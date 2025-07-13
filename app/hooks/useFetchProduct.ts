@@ -2,9 +2,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Axios from "../api-config";
 
 const getProducts = async () => {
-    const { data } = await Axios.get('https://backoffice.opompos.site/api/v1/products');
-    console.log('Fetched products:', data);
-    return data
+    const res = await Axios.get('https://backoffice.opompos.site/api/v1/products');
+    console.log('Fetched products:', res.data.product.data);
+    return res.data.product.data
 }
 
 export const useFetchProducts = <T>() => {
