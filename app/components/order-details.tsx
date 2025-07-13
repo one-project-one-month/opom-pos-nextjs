@@ -2,16 +2,13 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { X } from 'lucide-react'
-
 interface OrderDetailsModalProps {
   isOpen: boolean
   onClose: () => void
+  onProceedToPayment: () => void
 }
 
-export default function OrderDetailsModal({
-  isOpen,
-  onClose,
-}: OrderDetailsModalProps) {
+export default function OrderDetailsModal({ isOpen, onClose, onProceedToPayment }: OrderDetailsModalProps) {
   const orders = useSelector((state: any) => state.orderSummary.orders)
 
   const totalAmount = orders.reduce((total: number, order: any) => {
@@ -23,18 +20,20 @@ export default function OrderDetailsModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center overflow-auto">
       {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-opacity-50 backdrop-blur-sm"
-        onClick={onClose}></div>
-
+      <div 
+        className="absolute inset-0 bg-black/30"
+        onClick={onClose}
+      ></div>
+      
       {/* Modal Content */}
       <div className="relative bg-white rounded-lg shadow-lg max-w-4xl w-full mx-4 md:w-[600px] lg:w-[800px]">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b">
+        <div className="flex items-center justify-center p-6 relative">
           <h2 className="text-xl font-semibold text-gray-900">Order Details</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors">
+            className="absolute right-6 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+          >
             <X size={24} />
           </button>
         </div>
@@ -83,9 +82,11 @@ export default function OrderDetailsModal({
           <div className="flex gap-3 mt-6">
             <button
               onClick={() => {
-                // Handle action, e.g., proceed to payment
+                onProceedToPayment()
+                onClose()
               }}
-              className="flex-1 px-4 py-2 bg-[#FB9E3A] text-white rounded-lg hover:bg-orange-400 transition-colors">
+              className="flex-1 px-4 py-2 bg-[#FB9E3A] text-white rounded-lg hover:bg-orange-400 transition-colors cursor-pointer"
+            >
               Proceed to Payment
             </button>
           </div>

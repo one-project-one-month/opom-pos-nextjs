@@ -2,9 +2,13 @@
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import OrderDetailsModal from '../order-details'
+import PaymentModal from '../../(root)/(main)/PaymentModal'
+import { PaymentMethodTypes, ModalTypes } from '@/app/type/type'
 
 export default function OrderCheckout() {
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false)
+  const [currentModal, setCurrentModal] = useState<ModalTypes>(null)
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethodTypes>('cash')
   const orders = useSelector((state: any) => state.orderSummary.orders)
 
   const totalAmount = orders.reduce((total: number, order: any) => {
@@ -13,8 +17,12 @@ export default function OrderCheckout() {
 
   const handleCheckoutClick = () => {
     if (orders.length > 0) {
-      setIsModalOpen(true)
+      setIsOrderModalOpen(true)
     }
+  }
+
+  const handleProceedToPayment = () => {
+    setCurrentModal('payment')
   }
 
   return (
@@ -47,9 +55,19 @@ export default function OrderCheckout() {
       
       {/* Order Details Modal */}
       <OrderDetailsModal 
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isOrderModalOpen}
+        onClose={() => setIsOrderModalOpen(false)}
+        onProceedToPayment={handleProceedToPayment}
       />
+      
+      {/* Payment Modal */}
+      {currentModal === 'payment' && (
+        <PaymentModal
+          paymentMethod={paymentMethod}
+          setPaymentMethod={setPaymentMethod}
+          setCurrentModal={setCurrentModal}
+        />
+      )}
     </>
   )
 }
