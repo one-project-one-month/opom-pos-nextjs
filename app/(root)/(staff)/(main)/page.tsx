@@ -21,22 +21,13 @@ export default function Home() {
             <ProductSearch />
             <CategoryList />
           </div>
-          <div className="flex-1 min-h-0 mt-5">
+          <div className="flex-1 min-h-0 mt-3 sm:mt-5">
             <ProductList />
           </div>
         </div>
         <OrderSummaryLayout />
-        {/* <div className="w-1/3 h-screen">
-          Order Summary & Checkout{' '}
-          <CustomBtn
-            onClick={() => setCurrentModal('order')}
-            className="bg-[#FB9E3A]"
-          >
-            Open Modal
-          </CustomBtn>
-        </div> */}
       </div>
-      Order Modal
+      {/* Order Modal */}
       {currentModal === 'order' && (
         <Modal onClose={() => setCurrentModal(null)}>
           <CustomBtn

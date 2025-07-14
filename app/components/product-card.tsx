@@ -50,6 +50,15 @@ export const ProductCard = ({
           </div>
         </div>
       </div>
+      
+      {/* Add to cart indicator on hover */}
+      <div className="absolute top-3 right-3 w-6 h-6 bg-[#FB9E3A] rounded-full flex items-center justify-center
+                      opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0
+                      transition-all duration-300">
+        <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+        </svg>
+      </div>
     </div>
   )
 }
