@@ -1,14 +1,13 @@
-
-'use client';
-import CategoryList from '@/app/components/category-list';
-import ProductList from '@/app/components/product-list';
-import ProductSearch from '@/app/components/product-search';
-import OrderSummary from '@/app/components/orderSummary/order-summary';
-import { useState } from 'react';
-import PaymentModel from './PaymentModal';
-import { ModalTypes, PaymentMethodTypes } from '@/app/type/type';
-import Modal from '@/app/components/modal';
-import CustomBtn from '@/app/components/custom-btn';
+'use client'
+import CategoryList from '@/app/components/category-list'
+import ProductList from '@/app/components/product-list'
+import ProductSearch from '@/app/components/product-search'
+import OrderSummaryLayout from '@/app/components/orderSummary/order-summary-layout'
+import { useState } from 'react'
+import PaymentModel from './PaymentModal'
+import { ModalTypes, PaymentMethodTypes } from '@/app/type/type'
+import Modal from '@/app/components/modal'
+import CustomBtn from '@/app/components/custom-btn'
 
 export default function Home() {
   const [currentModal, setCurrentModal] = useState<ModalTypes>(null)
@@ -26,11 +25,7 @@ export default function Home() {
             <ProductList />
           </div>
         </div>
-        
-        {/* Order Summary Section */}
-        <div className="w-full lg:w-1/3 h-[40vh] lg:h-screen flex flex-col bg-white lg:bg-transparent">
-          <OrderSummary />
-        </div>
+        <OrderSummaryLayout />
       </div>
       {/* Order Modal */}
       {currentModal === 'order' && (
@@ -61,6 +56,5 @@ export default function Home() {
         </Modal>
       )}
     </>
-  );
-
+  )
 }

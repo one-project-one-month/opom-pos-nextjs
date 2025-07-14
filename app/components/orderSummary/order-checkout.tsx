@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import OrderDetailsModal from '../order-details'
-import PaymentModal from '../../(root)/(main)/PaymentModal'
+import PaymentModal from '@/app/(root)/(staff)/(main)/PaymentModal'
 import { PaymentMethodTypes, ModalTypes } from '@/app/type/type'
 
 export default function OrderCheckout() {
@@ -52,14 +52,14 @@ export default function OrderCheckout() {
           Checkout
         </button>
       </div>
-      
+
       {/* Order Details Modal */}
-      <OrderDetailsModal 
+      <OrderDetailsModal
         isOpen={isOrderModalOpen}
         onClose={() => setIsOrderModalOpen(false)}
         onProceedToPayment={handleProceedToPayment}
       />
-      
+
       {/* Payment Modal */}
       {currentModal === 'payment' && (
         <PaymentModal
