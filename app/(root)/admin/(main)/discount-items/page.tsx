@@ -1,8 +1,20 @@
+'use client'
+import CategoryList from '@/app/components/category-list'
+import Loading from '@/app/(root)/(staff)/(main)/loading'
+import { useFetchProducts } from '@/app/hooks/useFetchProduct'
+import DiscountItemsLists from '@/app/components/discountItems/discount-items-lists'
+
 export default function Page() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-2xl font-bold text-gray-800">Discount items Page</h1>
-      <p className="mt-4 text-gray-600">This is discount items page</p>
+    <div className="w-full h-screen p-5 flex flex-col">
+      <div className="flex justify-between">
+        <h1 className="font-light text-2xl">Discount Item Lists</h1>
+        <p className="text-red-600 ">Discount rules</p>
+      </div>
+      <div className="my-8">
+        <CategoryList></CategoryList>
+      </div>
+      <DiscountItemsLists />
     </div>
   )
 }
