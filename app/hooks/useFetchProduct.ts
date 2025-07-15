@@ -1,20 +1,22 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Axios from "../api-config";
 
-const getProducts = async () => {
+const getProducts = async (params? : {name?: string}) => {
     try {
-        const res = await Axios.get('https://backoffice.opompos.site/api/v1/products');
-        return res.data.product.data
+        // Build query string if name is present
+        const query = params?.name ? `?name=${encodeURIComponent(params.name)}` : '';
+        const res = await Axios.get(`https://backoffice.opompos.site/api/v1/products${query}`);
+        return res.data.product.data;
     } catch (error) {
         console.error('Error fetching products:', error);
         throw error;
     }
 }
 
-export const useFetchProducts = <T>() => {
+export const useFetchProducts = <T>(params: {name?: string}) => {
     return useQuery<T>({
-        queryKey: ['products'],
-        queryFn: getProducts
+        queryKey: ['products', params],
+        queryFn: () => getProducts(params),
     })
 }
 

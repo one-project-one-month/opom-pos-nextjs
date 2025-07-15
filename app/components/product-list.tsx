@@ -6,9 +6,13 @@ import { addOrder } from '../store/slices/orderSummarySlice'
 import { Product } from '../type/product'
 import { useFetchProducts } from '../hooks/useFetchProduct'
 import Loading from '../(root)/(staff)/(main)/loading'
+import { useSearchParams } from 'next/navigation'
 
 const ProductList = () => {
-  const { error, isLoading, data } = useFetchProducts<Product[]>()
+  const searchParams = useSearchParams();
+  const name = searchParams.get("name") || "";
+
+  const { error, isLoading, data } = useFetchProducts<Product[]>({ name })
 
   const dispatch = useDispatch()
 
