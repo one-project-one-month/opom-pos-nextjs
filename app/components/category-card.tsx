@@ -1,4 +1,4 @@
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import queryString from 'query-string'
 import React from 'react'
 
@@ -13,8 +13,14 @@ const CategoryCard = ({active = false, name}: CategoryCardProps) => {
 
   const getCategory = () => {
     const currentQuery = queryString.parse(window.location.search);
-    const updatedQuery = { ...currentQuery, category: name };
+    const updatedQuery: Record<string, string | string[] | undefined> = { ...currentQuery, category: name };
 
+      if (currentQuery.category === name) {
+        delete updatedQuery.category;
+      } else {
+        updatedQuery.category = name;
+      }
+    
     const url = queryString.stringifyUrl(
         {
             url: window.location.pathname,
