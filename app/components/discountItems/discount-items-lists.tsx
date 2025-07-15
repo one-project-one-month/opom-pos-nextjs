@@ -40,7 +40,13 @@ const pagination = (
   return { paginatedItems, totalPages, startedIndex, lastIndex }
 }
 
-export default function DiscountItemsLists() {
+interface DiscountItemsListsProps {
+  showAddDiscountModal: () => void
+}
+
+export default function DiscountItemsLists({
+  showAddDiscountModal,
+}: DiscountItemsListsProps) {
   const { error, isLoading, data } = useFetchProducts<Product[]>()
 
   const [itemsPerPage, setItemsPerPage] = useState(5)
@@ -106,7 +112,7 @@ export default function DiscountItemsLists() {
               <td className="px-3 py-2 whitespace-nowrap"></td>
               <td className="px-3 py-2 whitespace-nowrap"></td>
               <td className="px-3 py-2 whitespace-nowrap">
-                <button>
+                <button onClick={showAddDiscountModal}>
                   <span className="underline text-[#9E9E9E]">Add Discount</span>
                 </button>
               </td>
