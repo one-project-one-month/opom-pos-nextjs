@@ -11,6 +11,8 @@ const getProducts = async (params? : {name?: string, category?: string}) => {
         const url = `https://backoffice.opompos.site/api/v1/products${queryString ? `?${queryString}` : ''}`;
 
         const res = await Axios.get(url);
+        console.log('Fetched products:', res.data.product.data);
+        
         return res.data.product.data;
 
     } catch (error) {

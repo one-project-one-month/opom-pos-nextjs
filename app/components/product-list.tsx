@@ -40,15 +40,21 @@ const ProductList = () => {
 
   return (
     <div className="h-full grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[17px] lg:gap-[20px] overflow-y-auto no-scrollbar items-start">
-      {data?.map((product, i) => (
-        <ProductCard
-          key={i}
-          photo={product?.photo || '/logo.svg'}
-          name={product?.name}
-          price={product?.price}
-          ordersClick={() => dispatch(addOrder(product))}
-        />
-      ))}
+      {data && data.length > 0 ? (
+        data.map((product, i) => (
+          <ProductCard
+            key={i}
+            photo={product?.photo || '/logo.svg'}
+            name={product?.name}
+            price={product?.price}
+            ordersClick={() => dispatch(addOrder(product))}
+          />
+        ))
+      ) : (
+        <div className="col-span-full flex justify-center items-center text-lg font-semibold h-32">
+          No products found
+        </div>
+      )}
     </div>
   )
 }
