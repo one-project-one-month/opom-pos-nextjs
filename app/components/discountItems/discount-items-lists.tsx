@@ -2,6 +2,7 @@
 import { useFetchProducts } from '@/app/hooks/useFetchProduct'
 import Loading from '@/app/(root)/(staff)/(main)/loading'
 import { useState } from 'react'
+import { current } from '@reduxjs/toolkit'
 
 // Define Product type or import it from your models
 type Product = {
@@ -14,13 +15,36 @@ type Product = {
   // Add other fields as needed
 }
 
+interface PaginationParams {
+  currentPage: number
+  itemsPerPage: number
+  items: any
+}
+
+interface PaginationResult {
+  paginatedItems: any
+  totalPages: number
+  startedIndex: number
+  lastIndex: number
+}
+
+const pagination = (
+  currentPage: number,
+  itemsPerPage: number,
+  items: any
+): PaginationResult => {
+  const totalPages = Math.ceil(items.length / itemsPerPage)
+  const startedIndex = (currentPage - 1) * itemsPerPage
+  const lastIndex = startedIndex + itemsPerPage
+  const paginatedItems = items.slice(startedIndex, lastIndex)
+  return { paginatedItems, totalPages, startedIndex, lastIndex }
+}
+
 export default function DiscountItemsLists() {
   const { error, isLoading, data } = useFetchProducts<Product[]>()
-  console.log(data)
 
-  const [value, setValue] = useState(1)
-  const [showModal, setShowModal] = useState(false)
-  const [selectedOrder, setSelectedOrder] = useState<any>(null)
+  const [itemsPerPage, setItemsPerPage] = useState(5)
+  const [currentPage, setCurrentPage] = useState(1)
 
   if (isLoading) {
     return (
@@ -37,6 +61,13 @@ export default function DiscountItemsLists() {
       </div>
     )
   }
+
+  const { paginatedItems, totalPages, startedIndex, lastIndex } = pagination(
+    currentPage,
+    itemsPerPage,
+    data
+  )
+
   return (
     <div className="overflow-x-auto ">
       <table className="min-w-full divide-y-2 divide-gray-200">
@@ -64,20 +95,20 @@ export default function DiscountItemsLists() {
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200 *:even:bg-gray-50">
-          {data?.map((product, index) => (
+          {paginatedItems?.map((product, index) => (
             <tr
               key={product.id}
-              className="*:text-gray-900 *:first:font-medium h-12 hover:bg-gray-100 transition-colors cursor-pointer">
+              className="*:text-gray-900 *:first:font-medium h-12 py-9 hover:bg-gray-100 transition-colors cursor-pointer">
               <td className="px-3 py-2 whitespace-nowrap">{product.id}</td>
               <td className="px-3 py-2 whitespace-nowrap">{product.name}</td>
               <td className="px-3 py-2 whitespace-nowrap">{product.price}</td>
-              <td className="px-3 py-2 whitespace-nowrap">discountPrice</td>
+              <td className="px-3 py-2 whitespace-nowrap"></td>
+              <td className="px-3 py-2 whitespace-nowrap"></td>
+              <td className="px-3 py-2 whitespace-nowrap"></td>
               <td className="px-3 py-2 whitespace-nowrap">
-                {product.startDate}
-              </td>
-              <td className="px-3 py-2 whitespace-nowrap">{product.endDate}</td>
-              <td className="px-3 py-2 whitespace-nowrap">
-                <button>Add Discount</button>
+                <button>
+                  <span className="underline text-[#9E9E9E]">Add Discount</span>
+                </button>
               </td>
             </tr>
           ))}
@@ -93,11 +124,13 @@ export default function DiscountItemsLists() {
               <input
                 type="number"
                 id="Page"
-                value={value}
-                onChange={(e) => setValue(Number(e.target.value))}
+                value={itemsPerPage}
+                onChange={(e) => setItemsPerPage(Number(e.target.value))}
                 className="h-8 w-16 px-2 rounded border border-gray-200 sm:text-sm"
               />
-              <span className="text-gray-600 text-sm">1-5 of 100 items</span>
+              <span className="text-gray-600 text-sm">
+                {startedIndex + 1}-{lastIndex} of {data?.length} items
+              </span>
             </label>
           </li>
         </ul>
@@ -110,11 +143,14 @@ export default function DiscountItemsLists() {
               <input
                 type="number"
                 id="Page"
-                value={value}
-                onChange={(e) => setValue(Number(e.target.value))}
+                value={currentPage}
+                onChange={(e) => setCurrentPage(Number(e.target.value))}
                 className="h-8 w-16 px-2 rounded border border-gray-200 sm:text-sm"
               />
-              <span className="text-gray-600 text-sm"> of 40 pages </span>
+              <span className="text-gray-600 text-sm">
+                {' '}
+                of {totalPages} pages{' '}
+              </span>
             </label>
           </li>
 
