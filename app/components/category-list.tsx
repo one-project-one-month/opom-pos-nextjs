@@ -8,7 +8,7 @@ const CategoryList = () => {
   return (
     <div className='flex gap-[10px] overflow-x-auto no-scrollbar'>
         {data?.map((cat, idx) => (
-            <CategoryCard key={idx} name={cat.name} active={false} />
+            <CategoryCard key={idx} name={cat.name} />
         ))}
     </div>
   )
