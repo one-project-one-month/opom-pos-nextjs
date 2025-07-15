@@ -11,8 +11,9 @@ import { useSearchParams } from 'next/navigation'
 const ProductList = () => {
   const searchParams = useSearchParams();
   const name = searchParams.get("name") || "";
+  const category = searchParams.get("category") || "";
 
-  const { error, isLoading, data } = useFetchProducts<Product[]>({ name })
+  const { error, isLoading, data } = useFetchProducts<Product[]>({ name, category })
 
   const dispatch = useDispatch()
 
