@@ -6,6 +6,7 @@ const getProducts = async (params? : {name?: string}) => {
         // Build query string if name is present
         const query = params?.name ? `?name=${encodeURIComponent(params.name)}` : '';
         const res = await Axios.get(`https://backoffice.opompos.site/api/v1/products${query}`);
+        console.log(res.data.product.data);
         return res.data.product.data;
     } catch (error) {
         console.error('Error fetching products:', error);

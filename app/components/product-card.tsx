@@ -15,7 +15,7 @@ export const ProductCard = ({
 }: ProductCardProps) => {
   return (
     <div
-      className="w-full h-full flex relative justify-center items-center shadow-[0px_5px_15px_0px_#0000000D] cursor-pointer hover:transform hover:scale-[1.02] transition-all duration-200 ease-in-out"
+      className="w-full flex relative justify-center items-center shadow-[0px_5px_15px_0px_#0000000D] cursor-pointer hover:transform hover:scale-[1.02] transition-all duration-200 ease-in-out"
       onClick={ordersClick}>
       {/* Top-left corner */}
       <div className="absolute top-0 left-0 w-[10px] h-[10px] border-t-[0.5px] border-l-[0.5px] border-[#FB9E3A]"></div>
@@ -33,7 +33,7 @@ export const ProductCard = ({
         <div className="space-y-[15px]">
           <div className="w-[110px] h-[110px] relative overflow-hidden flex items-center justify-center">
             <Image
-              src={photo || '/logo.svg'}
+              src= {photo || '/logo.svg'} 
               width={110}
               height={110}
               alt="Product Image"
