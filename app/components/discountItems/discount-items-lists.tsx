@@ -2,6 +2,7 @@
 import { useFetchProducts } from '@/app/hooks/useFetchProduct'
 import Loading from '@/app/(root)/(staff)/(main)/loading'
 import { useState } from 'react'
+
 import { current } from '@reduxjs/toolkit'
 
 // Define Product type or import it from your models
@@ -15,11 +16,11 @@ type Product = {
   // Add other fields as needed
 }
 
-interface PaginationParams {
-  currentPage: number
-  itemsPerPage: number
-  items: any
-}
+// interface PaginationParams {
+//   currentPage: number
+//   itemsPerPage: number
+//   items: any
+// }
 
 interface PaginationResult {
   paginatedItems: any
@@ -39,15 +40,16 @@ const pagination = (
   const paginatedItems = items.slice(startedIndex, lastIndex)
   return { paginatedItems, totalPages, startedIndex, lastIndex }
 }
-
 interface DiscountItemsListsProps {
+  category: string | null
   showAddDiscountModal: () => void
 }
 
 export default function DiscountItemsLists({
+  category,
   showAddDiscountModal,
 }: DiscountItemsListsProps) {
-  const { error, isLoading, data } = useFetchProducts<Product[]>()
+  const { error, isLoading, data } = useFetchProducts<Product[]>(category)
 
   const [itemsPerPage, setItemsPerPage] = useState(5)
   const [currentPage, setCurrentPage] = useState(1)
@@ -67,6 +69,8 @@ export default function DiscountItemsLists({
       </div>
     )
   }
+
+  console.log(data)
 
   const { paginatedItems, totalPages, startedIndex, lastIndex } = pagination(
     currentPage,
@@ -101,7 +105,7 @@ export default function DiscountItemsLists({
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200 *:even:bg-gray-50">
-          {paginatedItems?.map((product, index) => (
+          {paginatedItems?.map((product: Product) => (
             <tr
               key={product.id}
               className="*:text-gray-900 *:first:font-medium h-12 py-9 hover:bg-gray-100 transition-colors cursor-pointer">
