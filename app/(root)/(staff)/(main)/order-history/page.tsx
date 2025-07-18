@@ -2,7 +2,7 @@
 import CustomBtn from '@/app/components/custom-btn';
 import DateFilter from '@/app/components/date-filter';
 import Modal from '@/app/components/modal';
-import ProductSearch from '@/app/components/product-search'
+import ProductSearch from '@/app/components/products/product-search'
 import { ScrollText } from 'lucide-react';
 import  { useState } from 'react'
 
