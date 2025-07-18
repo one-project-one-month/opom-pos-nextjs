@@ -2,10 +2,10 @@
 import React from 'react'
 import { ProductCard } from './product-card'
 import { useDispatch } from 'react-redux'
-import { addOrder } from '../store/slices/orderSummarySlice'
-import { Product } from '../type/product'
-import { useFetchProducts } from '../hooks/useFetchProduct'
-import Loading from '../(root)/(staff)/(main)/loading'
+import { addOrder } from '../../store/slices/orderSummarySlice'
+import { Product } from '../../type/product'
+import { useFetchProducts } from '../../hooks/useFetchProduct'
+import Loading from '../../(root)/(staff)/(main)/loading'
 
 const ProductList = () => {
   const { error, isLoading, data } = useFetchProducts<Product[]>()

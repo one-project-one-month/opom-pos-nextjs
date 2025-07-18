@@ -33,7 +33,7 @@ export const ProductCard = ({
         <div className="space-y-[15px]">
           <div className="w-[110px] h-[110px] relative overflow-hidden flex items-center justify-center">
             <Image
-              src={photo || '/logo.svg'}
+              src={photo || '/assets/logo.svg'}
               width={110}
               height={110}
               alt="Product Image"

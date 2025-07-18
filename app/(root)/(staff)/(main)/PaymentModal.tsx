@@ -32,7 +32,7 @@ function PaymentModal({
         <PaymentOption
           value={PaymentMethodEnum.Cash}
           label="Cash Payment"
-          iconSrc="/payments/cash.svg"
+          iconSrc="/assets/cash.svg"
           checked={paymentMethod === PaymentMethodEnum.Cash}
           onChange={handlePaymentChange}
         />
@@ -41,7 +41,7 @@ function PaymentModal({
           value={PaymentMethodEnum.DigitalWallet}
           label="Digital Wallet Payment"
           description="KBZPay, AYA Pay & WavePay"
-          iconSrc="/payments/digital-wallet.svg"
+          iconSrc="/assets/digital-wallet.svg"
           checked={paymentMethod === PaymentMethodEnum.DigitalWallet}
           onChange={handlePaymentChange}
         />
@@ -50,7 +50,7 @@ function PaymentModal({
           value={PaymentMethodEnum.CreditCard}
           label="Credit Card"
           description="Visa, Mastercard & MPU-UnionPay"
-          iconSrc="/payments/visa.svg"
+          iconSrc="/assets/visa.svg"
           checked={paymentMethod === PaymentMethodEnum.CreditCard}
           onChange={handlePaymentChange}
         />
