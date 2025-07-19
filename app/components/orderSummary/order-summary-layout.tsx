@@ -3,7 +3,12 @@ import OrderSummary from './order-summary'
 import { CircleX, ShoppingCart } from 'lucide-react'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
-export default function OrderSummaryLayout() {
+
+interface OrderSummaryLayoutProps {
+  onCheckoutClick?: () => void
+}
+
+export default function OrderSummaryLayout({ onCheckoutClick }: OrderSummaryLayoutProps) {
   const [isOpenSlide, setIsOpenSlide] = useState(false)
   const orders = useSelector((state: any) => state.orderSummary.orders)
   const totalQuantity = orders.reduce(
@@ -51,7 +56,7 @@ export default function OrderSummaryLayout() {
             <CircleX className="cursor-pointer" />
           </button>
         )}
-        <OrderSummary />
+        <OrderSummary onCheckoutClick={onCheckoutClick} />
       </div>
     </>
   )

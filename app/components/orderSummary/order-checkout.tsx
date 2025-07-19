@@ -1,14 +1,12 @@
 'use client'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
-import OrderDetailsModal from '../order-details'
-import PaymentModal from '@/app/(root)/(staff)/(main)/PaymentModal'
-import { PaymentMethodTypes, ModalTypes } from '@/app/type/type'
 
-export default function OrderCheckout() {
-  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false)
-  const [currentModal, setCurrentModal] = useState<ModalTypes>(null)
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethodTypes>('cash')
+interface OrderCheckoutProps {
+  onCheckoutClick?: () => void
+}
+
+export default function OrderCheckout({ onCheckoutClick }: OrderCheckoutProps) {
   const orders = useSelector((state: any) => state.orderSummary.orders)
 
   const totalAmount = orders.reduce((total: number, order: any) => {
@@ -16,13 +14,9 @@ export default function OrderCheckout() {
   }, 0)
 
   const handleCheckoutClick = () => {
-    if (orders.length > 0) {
-      setIsOrderModalOpen(true)
+    if (orders.length > 0 && onCheckoutClick) {
+      onCheckoutClick()
     }
-  }
-
-  const handleProceedToPayment = () => {
-    setCurrentModal('payment')
   }
 
   return (
@@ -44,7 +38,7 @@ export default function OrderCheckout() {
         <button
           disabled={orders.length === 0}
           onClick={handleCheckoutClick}
-          className={`text-white font-bold text-[18px] w-full rounded-[15px] py-[10px] ${
+          className={`text-white font-bold text-[18px] w-full rounded-[15px] py-[10px] cursor-pointer ${
             orders.length === 0
               ? 'bg-gray-400 cursor-not-allowed'
               : 'bg-[#FB9E3A] hover:bg-orange-400'
@@ -52,22 +46,6 @@ export default function OrderCheckout() {
           Checkout
         </button>
       </div>
-
-      {/* Order Details Modal */}
-      <OrderDetailsModal
-        isOpen={isOrderModalOpen}
-        onClose={() => setIsOrderModalOpen(false)}
-        onProceedToPayment={handleProceedToPayment}
-      />
-
-      {/* Payment Modal */}
-      {currentModal === 'payment' && (
-        <PaymentModal
-          paymentMethod={paymentMethod}
-          setPaymentMethod={setPaymentMethod}
-          setCurrentModal={setCurrentModal}
-        />
-      )}
     </>
   )
 }

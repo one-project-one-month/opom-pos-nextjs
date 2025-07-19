@@ -8,7 +8,7 @@ import { useFetchProducts } from '../../hooks/useFetchProduct'
 import Loading from '../../(root)/(staff)/(main)/loading'
 
 const ProductList = () => {
-  const { error, isLoading, data } = useFetchProducts<Product[]>()
+  const { error, isLoading, data } = useFetchProducts<Product[]>(null)
 
   const dispatch = useDispatch()
 

@@ -6,4 +6,4 @@ export enum PaymentMethodEnum {
 
 export type PaymentMethodTypes = `${PaymentMethodEnum}`;
 
-export type ModalTypes = 'order' | 'payment' | 'success' | null;
+export type ModalTypes = 'order' | 'order-details' | 'payment' | 'success' | null;
