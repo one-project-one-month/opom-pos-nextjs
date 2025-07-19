@@ -4,14 +4,23 @@ import ProductList from '@/app/components/products/product-list'
 import ProductSearch from '@/app/components/products/product-search'
 import OrderSummaryLayout from '@/app/components/orderSummary/order-summary-layout'
 import { useState } from 'react'
-import PaymentModel from './PaymentModal'
+import PaymentModal from './PaymentModal'
 import { ModalTypes, PaymentMethodTypes } from '@/app/type/type'
 import Modal from '@/app/components/modal'
 import CustomBtn from '@/app/components/custom-btn'
+import OrderDetailsModal from '@/app/components/order-details'
 
 export default function Home() {
   const [currentModal, setCurrentModal] = useState<ModalTypes>(null)
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethodTypes>('cash')
+
+  const handleOrderDetailsOpen = () => {
+    setCurrentModal('order-details')
+  }
+
+  const handleProceedToPayment = () => {
+    setCurrentModal('payment')
+  }
 
   return (
     <>
@@ -25,8 +34,16 @@ export default function Home() {
             <ProductList />
           </div>
         </div>
-        <OrderSummaryLayout />
+        <OrderSummaryLayout onCheckoutClick={handleOrderDetailsOpen} />
       </div>
+      {/* Order Details Modal */}
+      {currentModal === 'order-details' && (
+        <OrderDetailsModal
+          isOpen={true}
+          onClose={() => setCurrentModal(null)}
+          onProceedToPayment={handleProceedToPayment}
+        />
+      )}
       {/* Order Modal */}
       {currentModal === 'order' && (
         <Modal onClose={() => setCurrentModal(null)}>
@@ -39,7 +56,7 @@ export default function Home() {
       )}
       {/* Payment Modal */}
       {currentModal === 'payment' && (
-        <PaymentModel
+        <PaymentModal
           setCurrentModal={setCurrentModal}
           paymentMethod={paymentMethod}
           setPaymentMethod={setPaymentMethod}
