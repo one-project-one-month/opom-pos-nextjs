@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import CreateMemberModal from './CreateMemberModal';
+import MemberModal from './MemberModal';
 
 const dummyData = [
   {
@@ -37,8 +37,6 @@ const dummyData = [
   },
 ];
 
-
-
 const Page = () => {
   const [value, setValue] = useState(5);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -47,7 +45,7 @@ const Page = () => {
     <div className="p-5">
       <div className="flex justify-between items-center mt-7 mb-10">
         <p className="font-[400px] text-[25px]">Loyal Member List</p>
-        <button 
+        <button
           onClick={() => setIsModalOpen(true)}
           className="bg-[#FB9E3A] py-4 px-2 text-white rounded-[5px] flex items-center justify-center gap-2 hover:bg-[#E28E34] transition-colors"
         >
@@ -203,9 +201,9 @@ const Page = () => {
           </ul>
         </div>
       </div>
-      
-      <CreateMemberModal 
-        isOpen={isModalOpen} 
+
+      <MemberModal
+        isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSave={(member) => {
           // Here you would typically make an API call to save the member

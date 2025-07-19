@@ -4,17 +4,13 @@ import React, { ChangeEvent, useState } from 'react';
 import Modal from '@/app/components/modal';
 import CustomBtn from '@/app/components/custom-btn';
 
-type CreateMemberModalProps = {
+type MemberModalProps = {
   isOpen: boolean;
   onClose: () => void;
   onSave: (member: { name: string; email: string; phone: string }) => void;
 };
 
-const CreateMemberModal = ({
-  isOpen,
-  onClose,
-  onSave,
-}: CreateMemberModalProps) => {
+const MemberModal = ({ isOpen, onClose, onSave }: MemberModalProps) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -109,4 +105,4 @@ const CreateMemberModal = ({
   );
 };
 
-export default CreateMemberModal;
+export default MemberModal;

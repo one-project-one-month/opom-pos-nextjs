@@ -1,5 +1,5 @@
 import { X } from 'lucide-react';
-import { MouseEventHandler, ReactNode, useRef, useEffect } from 'react';
+import { ReactNode, useRef, useEffect } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 type ModalProps = {
@@ -18,7 +18,10 @@ function Modal({ children, className, onClose }: ModalProps) {
   // Handle click outside and Escape key
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
         onClose();
       }
     };
@@ -32,7 +35,7 @@ function Modal({ children, className, onClose }: ModalProps) {
     // Add event listeners when the component mounts
     document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('keydown', handleEscapeKey);
-    
+
     // Clean up the event listeners when the component unmounts
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
