@@ -55,7 +55,7 @@ function Signup() {
       </div>
       <div className="flex-1/3 overflow-hidden">
         <img
-          src="/image/POSLogin.png"
+          src="/assets/POSLogin.png"
           alt="Logo"
           width={600}
           height={600}

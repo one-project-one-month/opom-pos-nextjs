@@ -1,17 +1,43 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import Axios from "../api-config";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import Axios from '../api-config'
 
 const getProducts = async () => {
-    const { data } = await Axios.get('https://backoffice.opompos.site/api/v1/products');
-    console.log('Fetched products:', data);
-    return data
+  const res = await Axios.get('https://backoffice.opompos.site/api/v1/products')
+
+  return res.data.product.data
 }
 
-export const useFetchProducts = <T>() => {
-    return useQuery<T>({
-        queryKey: ['products'],
-        queryFn: getProducts
-    })
+const getProductsById = async (id: string | number) => {
+  const res = await Axios.get('https://backoffice.opompos.site/api/v1/products')
+
+  return res.data.product.data
+}
+
+const getProductsByCategories = async (category: string | null) => {
+  console.log(category)
+  const res = await Axios.get(
+    `https://backoffice.opompos.site/api/v1/products`,
+    {
+      params: { category: category },
+    }
+  )
+
+  return res.data.product.data
+}
+
+export const useFetchProducts = <T>(category: string | null) => {
+  return useQuery<T>({
+    queryKey: ['products', category ?? 'all'],
+    queryFn: () =>
+      category === null ? getProducts() : getProductsByCategories(category),
+  })
+}
+
+export const useFetchProductsById = <T>(id: string | number) => {
+  return useQuery<T>({
+    queryKey: ['products', id],
+    queryFn: () => getProductsById(id),
+  })
 }
 
 //call in page
@@ -20,18 +46,18 @@ export const useFetchProducts = <T>() => {
 
 //create order mutation
 const createOrder = async ({}) => {
-    const res = await Axios.post('',{})
-    return res
+  const res = await Axios.post('', {})
+  return res
 }
 
 export const useCreateOrder = () => {
-    const queryClient = useQueryClient()
+  const queryClient = useQueryClient()
 
-    return useMutation({
-        mutationKey: ['create-order'],
-        mutationFn: async ({}) => createOrder({}),
-        onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['orders']})
-        }
-    })
+  return useMutation({
+    mutationKey: ['create-order'],
+    mutationFn: async ({}) => createOrder({}),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['orders'] })
+    },
+  })
 }
