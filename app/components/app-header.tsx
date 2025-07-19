@@ -1,5 +1,5 @@
 'use client'
-import Logo from '@/public/logo.svg'
+import Logo from '@/public/assets/logo.svg'
 import { format } from 'date-fns'
 import { CalendarDays, History, LogOut } from 'lucide-react'
 import Image from 'next/image'

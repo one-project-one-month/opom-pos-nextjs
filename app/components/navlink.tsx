@@ -19,7 +19,7 @@ export default function NavLink({ href, children }: NavLinkProps) {
             href={href}
             className={clsx(
                 "hover:transition-all rounded p-2",
-                isActive ? "bg-[#E28E34] text-white" : "bg-white",
+                isActive ? "bg-primary-50 text-primary-300 border-2 border-primary-300" : "bg-white",
             )}
         >
             {children}
