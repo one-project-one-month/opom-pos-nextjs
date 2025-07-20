@@ -27,7 +27,9 @@ function PaymentModal({
       onClose={() => setCurrentModal(null)}
       // className="flex flex-col gap-11"
     >
-      <h1 className="font-bold text-2xl text-center mt-5">Payment Method</h1>
+      <h1 className="font-bold text-2xl text-center mt-5 mb-6">
+        Payment Method
+      </h1>
       <div className="flex flex-col gap-[0.711rem]">
         <PaymentOption
           value={PaymentMethodEnum.Cash}

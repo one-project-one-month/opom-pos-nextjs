@@ -1,26 +1,39 @@
-'use client'
-import CategoryList from '@/app/components/category-list'
-import ProductList from '@/app/components/products/product-list'
-import ProductSearch from '@/app/components/products/product-search'
-import OrderSummaryLayout from '@/app/components/orderSummary/order-summary-layout'
-import { useState } from 'react'
-import PaymentModal from './PaymentModal'
-import { ModalTypes, PaymentMethodTypes } from '@/app/type/type'
-import Modal from '@/app/components/modal'
-import CustomBtn from '@/app/components/custom-btn'
-import OrderDetailsModal from '@/app/components/order-details'
+'use client';
+import CategoryList from '@/app/components/category-list';
+import ProductList from '@/app/components/products/product-list';
+import ProductSearch from '@/app/components/products/product-search';
+import OrderSummaryLayout from '@/app/components/orderSummary/order-summary-layout';
+import { useState } from 'react';
+import PaymentModal from './PaymentModal';
+import { ModalTypes, PaymentMethodTypes } from '@/app/type/type';
+import Modal from '@/app/components/modal';
+import CustomBtn from '@/app/components/custom-btn';
+import OrderDetailsModal from '@/app/components/order-details';
+import { OrderSuccessModal } from './OrderSuccessModal';
 
 export default function Home() {
-  const [currentModal, setCurrentModal] = useState<ModalTypes>(null)
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethodTypes>('cash')
+  const [currentModal, setCurrentModal] = useState<ModalTypes>(null);
+  const [paymentMethod, setPaymentMethod] =
+    useState<PaymentMethodTypes>('cash');
+  const [orderSuccessDetails, setOrderSuccessDetails] = useState({
+    orderId: '123',
+    date: new Date().toLocaleDateString('en-GB'),
+    time: new Date().toLocaleTimeString('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+    }),
+    paymentType: 'KBZ Bank',
+    totalAmount: 1500,
+    memberName: 'Jayso',
+  });
 
   const handleOrderDetailsOpen = () => {
-    setCurrentModal('order-details')
-  }
+    setCurrentModal('order-details');
+  };
 
   const handleProceedToPayment = () => {
-    setCurrentModal('payment')
-  }
+    setCurrentModal('payment');
+  };
 
   return (
     <>
@@ -44,12 +57,14 @@ export default function Home() {
           onProceedToPayment={handleProceedToPayment}
         />
       )}
+
       {/* Order Modal */}
       {currentModal === 'order' && (
         <Modal onClose={() => setCurrentModal(null)}>
           <CustomBtn
             onClick={() => setCurrentModal('payment')}
-            className="bg-[#FB9E3A]">
+            className="bg-[#FB9E3A]"
+          >
             Go to payment modal
           </CustomBtn>
         </Modal>
@@ -62,16 +77,14 @@ export default function Home() {
           setPaymentMethod={setPaymentMethod}
         />
       )}
-      {/* Success Modal */}
+      {/* Order Success Modal */}
       {currentModal === 'success' && (
-        <Modal onClose={() => setCurrentModal(null)}>
-          <CustomBtn
-            onClick={() => setCurrentModal(null)}
-            className="bg-[#FB9E3A]">
-            Close
-          </CustomBtn>
-        </Modal>
+        <OrderSuccessModal
+          isOpen={true}
+          onClose={() => setCurrentModal(null)}
+          orderDetails={orderSuccessDetails}
+        />
       )}
     </>
-  )
+  );
 }

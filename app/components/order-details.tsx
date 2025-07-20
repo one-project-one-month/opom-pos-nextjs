@@ -25,7 +25,7 @@ const OrderDetailsModal = ({
   if (!isOpen) return null;
 
   return (
-    <Modal onClose={onClose} className="p-12 flex flex-col">
+    <Modal onClose={onClose} className="p-12 pb-7 flex flex-col">
       <h1 className="text-2xl font-bold text-center mb-6">Order Details</h1>
       <div className="flex flex-col flex-1 min-h-0">
         <div className="overflow-hidden flex flex-col h-full">
@@ -47,9 +47,8 @@ const OrderDetailsModal = ({
               </thead>
             </table>
           </div>
-
           {/* Scrollable Table Body */}
-          <div className="flex-1 overflow-y-auto h-56 max-h-56">
+          <div className="flex-1 overflow-y-auto min-h-56 max-h-56">
             <table className="w-full table-fixed border-separate border-spacing-y-3.5">
               <tbody>
                 {orders.map((order: any) => (
