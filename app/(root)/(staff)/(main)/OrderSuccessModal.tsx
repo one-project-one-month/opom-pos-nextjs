@@ -2,18 +2,21 @@
 
 import Modal from '@/app/components/modal';
 import CustomBtn from '@/app/components/custom-btn';
-import { Check, CheckCircle2 } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 type OrderSuccessModalProps = {
   isOpen: boolean;
   onClose: () => void;
   orderDetails: {
     orderId: string;
+    receiptNumber: string;
     date: string;
     time: string;
     paymentType: string;
     totalAmount: number;
     memberName: string;
+    changeAmount: number;
+    paidAmount: number;
   };
 };
 
@@ -48,28 +51,42 @@ export function OrderSuccessModal({
         {/* Order Details */}
         <div className="w-full space-y-3 mb-6 text-sm">
           <div className="flex justify-between">
-            <span>Order ID:</span>
-            <span>{orderDetails.orderId}</span>
+            <span>Receipt ID:</span>
+            <span className="font-medium">{orderDetails.orderId}</span>
           </div>
           <div className="flex justify-between">
             <span>Date:</span>
-            <span>{orderDetails.date}</span>
+            <span className="font-medium">{orderDetails.date}</span>
           </div>
           <div className="flex justify-between">
             <span>Time:</span>
-            <span>{orderDetails.time}</span>
+            <span className="font-medium">{orderDetails.time}</span>
           </div>
           <div className="flex justify-between">
             <span>Payment Type:</span>
-            <span>{orderDetails.paymentType}</span>
+            <span className="font-medium">{orderDetails.paymentType}</span>
           </div>
           <div className="flex justify-between">
             <span>Total Amount:</span>
-            <span>{orderDetails.totalAmount.toLocaleString()} MMK</span>
+            <span className="font-medium">
+              {orderDetails.totalAmount.toLocaleString()} MMK
+            </span>
+          </div>
+          <div className="flex justify-between">
+            <span>Paid Amount:</span>
+            <span className="font-medium">
+              {orderDetails.paidAmount.toLocaleString()} MMK
+            </span>
+          </div>
+          <div className="flex justify-between">
+            <span>Change Amount:</span>
+            <span className="font-medium text-green-600">
+              {orderDetails.changeAmount.toLocaleString()} MMK
+            </span>
           </div>
           <div className="flex justify-between">
             <span>Member:</span>
-            <span>{orderDetails.memberName}</span>
+            <span className="font-medium">{orderDetails.memberName}</span>
           </div>
         </div>
         {/* Button Group */}

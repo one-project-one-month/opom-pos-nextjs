@@ -10,22 +10,49 @@ import Modal from '@/app/components/modal';
 import CustomBtn from '@/app/components/custom-btn';
 import OrderDetailsModal from '@/app/components/order-details';
 import { OrderSuccessModal } from './OrderSuccessModal';
+import { ErrorModal } from './ErrorModal';
+
+type ErrorState = {
+  isOpen: boolean;
+  message: string;
+  title?: string;
+};
+
+type OrderSuccessDetails = {
+  orderId: string;
+  date: string;
+  time: string;
+  paymentType: string;
+  totalAmount: number;
+  memberName: string;
+  receiptNumber: string;
+  changeAmount: number;
+  paidAmount: number;
+};
 
 export default function Home() {
   const [currentModal, setCurrentModal] = useState<ModalTypes>(null);
   const [paymentMethod, setPaymentMethod] =
     useState<PaymentMethodTypes>('cash');
-  const [orderSuccessDetails, setOrderSuccessDetails] = useState({
-    orderId: '123',
-    date: new Date().toLocaleDateString('en-GB'),
-    time: new Date().toLocaleTimeString('en-GB', {
-      hour: '2-digit',
-      minute: '2-digit',
-    }),
-    paymentType: 'KBZ Bank',
-    totalAmount: 1500,
-    memberName: 'Jayso',
+  const [error, setError] = useState<ErrorState>({
+    isOpen: false,
+    message: '',
   });
+  const [orderSuccessDetails, setOrderSuccessDetails] =
+    useState<OrderSuccessDetails>({
+      orderId: '',
+      date: new Date().toLocaleDateString('en-GB'),
+      time: new Date().toLocaleTimeString('en-GB', {
+        hour: '2-digit',
+        minute: '2-digit',
+      }),
+      paymentType: 'Cash',
+      totalAmount: 0,
+      memberName: 'Guest',
+      receiptNumber: '',
+      changeAmount: 0,
+      paidAmount: 0,
+    });
 
   const handleOrderDetailsOpen = () => {
     setCurrentModal('order-details');
@@ -33,6 +60,39 @@ export default function Home() {
 
   const handleProceedToPayment = () => {
     setCurrentModal('payment');
+  };
+
+  const handlePaymentSuccess = (response: any) => {
+    const { data } = response;
+
+    setOrderSuccessDetails((prev) => ({
+      ...prev,
+      orderId: data.order.order_number,
+      receiptNumber: data.receipt_number,
+      totalAmount: parseFloat(data.total_amount),
+      changeAmount: parseFloat(data.change_amount),
+      paidAmount: parseFloat(data.paid_amount), // Assuming the amount is in cents
+      date: new Date(data.order.created_at).toLocaleDateString('en-GB'),
+      time: new Date(data.order.created_at).toLocaleTimeString('en-GB', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      }),
+      memberName: data.order.customer?.name || 'Guest',
+      paymentType: 'Cash',
+    }));
+
+    setCurrentModal('success');
+  };
+
+  const handleError = (message: string, title: string = 'Error') => {
+    setError({ isOpen: true, message, title });
+    setCurrentModal('error');
+  };
+
+  const closeError = () => {
+    setError({ isOpen: false, message: '' });
+    setCurrentModal(null);
   };
 
   return (
@@ -49,6 +109,7 @@ export default function Home() {
         </div>
         <OrderSummaryLayout onCheckoutClick={handleOrderDetailsOpen} />
       </div>
+
       {/* Order Details Modal */}
       {currentModal === 'order-details' && (
         <OrderDetailsModal
@@ -57,6 +118,14 @@ export default function Home() {
           onProceedToPayment={handleProceedToPayment}
         />
       )}
+
+      {/* Error Modal */}
+      <ErrorModal
+        isOpen={currentModal === 'error' && error.isOpen}
+        onClose={closeError}
+        title={error.title}
+        message={error.message}
+      />
 
       {/* Order Modal */}
       {currentModal === 'order' && (
@@ -75,6 +144,8 @@ export default function Home() {
           setCurrentModal={setCurrentModal}
           paymentMethod={paymentMethod}
           setPaymentMethod={setPaymentMethod}
+          onError={handleError}
+          onSuccess={handlePaymentSuccess}
         />
       )}
       {/* Order Success Modal */}
