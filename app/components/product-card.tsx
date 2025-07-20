@@ -13,6 +13,16 @@ export const ProductCard = ({
   price,
   ordersClick,
 }: ProductCardProps) => {
+  
+  let imageSrc = '/logo.svg';
+  if (typeof photo === 'string' && photo.trim() !== '') {
+    if (photo.startsWith('http://') || photo.startsWith('https://') || photo.startsWith('/')) {
+      imageSrc = photo;
+    } else {
+      imageSrc = '/' + photo;
+    }
+  }
+  
   return (
     <div
       className="w-full flex relative justify-center items-center shadow-[0px_5px_15px_0px_#0000000D] cursor-pointer hover:transform hover:scale-[1.02] transition-all duration-200 ease-in-out"
@@ -33,7 +43,7 @@ export const ProductCard = ({
         <div className="space-y-[15px]">
           <div className="w-[110px] h-[110px] relative overflow-hidden flex items-center justify-center">
             <Image
-              src= {photo || '/logo.svg'} 
+              src= {imageSrc}
               width={110}
               height={110}
               alt="Product Image"
