@@ -43,7 +43,7 @@ const ProductList = () => {
         data.map((product, i) => (
           <ProductCard
             key={i}
-            photo={product?.photo || '/logo.svg'}
+            photo={product?.photo || 'assets/logo.svg'}
             name={product?.name}
             price={product?.price}
             ordersClick={() => dispatch(addOrder(product))}
