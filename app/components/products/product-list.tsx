@@ -38,7 +38,7 @@ const ProductList = () => {
   }
 
   return (
-    <div className="h-full grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[17px] lg:gap-[20px] overflow-y-auto no-scrollbar items-start">
+    <div className="h-full grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[17px] lg:gap-[20px] overflow-y-auto no-scrollbar items-center p-1">
       {data && data.length > 0 ? (
         data.map((product, i) => (
           <ProductCard

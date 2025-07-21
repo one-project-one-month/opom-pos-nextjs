@@ -25,19 +25,8 @@ export const ProductCard = ({
   
   return (
     <div
-      className="w-full flex relative justify-center items-center shadow-[0px_5px_15px_0px_#0000000D] cursor-pointer hover:transform hover:scale-[1.02] transition-all duration-200 ease-in-out"
+      className="w-full lg:h-full flex relative justify-center items-center border border-[#FB9E3A] rounded-md shadow-[0px_5px_15px_0px_#0000000D] cursor-pointer hover:transform hover:scale-[1.02] transition-all duration-200 ease-in-out"
       onClick={ordersClick}>
-      {/* Top-left corner */}
-      <div className="absolute top-0 left-0 w-[10px] h-[10px] border-t-[0.5px] border-l-[0.5px] border-[#FB9E3A]"></div>
-
-      {/* Top-right corner */}
-      <div className="absolute top-0 right-0 w-[10px] h-[10px] border-t-[0.5px] border-r-[0.5px] border-[#FB9E3A]"></div>
-
-      {/* Bottom-left corner */}
-      <div className="absolute bottom-0 left-0 w-[10px] h-[10px] border-b-[0.5px] border-l-[0.5px] border-[#FB9E3A]"></div>
-
-      {/* Bottom-right corner */}
-      <div className="absolute bottom-0 right-0 w-[10px] h-[10px] border-b-[0.5px] border-r-[0.5px] border-[#FB9E3A]"></div>
 
       <div className="w-[110px]">
         <div className="space-y-[15px]">
