@@ -2,7 +2,17 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import Axios from '../api-config'
 
 const getProducts = async () => {
-  const res = await Axios.get('https://backoffice.opompos.site/api/v1/products')
+  const res = await Axios.get(
+    'https://backoffice.opompos.site/api/v1/products',
+    {
+      headers: {
+        Accept: 'application/json',
+      },
+    }
+  )
+
+  console.log('it works')
+  console.log(res.data)
 
   return res.data.product.data
 }
@@ -14,10 +24,13 @@ const getProductsById = async (id: string | number) => {
 }
 
 const getProductsByCategories = async (category: string | null) => {
-  console.log(category)
   const res = await Axios.get(
     `https://backoffice.opompos.site/api/v1/products`,
     {
+      headers: {
+        Accept: 'application/json',
+        // add any other headers you need
+      },
       params: { category: category },
     }
   )

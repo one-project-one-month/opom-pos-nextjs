@@ -4,6 +4,7 @@ import Loading from '@/app/(root)/(staff)/(main)/loading'
 import { useState } from 'react'
 
 import { current } from '@reduxjs/toolkit'
+import { useFetchDiscountProducts } from '@/app/hooks/useFetchDiscountProduct'
 
 // Define Product type or import it from your models
 type Product = {
@@ -49,10 +50,13 @@ export default function DiscountItemsLists({
   category,
   showAddDiscountModal,
 }: DiscountItemsListsProps) {
-  const { error, isLoading, data } = useFetchProducts<Product[]>(category)
+  const { error, isLoading, data } =
+    useFetchDiscountProducts<Product[]>(category)
 
   const [itemsPerPage, setItemsPerPage] = useState(5)
   const [currentPage, setCurrentPage] = useState(1)
+
+  console.log(data)
 
   if (isLoading) {
     return (
