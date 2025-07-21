@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import MemberModal from './MemberModal';
 
+
 const dummyData = [
   {
     id: '12458789',
@@ -40,6 +41,7 @@ const dummyData = [
 const Page = () => {
   const [value, setValue] = useState(5);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   return (
     <div className="p-5">
@@ -212,6 +214,8 @@ const Page = () => {
           setIsModalOpen(false);
         }}
       />
+      
+
     </div>
   );
 };

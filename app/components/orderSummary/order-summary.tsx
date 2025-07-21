@@ -1,8 +1,8 @@
-import OrderLists from './order-lists'
-import OrderCheckout from './order-checkout'
+import OrderLists from './order-lists';
+import OrderCheckout from './order-checkout';
 
 interface OrderSummaryProps {
-  onCheckoutClick?: () => void
+  onCheckoutClick?: () => void;
 }
 
 export default function OrderSummary({ onCheckoutClick }: OrderSummaryProps) {
@@ -14,5 +14,5 @@ export default function OrderSummary({ onCheckoutClick }: OrderSummaryProps) {
         <OrderCheckout onCheckoutClick={onCheckoutClick} />
       </div>
     </>
-  )
+  );
 }
