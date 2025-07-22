@@ -3,7 +3,7 @@ import Axios from '../api-config'
 
 const getDiscountProducts = async () => {
   const res = await Axios.get(
-    'https://944879313bd5.ngrok-free.app/api/v1/manager_products',
+    'https://e0c8dfd98f99.ngrok-free.app/api/v1/products',
     {
       headers: {
         Accept: 'application/json',
@@ -13,7 +13,7 @@ const getDiscountProducts = async () => {
   )
   console.log('it works')
   console.log(res.data)
-  return res.data.products.data
+  return res.data.products
 }
 
 const getDiscountProductsById = async (id: string | number) => {

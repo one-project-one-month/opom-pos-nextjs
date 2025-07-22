@@ -14,6 +14,7 @@ type Product = {
   discountPrice: number
   startDate: string
   endDate: string
+  dis_percent: number
   // Add other fields as needed
 }
 
@@ -50,8 +51,7 @@ export default function DiscountItemsLists({
   category,
   showAddDiscountModal,
 }: DiscountItemsListsProps) {
-  const { error, isLoading, data } =
-    useFetchDiscountProducts<Product[]>(category)
+  const { error, isLoading, data } = useFetchProducts<Product[]>(category)
 
   const [itemsPerPage, setItemsPerPage] = useState(5)
   const [currentPage, setCurrentPage] = useState(1)
@@ -121,7 +121,14 @@ export default function DiscountItemsLists({
               <td className="px-3 py-2 whitespace-nowrap"></td>
               <td className="px-3 py-2 whitespace-nowrap">
                 <button onClick={showAddDiscountModal}>
-                  <span className="underline text-[#9E9E9E]">Add Discount</span>
+                  <span
+                    className={`underline ${
+                      product.dis_percent > 0
+                        ? 'text-red-400 '
+                        : 'text-[#9E9E9E]'
+                    } `}>
+                    {product.dis_percent > 0 ? 'Cancel ' : 'Add '}Discount
+                  </span>
                 </button>
               </td>
             </tr>

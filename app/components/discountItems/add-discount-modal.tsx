@@ -3,12 +3,31 @@
 import { X } from 'lucide-react'
 import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
+import { useFetchProductsById } from '@/app/hooks/useFetchProduct'
 
 interface AddDiscountModalProps {
   onClose: () => void
 }
 
 export default function AddDiscountModal({ onClose }: AddDiscountModalProps) {
+  type Product = {
+    id: number
+    name?: string
+    category_id?: string
+    price?: number
+    discountPrice?: number
+    startDate?: string
+    endDate?: string
+    // add other fields as needed
+  }
+
+  const { data, isLoading, error } = useFetchProductsById(1) as {
+    data: Product | undefined
+    isLoading: boolean
+    error: any
+  }
+  console.log(data)
+
   const mutation = useMutation({
     mutationFn: async (data: Record<string, any>) => {
       const res = await axios.post('/api/products/discount', data)
@@ -56,6 +75,7 @@ export default function AddDiscountModal({ onClose }: AddDiscountModalProps) {
                   name="productId"
                   type="text"
                   className="bg-[#F5F5F5] p-2 rounded-[10px]"
+                  defaultValue={data?.id || ''}
                 />
               </div>
               <div className="flex flex-col ms-5 w-full">
@@ -64,6 +84,7 @@ export default function AddDiscountModal({ onClose }: AddDiscountModalProps) {
                   name="productName"
                   type="text"
                   className="bg-[#F5F5F5] p-2 rounded-[10px]"
+                  defaultValue={data?.name || ''}
                 />
               </div>
             </div>
@@ -74,6 +95,7 @@ export default function AddDiscountModal({ onClose }: AddDiscountModalProps) {
                 name="category"
                 type="text"
                 className="bg-[#F5F5F5] p-2 rounded-[10px]"
+                defaultValue={data?.category_id || ''}
               />
             </div>
 
@@ -84,6 +106,7 @@ export default function AddDiscountModal({ onClose }: AddDiscountModalProps) {
                   name="originalPrice"
                   type="text"
                   className="bg-[#F5F5F5] p-2 rounded-[10px]"
+                  defaultValue={data?.price || ''}
                 />
               </div>
               <div className="flex flex-col ms-5 w-full">

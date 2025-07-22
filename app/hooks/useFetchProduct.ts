@@ -3,7 +3,7 @@ import Axios from '../api-config'
 
 const getProducts = async () => {
   const res = await Axios.get(
-    'https://backoffice.opompos.site/api/v1/products',
+    'https://e0c8dfd98f99.ngrok-free.app/api/v1/products',
     {
       headers: {
         Accept: 'application/json',
@@ -14,13 +14,16 @@ const getProducts = async () => {
   console.log('it works')
   console.log(res.data)
 
-  return res.data.product.data
+  return res.data.products
 }
 
 const getProductsById = async (id: string | number) => {
-  const res = await Axios.get('https://backoffice.opompos.site/api/v1/products')
-
-  return res.data.product.data
+  console.log(id)
+  const res = await Axios.get(
+    `https://e0c8dfd98f99.ngrok-free.app/api/v1/products/${id}`
+  )
+  console.log('full response', res.data)
+  return res.data.product
 }
 
 const getProductsByCategories = async (category: string | null) => {
