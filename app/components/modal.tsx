@@ -11,7 +11,7 @@ type ModalProps = {
 function Modal({ children, className, onClose }: ModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   const modalClassName = twMerge(
-    'min-h-[500px] w-[500px] bg-white rounded-xl p-7 relative z-50',
+    'w-[500px] max-h-[90vh] bg-white rounded-xl p-7 relative z-50 flex flex-col',
     className
   );
 

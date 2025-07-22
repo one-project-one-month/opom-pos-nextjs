@@ -21,7 +21,7 @@ const ProductList = () => {
       <div className="flex items-center justify-center h-full">
         <Loading />
       </div>
-    )
+    );
   }
 
   if (error) {
@@ -34,7 +34,7 @@ const ProductList = () => {
           </svg>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -46,7 +46,17 @@ const ProductList = () => {
             photo={product?.photo || 'assets/logo.svg'}
             name={product?.name}
             price={product?.price}
-            ordersClick={() => dispatch(addOrder(product))}
+            ordersClick={() =>
+            dispatch(
+              addOrder({
+                id: product.id.toString(),
+                photo: product.photo || '',
+                name: product.name,
+                price: product.price.toString(),
+                quantity: 1,
+              })
+            )
+          }
           />
         ))
       ) : (
@@ -55,7 +65,7 @@ const ProductList = () => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default ProductList
+export default ProductList;

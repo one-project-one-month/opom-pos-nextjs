@@ -1,4 +1,6 @@
-const base = "https://backoffice.opompos.site/api/v1/"
+const base = 'https://backoffice.opompos.site/api/v1/';
+
 export const API = {
-    PRODUCTS: base + 'products'
-}
+  PRODUCTS: base + 'products',
+  ORDER: base + 'orders/checkout',
+};
