@@ -37,7 +37,7 @@ const getProductsByCategories = async (category: string | null) => {
   return res.data.product.data
 }
 
-export const useFetchProducts = <T>(category: string | null) => {
+export const useFetchProducts = <T>(category: string | null = null) => {
   return useQuery<T>({
     queryKey: ['products', category ?? 'all'],
     queryFn: () =>

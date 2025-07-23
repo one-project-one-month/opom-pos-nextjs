@@ -1,22 +1,23 @@
-'use client';
-import React from 'react';
-import { ProductCard } from './product-card';
-import { useDispatch } from 'react-redux';
-import { addOrder } from '../../store/slices/orderSummarySlice';
-import { Product } from '../../type/product';
-import { useFetchProducts } from '../../hooks/useFetchProduct';
-import Loading from '../../(root)/(staff)/(main)/loading';
+'use client'
+import React from 'react'
+import { ProductCard } from './product-card'
+import { useDispatch } from 'react-redux'
+import { addOrder } from '../../store/slices/orderSummarySlice'
+import { Product } from '../../type/product'
+import { useFetchProducts } from '../../hooks/useFetchProduct'
+import Loading from '../../(root)/(staff)/(main)/loading'
 
 const ProductList = () => {
-  const { error, isLoading, data } = useFetchProducts<Product[]>(null);
-  const dispatch = useDispatch();
+  const { error, isLoading, data } = useFetchProducts<Product[]>(null)
+  const dispatch = useDispatch()
+  console.log('ProductList data:', data)
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full">
         <Loading />
       </div>
-    );
+    )
   }
 
   if (error) {
@@ -24,7 +25,7 @@ const ProductList = () => {
       <div className="flex items-center justify-center h-full">
         <div className="text-red-500">Error: {error.message}</div>
       </div>
-    );
+    )
   }
 
   return (
@@ -49,7 +50,7 @@ const ProductList = () => {
         />
       ))}
     </div>
-  );
-};
+  )
+}
 
-export default ProductList;
+export default ProductList
