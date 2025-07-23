@@ -3,9 +3,6 @@ import { useFetchProducts } from '@/app/hooks/useFetchProduct'
 import Loading from '@/app/(root)/(staff)/(main)/loading'
 import { useState } from 'react'
 
-import { current } from '@reduxjs/toolkit'
-import { useFetchDiscountProducts } from '@/app/hooks/useFetchDiscountProduct'
-
 // Define Product type or import it from your models
 type Product = {
   id: string
@@ -18,11 +15,6 @@ type Product = {
   // Add other fields as needed
 }
 
-// interface PaginationParams {
-//   currentPage: number
-//   itemsPerPage: number
-//   items: any
-// }
 
 interface PaginationResult {
   paginatedItems: any
@@ -42,9 +34,10 @@ const pagination = (
   const paginatedItems = items.slice(startedIndex, lastIndex)
   return { paginatedItems, totalPages, startedIndex, lastIndex }
 }
+
 interface DiscountItemsListsProps {
   category: string | null
-  showAddDiscountModal: () => void
+  showAddDiscountModal: (product:Product) => void
 }
 
 export default function DiscountItemsLists({
@@ -55,8 +48,6 @@ export default function DiscountItemsLists({
 
   const [itemsPerPage, setItemsPerPage] = useState(5)
   const [currentPage, setCurrentPage] = useState(1)
-
-  console.log(data)
 
   if (isLoading) {
     return (
@@ -73,8 +64,6 @@ export default function DiscountItemsLists({
       </div>
     )
   }
-
-  console.log(data)
 
   const { paginatedItems, totalPages, startedIndex, lastIndex } = pagination(
     currentPage,
@@ -120,7 +109,7 @@ export default function DiscountItemsLists({
               <td className="px-3 py-2 whitespace-nowrap"></td>
               <td className="px-3 py-2 whitespace-nowrap"></td>
               <td className="px-3 py-2 whitespace-nowrap">
-                <button onClick={showAddDiscountModal}>
+                <button onClick={() => showAddDiscountModal(product)}>
                   <span
                     className={`underline ${
                       product.dis_percent > 0

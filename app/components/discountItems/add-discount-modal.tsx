@@ -3,31 +3,27 @@
 import { X } from 'lucide-react'
 import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
-import { useFetchProductsById } from '@/app/hooks/useFetchProduct'
 
 interface AddDiscountModalProps {
   onClose: () => void
+  product: Product
 }
 
-export default function AddDiscountModal({ onClose }: AddDiscountModalProps) {
-  type Product = {
-    id: number
-    name?: string
-    category_id?: string
-    price?: number
-    discountPrice?: number
-    startDate?: string
-    endDate?: string
-    // add other fields as needed
-  }
+type Product = {
+  id: string
+  name?: string
+  category_id?: string
+  price?: number
+  discountPrice?: number
+  startDate?: string
+  endDate?: string
+  // add other fields as needed
+}
 
-  const { data, isLoading, error } = useFetchProductsById(1) as {
-    data: Product | undefined
-    isLoading: boolean
-    error: any
-  }
-  console.log(data)
-
+export default function AddDiscountModal({
+  onClose,
+  product,
+}: AddDiscountModalProps) {
   const mutation = useMutation({
     mutationFn: async (data: Record<string, any>) => {
       const res = await axios.post('/api/products/discount', data)
@@ -75,16 +71,16 @@ export default function AddDiscountModal({ onClose }: AddDiscountModalProps) {
                   name="productId"
                   type="text"
                   className="bg-[#F5F5F5] p-2 rounded-[10px]"
-                  defaultValue={data?.id || ''}
+                  defaultValue={product?.id || ''}
                 />
               </div>
               <div className="flex flex-col ms-5 w-full">
                 <label className="mb-3">Product Name</label>
                 <input
-                  name="productName"
+                  name="name"
                   type="text"
                   className="bg-[#F5F5F5] p-2 rounded-[10px]"
-                  defaultValue={data?.name || ''}
+                  defaultValue={product?.name || ''}
                 />
               </div>
             </div>
@@ -92,10 +88,10 @@ export default function AddDiscountModal({ onClose }: AddDiscountModalProps) {
             <div className="flex flex-col mt-5">
               <label className="mb-3">Category</label>
               <input
-                name="category"
+                name="category_id"
                 type="text"
                 className="bg-[#F5F5F5] p-2 rounded-[10px]"
-                defaultValue={data?.category_id || ''}
+                defaultValue={product?.category_id || ''}
               />
             </div>
 
@@ -106,13 +102,13 @@ export default function AddDiscountModal({ onClose }: AddDiscountModalProps) {
                   name="originalPrice"
                   type="text"
                   className="bg-[#F5F5F5] p-2 rounded-[10px]"
-                  defaultValue={data?.price || ''}
+                  defaultValue={product?.price || ''}
                 />
               </div>
               <div className="flex flex-col ms-5 w-full">
-                <label className="mb-3">Discount Price</label>
+                <label className="mb-3">Discount Percent</label>
                 <input
-                  name="discountPrice"
+                  name="disPercent"
                   type="text"
                   className="bg-[#F5F5F5] p-2 rounded-[10px]"
                 />
@@ -122,18 +118,20 @@ export default function AddDiscountModal({ onClose }: AddDiscountModalProps) {
             <div className="flex flex-col mt-5">
               <label className="mb-3">Start Date</label>
               <input
-                name="startDate"
+                name="disStartDate"
                 type="text"
                 className="bg-[#F5F5F5] p-2 rounded-[10px]"
+                defaultValue={product?.startDate || ''}
               />
             </div>
 
             <div className="flex flex-col mt-5">
               <label className="mb-3">End Date</label>
               <input
-                name="endDate"
+                name="disEndDate"
                 type="text"
                 className="bg-[#F5F5F5] p-2 rounded-[10px]"
+                defaultValue={product?.endDate || ''}
               />
             </div>
 
