@@ -15,7 +15,6 @@ type Product = {
   // Add other fields as needed
 }
 
-
 interface PaginationResult {
   paginatedItems: any
   totalPages: number
@@ -37,7 +36,7 @@ const pagination = (
 
 interface DiscountItemsListsProps {
   category: string | null
-  showAddDiscountModal: (product:Product) => void
+  showAddDiscountModal: (product: Product) => void
 }
 
 export default function DiscountItemsLists({
@@ -104,7 +103,9 @@ export default function DiscountItemsLists({
               className="*:text-gray-900 *:first:font-medium h-12 py-9 hover:bg-gray-100 transition-colors cursor-pointer">
               <td className="px-3 py-2 whitespace-nowrap">{product.id}</td>
               <td className="px-3 py-2 whitespace-nowrap">{product.name}</td>
-              <td className="px-3 py-2 whitespace-nowrap">{product.price}</td>
+              <td className="px-3 py-2 whitespace-nowrap">
+                {product.price}MMK
+              </td>
               <td className="px-3 py-2 whitespace-nowrap"></td>
               <td className="px-3 py-2 whitespace-nowrap"></td>
               <td className="px-3 py-2 whitespace-nowrap"></td>
