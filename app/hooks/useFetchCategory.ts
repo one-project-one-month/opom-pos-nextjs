@@ -1,9 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Axios from "../api-config";
+import { API } from "../constants/api";
 
 const getCategories = async () => {
     try {
-        const res = await Axios.get(`https://backoffice.opompos.site/api/v1/categories`);
+        const res = await Axios.get(API.CATEGORIES);
         console.log(res.data.category);
         return res.data.category;
     } catch (error) {

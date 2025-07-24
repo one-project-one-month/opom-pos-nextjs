@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import Axios from '../api-config'
+import { API } from '../constants/api';
 
 const getProducts = async (params? : {name?: string, category?: string}) => {
     try {
@@ -8,7 +9,7 @@ const getProducts = async (params? : {name?: string, category?: string}) => {
         if (params?.category) queryParams.append('category', params.category);
 
         const queryString = queryParams.toString();
-        const url = `https://backoffice.opompos.site/api/v1/products${queryString ? `?${queryString}` : ''}`;
+        const url = `${API.PRODUCTS}${queryString ? `?${queryString}` : ''}`;
 
         const res = await Axios.get(url);
         console.log('Fetched products:', res.data.product.data);
