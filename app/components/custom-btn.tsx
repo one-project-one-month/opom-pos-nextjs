@@ -14,7 +14,7 @@ export default function CustomBtn({
   return (
     <button
       className={twMerge(
-        'text-white rounded-sm sm:px-2.5 px-2 sm:py-2 py-1 cursor-pointer',
+        'text-white rounded-sm sm:px-2.5 px-3 sm:py-2 py-1 cursor-pointer',
         className
       )}
       {...rest}

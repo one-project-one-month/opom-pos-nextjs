@@ -12,10 +12,10 @@ Axios.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
     config.headers.set("ngrok-skip-browser-warning", "69420");
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+    return config
+},
+    error => Promise.reject(error)
+)
 
 Axios.interceptors.response.use(
   (response) => {
