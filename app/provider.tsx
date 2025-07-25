@@ -1,10 +1,11 @@
-'use client'
+"use client";
 
-import React from 'react'
-import { store } from './store/store'
-import { Provider } from 'react-redux'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import React from "react";
+import { store } from "./store/store";
+import { Provider } from "react-redux";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { AuthProvider } from "./contexts/AuthContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -13,15 +14,16 @@ const queryClient = new QueryClient({
       retry: false,
     },
   },
-})
+});
 
-export default function Providers({children}: {children : React.ReactNode}) {
-    return (
-        <Provider store={store}>
-            <QueryClientProvider client={queryClient}>
-                {children}
-            <ReactQueryDevtools initialIsOpen={false} />
-            </QueryClientProvider>
-        </Provider>
-    )
+export default function Providers({ children }: { children: React.ReactNode }) {
+  return (
+    <Provider store={store}>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>{children}</AuthProvider>
+
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </Provider>
+  );
 }
