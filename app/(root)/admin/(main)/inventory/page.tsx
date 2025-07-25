@@ -2,27 +2,91 @@
 import Loading from '@/app/(root)/(staff)/(main)/loading';
 import CategoryList from '@/app/components/category-list';
 import CustomBtn from '@/app/components/custom-btn';
-import { FilterSvg } from '@/app/components/custom-svg';
+import { FilterSvg, LowStocksSvg, OutOfStocksSvg, TotalProductsSvg } from '@/app/components/custom-svg';
 import CustomTable from '@/app/components/custom-table';
 import Modal from '@/app/components/modal';
 import ModalTitle from '@/app/components/modal-title';
+import ProductForm from '@/app/components/products/product-form';
 import TableTitle from '@/app/components/table-title';
-import { useFetchProducts } from '@/app/hooks/useFetchProduct';
-import { Product } from '@/app/type/product';
+import { useFetchCategories } from '@/app/hooks/useFetchCategories';
+import { useCreateProduct, useDeletProduct, useFetchManagerProducts, useFetchProducts } from '@/app/hooks/useFetchProduct';
+import { CategoriesResponse, Product, ProductsResponse } from '@/app/type/product';
+import { Category } from '@/app/type/type';
 import ProductImg from '@/public/assets/total-product.png';
-import { Plus } from 'lucide-react';
+import { LoaderIcon, Plus } from 'lucide-react';
 import Image from 'next/image';
+import { title } from 'process';
 import { useState } from 'react';
 
 function InventoryPage() {
-  const { error, isLoading, data } = useFetchProducts<Product[]>()
+  const [detailData, setDetailData] = useState<Product>();
   const [showModal, setShowModal] = useState(false);
+  const [confirmModal, setConfirmModal] = useState(false);
+  const [errorModal, setErrorModal] = useState(false)
+  const [isProductAdd, setIsProductAdd] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+  const [productId, setProductId] = useState(0);
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(5)
+  const [status, setStatus] = useState('')
+  const [categoryName, setCategoryName] = useState('');
+
+  const { error, isLoading, data } = useFetchManagerProducts<ProductsResponse>({ page: page, pageSize: size, status: status, category_name: categoryName })
+  const { isLoading: productsLoading, data: productsData } = useFetchManagerProducts<ProductsResponse>()
+  const { error: categoriesError, isLoading: categoriesLoading, data: categories } = useFetchCategories<CategoriesResponse[]>();
+  const { mutate, isPending, error: mutateError, data: responseData } = useCreateProduct();
+  const { mutate: deleteMutate, isPending: isDeletePending, error: deleteError } = useDeletProduct(() => {
+    setConfirmModal(false)
+  });
+  console.log(responseData, isPending, mutateError, data, 'category ', categories);
+
+  const products = data?.products?.data ?? [];
+  // const products = data ?? [];
+  const total = productsData?.["count of total products"] ?? 0;
+  const outOfStock = productsData?.["count of out of stock"] ?? 0;
+  const lowStock = productsData?.["count of low of stock"] ?? 0;
+
+  const productsList = [
+    {
+      title: 'Total Products',
+      svg: <TotalProductsSvg width={24} height={24} />,
+      count: total,
+      color: 'bg-success-300'
+    },
+    {
+      title: 'Low Stock Item',
+      svg: <LowStocksSvg width={25} height={25} />,
+      count: lowStock,
+      color: 'bg-primary-400'
+    },
+    {
+      title: 'Out of Stocks',
+      svg: <OutOfStocksSvg width={25} height={25} />,
+      count: outOfStock,
+      color: 'bg-alert-300'
+    }
+  ]
+
+  const labelItems = [
+    {
+      label: 'Out of Stock',
+      value: 'out_of_stock'
+    },
+    {
+      label: 'Low Stock',
+      value: 'low_stock'
+    },
+    {
+      label: 'In Stock',
+      value: 'full_stock'
+    }
+  ]
 
   const columns = [
     {
       title: 'No',
       key: 'id',
-      dataIndex: 'id'
+      render: (value: string, record: Product, index: number) => <span>{(index + page) * size}</span>
     },
     {
       title: 'SKU',
@@ -47,78 +111,189 @@ function InventoryPage() {
     {
       title: 'Status',
       key: 'status',
-      dataIndex: 'status'
+      dataIndex: 'stock',
+      render: (value: string) => (
+        <div>
+          {
+            Number(value) > 50 ? (
+              <span className="bg-green-600 rounded-3xl px-2 py-1 text-sm text-white">Full Stock</span>
+            ) : Number(value) >= 1 ? (
+              <span className="bg-yellow-600 rounded-3xl px-2 py-1 text-sm text-white">Low Stock</span>
+            ) : (
+              <span className="bg-red-600 rounded-3xl px-2 py-1 text-sm text-white">Out of Stock</span>
+            )
+          }
+        </div>
+      )
     },
     {
       title: 'Action',
       key: 'action',
       dataIndex: 'id',
-      render: () => {
-        return (
-          <div className='flex gap-2 font-bold'>
-            <button className='text-blue-500'>
-              Edit
-            </button> {" / "}
-            <button className='text-red-500'>
-              Delete
-            </button>
-          </div>
-        )
-      }
+      render: (value: string, record: Product) => (
+        <div className='flex gap-2 font-bold'>
+          <button className='text-blue-500 cursor-pointer' onClick={() => handleEdit(record)}>
+            Edit
+          </button> {" / "}
+          <button className='text-red-500 cursor-pointer' onClick={() => {
+            setProductId(record.id);
+            setConfirmModal(true);
+          }}>
+            Delete
+          </button>
+        </div>
+      )
     },
-
   ]
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <Loading />
-      </div>
-    )
+  const handleAdd = () => {
+    setShowModal(true)
+    setIsProductAdd(true)
   }
 
-  if (error) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <div className="text-red-500">Error: {error.message}</div>
-      </div>
-    )
+  const handleEdit = (data: Product) => {
+    setDetailData(data)
+    setShowModal(true)
+    setIsProductAdd(false)
+  }
+
+  const handleDelete = () => {
+    deleteMutate(productId)
+  }
+
+  const handleAction = (data: ProductFormValues) => {
+    const formData = new FormData();
+    formData.append('name', data.name);
+    formData.append('sku', String(data?.sku));
+    formData.append('price', String(data.price));
+    formData.append('const_price', String(data.constPrice));
+    formData.append('stock', String(data.stock));
+    formData.append('brand_id', String(data.brandId));
+    formData.append('category_id', String(data.categoryId));
+    formData.append('dis_percent', String(10));
+    if (data.photo instanceof FileList) {
+      formData.append('photo', data.photo?.[0]);
+    } else if (typeof data.photo === 'string') {
+      formData.append('photo', data.photo);
+    }
+    if (data.expiredDate) formData.append('expired_at', String(data.expiredDate));
+    mutate({
+      formData,
+      id: detailData ? data?.id : undefined,
+    });
+  }
+
+  const handleLabelClick = (value: string) => {
+    setShowMenu(false)
+    setStatus(value)
   }
 
   return (
     <div>
       <p className='text-xl'>Inventory Management</p>
-      <div className='w-[220] p-5 shadow-md flex justify-center items-center gap-5 my-7'>
-        <div className='bg-success-300 w-[45] h-[45] rounded-sm flex justify-center items-center'>
-          <Image src={ProductImg} alt='total products' />
-        </div>
-        <div>
-          <p className='mb-1'>Total Products</p>
-          <p className='font-semibold text-lg'>50, 309</p>
-        </div>
+      <div className='flex gap-8'>
+        {
+          productsList.map((product, index) => (
+            <div key={index} className='w-[220] p-5 shadow-md flex justify-center items-center gap-5 my-7'>
+              <div className={`${product.color} w-[45] h-[45] rounded-sm flex justify-center items-center`}>
+                {product.svg}
+              </div>
+              <div>
+                <p className='mb-1'>{product.title}</p>
+                <p className='font-semibold text-lg'>{productsLoading ? <LoaderIcon /> :  product.count || 0}</p>
+              </div>
+            </div>
+          ))
+        }
       </div>
-      <div className='grid grid-cols-4 gap-2'>
-        <div className='border border-primary-400 rounded-md p-5'>
-          <div className='mb-3'>
-            <p>Fruits & Vegetables</p>
-          </div>
-          <p>120</p>
-        </div>
+      <div className='grid md:grid-cols-5 sm:grid-cols-3 gap-2'>
+        {
+          categoriesLoading && <Loading />
+        }
+        {categoriesError && <p className='text-alert-400'>Error loading categories</p>}
+        {
+          categories?.map((item, index) => (
+            <div key={index} className='border border-primary-400 rounded-md p-5'>
+              <div className='mb-3'>
+                <p>{item.name}</p>
+              </div>
+              <p>{item.product.length}</p>
+            </div>
+          ))
+        }
       </div>
       <div className='flex justify-between mt-10 mb-5'>
         <TableTitle>Product Lists</TableTitle>
-        <div className='flex gap-5'>
-          <CustomBtn className="bg-[#FB9E3A] hover:bg-[#E28E34] flex gap-2" onClick={() => setShowModal(true)}><Plus /> Add product</CustomBtn>
-          <CustomBtn className="border border-primary-300 text-black flex gap-2"><FilterSvg width={18} height={18} /> Filters</CustomBtn>
+        <div className='flex gap-5 relative'>
+          <CustomBtn className="bg-[#FB9E3A] hover:bg-[#E28E34] flex gap-2" onClick={() => handleAdd()}><Plus /> Add product</CustomBtn>
+          <CustomBtn className="border border-primary-300 text-black flex gap-2" onClick={() => setShowMenu(!showMenu)}><FilterSvg width={18} height={18} /> Filters</CustomBtn>
+          {
+            showMenu &&
+            <div className='absolute right-0 top-[42px] min-h-[130px] w-[150px] bg-white rounded-md p-3 border border-gray-300 flex flex-col justify-between'>
+              {labelItems?.map((stock, index) => (
+                <span
+                  key={index}
+                  className='cursor-pointer hover:bg-gray-100 px-2 py-1 rounded'
+                  onClick={() => handleLabelClick(stock.value)}
+                >
+                  {stock.label}
+                </span>
+              ))}
+            </div>
+          }
         </div>
       </div>
       <CategoryList />
       <br />
-      <CustomTable columns={columns} data={data} />
+      <div>
+        {isLoading && <div className="text-center"><Loading /></div>}
+        {error && <p className='text-alert-400'>Error loading products</p>}
+
+        {!isLoading && !error && (
+          <CustomTable
+            columns={columns}
+            data={products}
+            pagination={{
+              pageSize: size,
+              currentPage: data?.products?.current_page,
+              lastPage: data?.products?.last_page,
+              total: data?.products?.total,
+              handleOnChange: (newPage, newSize) => {
+                setPage(newPage);
+                setSize(newSize);
+              },
+            }}
+          />
+        )}
+      </div>
       {
         showModal &&
         <Modal onClose={() => setShowModal(false)} className="bg-white p-6 rounded-2xl shadow-xl w-full max-w-sm mx-auto">
           <ModalTitle>Product Information</ModalTitle>
+          <ProductForm detailData={isProductAdd ? null : detailData} handleAction={(data) => handleAction(data)} loading={isPending} />
+        </Modal>
+      }
+      {
+        confirmModal &&
+        <Modal onClose={() => setConfirmModal(false)} className="bg-white p-6 rounded-2xl shadow-xl w-full max-w-sm mx-auto">
+          <ModalTitle>Confirmation</ModalTitle>
+          <span className='text-center'>Are you sure to delete this product?</span>
+          <div className='flex justify-center gap-2 mt-5'>
+            <CustomBtn className="border border-alert-400 hover:bg-alert-500 hover:text-white text-black" onClick={() => setConfirmModal(false)}>No</CustomBtn>
+            <CustomBtn className="border border-success-400 hover:bg-success-500 hover:text-white text-black flex gap-2 justify-center items-center" onClick={() => handleDelete()}>{
+              isDeletePending ? <Loading /> :
+                'Yes'}</CustomBtn>
+          </div>
+        </Modal>
+      }
+      {
+        errorModal &&
+        <Modal onClose={() => setErrorModal(false)} className="bg-white p-6 rounded-2xl shadow-xl w-full max-w-sm mx-auto">
+          <ModalTitle>Error</ModalTitle>
+          <span className='text-center'>{deleteError ? 'Something Went Wrong' : ''}</span>
+          <div className='flex justify-center gap-2 mt-5'>
+            <CustomBtn className="border border-alert-400 hover:bg-alert-500 hover:text-white text-black" onClick={() => setErrorModal(false)}>Ok</CustomBtn>
+          </div>
         </Modal>
       }
     </div>

@@ -15,7 +15,7 @@ export interface CreateOrderPayload {
 export const orderService = {
   createOrder: async (payload: CreateOrderPayload) => {
     try {
-      const response = await Axios.post(API.ORDER, payload);
+      const response = await Axios.post(API.order, payload);
       return response.data;
     } catch (error) {
       console.error('Error creating order:', error);
