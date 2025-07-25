@@ -34,7 +34,9 @@ function InventoryPage() {
   const { error, isLoading, data } = useFetchManagerProducts<ProductsResponse>({ page: page, pageSize: size, status: status, category_name: categoryName })
   const { isLoading: productsLoading, data: productsData } = useFetchManagerProducts<ProductsResponse>()
   const { error: categoriesError, isLoading: categoriesLoading, data: categories } = useFetchCategories<CategoriesResponse[]>();
-  const { mutate, isPending, error: mutateError, data: responseData } = useCreateProduct();
+  const { mutate, isPending, error: mutateError, data: responseData } = useCreateProduct(() => {
+    setShowModal(false)
+  });
   const { mutate: deleteMutate, isPending: isDeletePending, error: deleteError } = useDeletProduct(() => {
     setConfirmModal(false)
   });
@@ -69,6 +71,10 @@ function InventoryPage() {
 
   const labelItems = [
     {
+      label: 'All',
+      value: ''
+    },
+    {
       label: 'Out of Stock',
       value: 'out_of_stock'
     },
@@ -86,7 +92,8 @@ function InventoryPage() {
     {
       title: 'No',
       key: 'id',
-      render: (value: string, record: Product, index: number) => <span>{(index + page) * size}</span>
+      dataIndex: 'id',
+      render: (value: string, record: Product, index: number) => <span>{(page - 1) * size + index + 1}</span>
     },
     {
       title: 'SKU',
@@ -189,7 +196,7 @@ function InventoryPage() {
   }
 
   return (
-    <div>
+    <>
       <p className='text-xl'>Inventory Management</p>
       <div className='flex gap-8'>
         {
@@ -200,7 +207,7 @@ function InventoryPage() {
               </div>
               <div>
                 <p className='mb-1'>{product.title}</p>
-                <p className='font-semibold text-lg'>{productsLoading ? <LoaderIcon /> :  product.count || 0}</p>
+                <p className='font-semibold text-lg'>{productsLoading ? <LoaderIcon /> : product.count || 0}</p>
               </div>
             </div>
           ))
@@ -280,9 +287,10 @@ function InventoryPage() {
           <span className='text-center'>Are you sure to delete this product?</span>
           <div className='flex justify-center gap-2 mt-5'>
             <CustomBtn className="border border-alert-400 hover:bg-alert-500 hover:text-white text-black" onClick={() => setConfirmModal(false)}>No</CustomBtn>
-            <CustomBtn className="border border-success-400 hover:bg-success-500 hover:text-white text-black flex gap-2 justify-center items-center" onClick={() => handleDelete()}>{
-              isDeletePending ? <Loading /> :
-                'Yes'}</CustomBtn>
+            <CustomBtn className="border border-success-400 hover:bg-success-500 hover:text-white text-black flex gap-2 justify-center items-center"
+              onClick={() => handleDelete()}>
+              {isDeletePending && <Loading />}
+              Yes</CustomBtn>
           </div>
         </Modal>
       }
@@ -296,7 +304,7 @@ function InventoryPage() {
           </div>
         </Modal>
       }
-    </div>
+    </>
   )
 }
 

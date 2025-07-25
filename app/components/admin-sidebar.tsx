@@ -4,42 +4,29 @@ import { useState } from 'react';
 import NavLink from './navlink';
 
 export default function Sidebar() {
-    const [isOpen, setIsOpen] = useState(true);
 
     const styleClass = 'flex flex-col items-center gap-1';
 
     return (
-        <aside className={`bg-white text-gray-800 border-r border-gray-300 shadow transition-all duration-300 ease-in-out ${isOpen ? 'w-52' : 'w-18'} flex flex-col justify-between items-center py-6`}>
+        <aside className={`bg-white text-gray-800 border-r h-screen border-gray-300 shadow transition-all duration-300 ease-in-out w-52 flex flex-col gap-[150px] fixed items-center py-6`}>
             <nav className='flex flex-col px-4 space-y-3'>
                 <NavLink href='/admin'>
-                    {
-                        isOpen ? <div className={styleClass}><Home />Dashboard</div> : <Home />
-                    }
+                    <div className={styleClass}><Home />Dashboard</div>
                 </NavLink>
                 <NavLink href='/admin/sale-reports'>
-                    {
-                        isOpen ? <div className={styleClass}><ClipboardList />Sale Reports</div> : <ClipboardList />
-                    }
+                    <div className={styleClass}><ClipboardList />Sale Reports</div>
                 </NavLink>
                 <NavLink href='/admin/inventory'>
-                    {
-                        isOpen ? <div className={styleClass}><ListTodo />Inventory Items</div> : <ListTodo />
-                    }
+                    <div className={styleClass}><ListTodo />Inventory Items</div>
                 </NavLink>
                 <NavLink href='/admin/discount-items'>
-                    {
-                        isOpen ? <div className={styleClass}><Tag /> Discount Items</div> : <Tag />
-                    }
+                    <div className={styleClass}><Tag /> Discount Items</div>
                 </NavLink>
                 <NavLink href='/admin/staff-lists'>
-                    {
-                        isOpen ? <div className={styleClass}><User />Staff Lists</div> : <User />
-                    }
+                    <div className={styleClass}><User />Staff Lists</div>
                 </NavLink>
                 <NavLink href='/admin/member-lists'>
-                    {
-                        isOpen ? <div className={styleClass}><UsersRound />Member Lists</div> : <UsersRound />
-                    }
+                    <div className={styleClass}><UsersRound />Member Lists</div>
                 </NavLink>
                 {/* <NavLink href='/admin/settings'>
                     {
@@ -47,7 +34,6 @@ export default function Sidebar() {
                     }
                 </NavLink> */}
             </nav>
-            <button className='cursor-pointer' onClick={() => setIsOpen(prev => !prev)}><ListCollapseIcon /></button>
         </aside>
     )
 }
