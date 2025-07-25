@@ -21,7 +21,7 @@ export const LogoutButton: React.FC<LogoutButtonProps> = ({
 
   const handleLogout = async () => {
     await logout();
-    router.push("/login");
+    router.push("/auth/login");
   };
 
   return (
@@ -36,7 +36,6 @@ export const LogoutButton: React.FC<LogoutButtonProps> = ({
   );
 };
 
-// Alternative dropdown menu item version
 export const LogoutMenuItem: React.FC<{ onClose?: () => void }> = ({
   onClose,
 }) => {
@@ -50,11 +49,8 @@ export const LogoutMenuItem: React.FC<{ onClose?: () => void }> = ({
   };
 
   return (
-    <button
-      onClick={handleLogout}
-      className="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-    >
-      <LogOut className="h-4 w-4" />
+    <button onClick={handleLogout} className=" text-white">
+      <LogOut className="h-10 w-10" />
       Logout
     </button>
   );

@@ -4,9 +4,10 @@ import { format } from "date-fns";
 import { CalendarDays, History, LogOut } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import CustomBtn from "../components/custom-btn";
+// import CustomBtn from "../components/custom-btn";
 import { usePathname } from "next/navigation";
 import { BiLeftArrow } from "react-icons/bi";
+import { LogoutButton } from "./Logout";
 
 export default function Header() {
   const now = new Date();
@@ -44,9 +45,12 @@ export default function Header() {
             )}
           </>
         )}
-        <CustomBtn className="bg-alert-500 flex gap-3 items-center">
+        {/* <CustomBtn className="bg-alert-500 flex gap-3 items-center">
           <LogOut size={18} /> Log Out
-        </CustomBtn>
+        </CustomBtn> */}
+        <div className=" bg-primary-300 rounded-lg p-1 ">
+          <LogoutButton />
+        </div>
       </div>
     </header>
   );
