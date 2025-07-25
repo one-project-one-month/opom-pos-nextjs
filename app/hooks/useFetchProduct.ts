@@ -6,15 +6,15 @@ const getProducts = async (params? : {name?: string, category?: string}) => {
     try {
         const queryParams = new URLSearchParams();
         if (params?.name) queryParams.append('name', params.name);
-        if (params?.category) queryParams.append('category', params.category);
+        if (params?.category) queryParams.append('category_name', params.category);
 
         const queryString = queryParams.toString();
         const url = `${API.products}${queryString ? `?${queryString}` : ''}`;
 
         const res = await Axios.get(url);
-        console.log('Fetched products:', res.data.product.data);
+        console.log('Fetched products:', res.data.products);
         
-        return res.data.product.data;
+        return res.data.products;
 
     } catch (error) {
         console.error('Error fetching products:', error);

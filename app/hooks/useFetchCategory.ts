@@ -4,7 +4,7 @@ import { API } from "../constants/api";
 
 const getCategories = async () => {
     try {
-        const res = await Axios.get(API.CATEGORIES);
+        const res = await Axios.get(API.categories);
         console.log(res.data.category);
         return res.data.category;
     } catch (error) {

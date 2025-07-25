@@ -38,19 +38,30 @@ const ProductList = () => {
   }
 
   return (
-    <div className="h-full grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[17px] lg:gap-[20px] overflow-y-auto no-scrollbar items-center p-1">
+    <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[17px] lg:gap-[20px] overflow-y-auto no-scrollbar items-center p-1">
       {data && data.length > 0 ? (
         data.map((product, i) => (
           <ProductCard
             key={i}
-            photo={product?.photo || 'assets/logo.svg'}
+              photo={
+                typeof product.photo === 'string'
+                  ? product.photo
+                  : product.photo instanceof File
+                    ? URL.createObjectURL(product.photo)
+                    : 'assets/logo.svg'
+              }
             name={product?.name}
             price={product?.price}
             ordersClick={() =>
             dispatch(
               addOrder({
                 id: product.id.toString(),
-                photo: product.photo || '',
+                photo:
+                  typeof product.photo === 'string'
+                    ? product.photo
+                    : product.photo instanceof File
+                      ? URL.createObjectURL(product.photo)
+                      : '',
                 name: product.name,
                 price: product.price.toString(),
                 quantity: 1,
