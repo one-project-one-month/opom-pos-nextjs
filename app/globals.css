@@ -46,6 +46,8 @@
   --color-success-700: #056619;
   --color-success-800: #044c12;
   --color-success-900: #033b0e;
+
+  --color-input-gray: #F5F5F5;
 }
 
 @layer utilities {

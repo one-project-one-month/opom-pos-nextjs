@@ -1,23 +1,22 @@
-'use client'
-import React from 'react'
-import { ProductCard } from './product-card'
-import { useDispatch } from 'react-redux'
-import { addOrder } from '../../store/slices/orderSummarySlice'
-import { Product } from '../../type/product'
-import { useFetchProducts } from '../../hooks/useFetchProduct'
-import Loading from '../../(root)/(staff)/(main)/loading'
+'use client';
+import React from 'react';
+import { ProductCard } from './product-card';
+import { useDispatch } from 'react-redux';
+import { addOrder } from '../../store/slices/orderSummarySlice';
+import { Product } from '../../type/product';
+import { useFetchProducts } from '../../hooks/useFetchProduct';
+import Loading from '../../(root)/(staff)/(main)/loading';
 
 const ProductList = () => {
-  const { error, isLoading, data } = useFetchProducts<Product[]>()
-
-  const dispatch = useDispatch()
+  const { error, isLoading, data } = useFetchProducts<Product[]>(null);
+  const dispatch = useDispatch();
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full">
         <Loading />
       </div>
-    )
+    );
   }
 
   if (error) {
@@ -25,7 +24,7 @@ const ProductList = () => {
       <div className="flex items-center justify-center h-full">
         <div className="text-red-500">Error: {error.message}</div>
       </div>
-    )
+    );
   }
 
   return (
@@ -36,11 +35,21 @@ const ProductList = () => {
           photo={product?.photo || ''}
           name={product?.name}
           price={product?.price}
-          ordersClick={() => dispatch(addOrder(product))}
+          ordersClick={() =>
+            dispatch(
+              addOrder({
+                id: product.id.toString(),
+                photo: product.photo || '',
+                name: product.name,
+                price: product.price.toString(),
+                quantity: 1,
+              })
+            )
+          }
         />
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default ProductList
+export default ProductList;
