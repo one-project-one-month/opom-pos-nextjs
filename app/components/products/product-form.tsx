@@ -137,7 +137,7 @@ const ProductForm = ({ detailData, handleAction, loading }: ProductFormProps) =>
             </div>
             <div className='col-span-2'>
                 <label>Expired Date</label>
-                <input type='date'
+                <input type='date' min={new Date().toISOString().split("T")[0]}
                     {...register("expiredDate")}
                     className={inputStyle} />
             </div>

@@ -72,14 +72,18 @@ const createProducts = async (data: FormData, id?: number) => {
   return res
 }
 
-export const useCreateProduct = () => {
+export const useCreateProduct = (onSuccessCallback?: () => void) => {
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationKey: ['create-product'],
     mutationFn: ({ formData, id }: { formData: FormData; id?: number }) => createProducts(formData, id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['products','manager-products'] })
+      queryClient.invalidateQueries({ queryKey: ['manager-products', 'products'] })
+
+      if(onSuccessCallback){
+        onSuccessCallback();
+      }
     }
   })
 }
@@ -97,7 +101,7 @@ export const useDeletProduct = (onSuccessCallback?: () => void) => {
     mutationKey: ['delete-product'],
     mutationFn: (id: number) => deleteProduct(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['products', 'manager-products'] });
+      queryClient.invalidateQueries({ queryKey: ['manager-products', 'products'] });
 
       if(onSuccessCallback){
         onSuccessCallback();
