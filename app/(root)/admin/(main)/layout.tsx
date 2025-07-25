@@ -9,9 +9,9 @@ export default function AdminMainLayout({
     return (
             <div>
                 <Header />
-                <div className='flex h-screen overflow-hidden pt-20'>
+                <div className='flex overflow-hidden pt-20'>
                     <Sidebar />
-                    <main className='flex-1 overflow-y-auto p-10'>{children}</main>
+                    <main className='flex-1 overflow-y-auto ps-[250px] pe-9 pt-7 pb-10'>{children}</main>
                 </div>
             </div>
     )

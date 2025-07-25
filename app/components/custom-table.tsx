@@ -4,7 +4,7 @@ import { NextSvg, PrevSvg } from './custom-svg';
 interface ColumnType<T> {
     title: string;
     key: string;
-    dataIndex?: string;
+    dataIndex: string;
     render?: (value: any, record: T, index: number) => React.ReactNode;
 }
 
@@ -124,7 +124,7 @@ const CustomTable = <T extends Record<string, any>>({ columns, data, pagination 
                                 }
                             }}
                             disabled={pagination?.currentPage === 1}
-                            className="grid size-8 place-content-center rounded border border-gray-200 transition-colors hover:bg-gray-50 rtl:rotate-180 cursor-pointer"
+                            className="grid size-8 place-content-center rounded border border-gray-200 transition-colors hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed rtl:rotate-180 cursor-pointer"
                             aria-label="Previous page"
                         >
                             <PrevSvg />
@@ -133,16 +133,16 @@ const CustomTable = <T extends Record<string, any>>({ columns, data, pagination 
                     <li>
                         <button
                             onClick={(e) => {
-                                // e.preventDefault();
+                                e.preventDefault();
                                 if (pagination && pagination.currentPage && pagination.lastPage && (pagination?.currentPage < pagination?.lastPage)) {
                                     pagination?.handleOnChange?.(
                                         pagination.currentPage + 1,
                                         pagination.pageSize || 5
                                     )
                                 }
-                            }}
+                            }}        
                             disabled={pagination?.currentPage === pagination?.lastPage}
-                            className="grid size-8 place-content-center rounded border border-gray-200 transition-colors hover:bg-gray-50 rtl:rotate-180 cursor-pointer"
+                            className="grid size-8 place-content-center rounded border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors hover:bg-gray-50 rtl:rotate-180 cursor-pointer"
                             aria-label="Next page"
                         >
                             <NextSvg />
