@@ -86,14 +86,14 @@ const CustomTable = <T extends Record<string, any>>({ columns, data, pagination 
                                     className="pr-2.5 h-8 text-sm focus-within:outline-none cursor-pointer"
                                     onChange={handlePageSizeChange}
                                 >
-                                    <option value="5">5</option>
-                                    <option value="10">10</option>
-                                    <option value="25">25</option>
-                                    <option value="50">50</option>
-                                    <option value="100">100</option>
+                                    <option value={5}>5</option>
+                                    <option value={10}>10</option>
+                                    <option value={25}>25</option>
+                                    <option value={50}>50</option>
+                                    <option value={100}>100</option>
                                 </select>
                             </div>
-                            <span className="text-gray-600 text-sm">1-5 of {pagination?.total} items</span>
+                            <span className="text-gray-600 text-sm">1-{pagination?.pageSize} of {pagination?.total} items</span>
                         </label>
                     </li>
                 </ul>

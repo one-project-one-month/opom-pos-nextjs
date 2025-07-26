@@ -4,11 +4,12 @@ import CategoryList from '@/app/components/category-list';
 import CustomBtn from '@/app/components/custom-btn';
 import { FilterSvg, LowStocksSvg, OutOfStocksSvg, TotalProductsSvg } from '@/app/components/custom-svg';
 import CustomTable from '@/app/components/custom-table';
+import ManagerCategoryList from '@/app/components/manager-category-list';
 import Modal from '@/app/components/modal';
 import ModalTitle from '@/app/components/modal-title';
 import ProductForm from '@/app/components/products/product-form';
 import TableTitle from '@/app/components/table-title';
-import { useFetchCategories } from '@/app/hooks/useFetchCategories';
+import { useFetchCategories } from '@/app/hooks/useFetchCategory';
 import { useCreateProduct, useDeletProduct, useFetchManagerProducts, useFetchProducts } from '@/app/hooks/useFetchProduct';
 import { CategoriesResponse, Product, ProductsResponse } from '@/app/type/product';
 import { Category } from '@/app/type/type';
@@ -17,6 +18,7 @@ import { LoaderIcon, Plus } from 'lucide-react';
 import Image from 'next/image';
 import { title } from 'process';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 function InventoryPage() {
   const [detailData, setDetailData] = useState<Product>();
@@ -27,26 +29,34 @@ function InventoryPage() {
   const [showMenu, setShowMenu] = useState(false);
   const [productId, setProductId] = useState(0);
   const [page, setPage] = useState(1);
-  const [size, setSize] = useState(5)
+  const [size, setSize] = useState(10)
   const [status, setStatus] = useState('')
   const [categoryName, setCategoryName] = useState('');
 
-  const { error, isLoading, data } = useFetchManagerProducts<ProductsResponse>({ page: page, pageSize: size, status: status, category_name: categoryName })
-  const { isLoading: productsLoading, data: productsData } = useFetchManagerProducts<ProductsResponse>()
+  const params = {
+    ...(page !== 0 && { page }),
+    ...(size !== 0 && { pageSize: size }),
+    ...(status && { status }),
+    ...(categoryName && { category_name: categoryName }),
+  };
+
+  const { error, isLoading, data } = useFetchManagerProducts<ProductsResponse>(params)
   const { error: categoriesError, isLoading: categoriesLoading, data: categories } = useFetchCategories<CategoriesResponse[]>();
   const { mutate, isPending, error: mutateError, data: responseData } = useCreateProduct(() => {
     setShowModal(false)
+    toast.success(`Successfully ${detailData ? 'Updated' : 'Created'}`)
   });
   const { mutate: deleteMutate, isPending: isDeletePending, error: deleteError } = useDeletProduct(() => {
     setConfirmModal(false)
+    toast.success("Successfully Deleted")
   });
-  console.log(responseData, isPending, mutateError, data, 'category ', categories);
+  console.log(responseData, isPending, mutateError, data, 'category ', categories, size, page);
 
   const products = data?.products?.data ?? [];
   // const products = data ?? [];
-  const total = productsData?.["count of total products"] ?? 0;
-  const outOfStock = productsData?.["count of out of stock"] ?? 0;
-  const lowStock = productsData?.["count of low of stock"] ?? 0;
+  const total = data?.["count of total products"] ?? 0;
+  const outOfStock = data?.["count of out of stock"] ?? 0;
+  const lowStock = data?.["count of low of stock"] ?? 0;
 
   const productsList = [
     {
@@ -171,7 +181,7 @@ function InventoryPage() {
   const handleAction = (data: ProductFormValues) => {
     const formData = new FormData();
     formData.append('name', data.name);
-    formData.append('sku', String(data?.sku));
+    if(!detailData?.sku) formData.append('sku', String(data?.sku));
     formData.append('price', String(data.price));
     formData.append('const_price', String(data.constPrice));
     formData.append('stock', String(data.stock));
@@ -195,22 +205,36 @@ function InventoryPage() {
     setStatus(value)
   }
 
+  const handleCategoryClick = (name: string) => {
+    setCategoryName(name)
+  }
+
   return (
     <>
       <p className='text-xl'>Inventory Management</p>
       <div className='flex gap-8'>
         {
-          productsList.map((product, index) => (
-            <div key={index} className='w-[220] p-5 shadow-md flex justify-center items-center gap-5 my-7'>
-              <div className={`${product.color} w-[45] h-[45] rounded-sm flex justify-center items-center`}>
-                {product.svg}
-              </div>
-              <div>
-                <p className='mb-1'>{product.title}</p>
-                <p className='font-semibold text-lg'>{productsLoading ? <LoaderIcon /> : product.count || 0}</p>
-              </div>
-            </div>
-          ))
+          productsList.map((product, index) => {
+            console.log(product.count);
+            
+            return <>
+              {
+                product.count !== 0 ? (
+                  (
+                    <div key={index} className='w-[220] p-5 shadow-md flex justify-center items-center gap-5 my-7'>
+                      <div className={`${product.color} w-[45] h-[45] rounded-sm flex justify-center items-center`}>
+                        {product.svg}
+                      </div>
+                      <div>
+                        <p className='mb-1'>{product.title}</p>
+                        <p className='font-semibold text-lg'>{isLoading ? <LoaderIcon /> : product.count}</p>
+                      </div>
+                    </div>
+                  )
+                ) : <></>
+              }
+            </>
+          })
         }
       </div>
       <div className='grid md:grid-cols-5 sm:grid-cols-3 gap-2'>
@@ -250,7 +274,7 @@ function InventoryPage() {
           }
         </div>
       </div>
-      <CategoryList />
+      {categories && <ManagerCategoryList categoryData={categories} handleCategoryClick={handleCategoryClick} />}
       <br />
       <div>
         {isLoading && <div className="text-center"><Loading /></div>}
@@ -289,7 +313,7 @@ function InventoryPage() {
             <CustomBtn className="border border-alert-400 hover:bg-alert-500 hover:text-white text-black" onClick={() => setConfirmModal(false)}>No</CustomBtn>
             <CustomBtn className="border border-success-400 hover:bg-success-500 hover:text-white text-black flex gap-2 justify-center items-center"
               onClick={() => handleDelete()}>
-              {isDeletePending && <Loading />}
+              {isDeletePending && <LoaderIcon />}
               Yes</CustomBtn>
           </div>
         </Modal>

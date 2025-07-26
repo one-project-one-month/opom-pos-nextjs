@@ -8,8 +8,8 @@ Axios.defaults.baseURL = "";
 
 Axios.interceptors.request.use(
   async (config) => {
-    const token = "";
-    config.headers["ngrok-skip-browser-warning"] = "69420";
+    const token = '141|WHhwMolxXo9KMBiRguW7FkLHESFvoCYsCtjeckyEe720a149';
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

@@ -1,6 +1,6 @@
 import React from 'react'
 import CategoryCard from './category-card'
-import { useFetchCategories } from '@/app/hooks/useFetchCategories'
+import { useFetchCategories } from '@/app/hooks/useFetchCategory'
 import Loading from '@/app/(root)/(staff)/(main)/loading'
 
 type Props = {
