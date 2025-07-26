@@ -1,24 +1,15 @@
 import React from 'react'
 import CategoryCard from './category-card';
-
-const dummyCategories = [
-  { title: 'Vegetables and fruits', active: true },
-  { title: 'Fruits' },
-  { title: 'Meat' },
-  { title: 'Seafood' },
-  { title: 'Dairy' },
-  { title: 'Bakery' },
-  { title: 'Beverages' },
-  { title: 'Snacks' },
-  { title: 'Frozen' },
-  { title: 'Others' },
-]
+import { useFetchCategories } from '../hooks/useFetchCategory';
+import { Category } from '../type/category';
 
 const CategoryList = () => {
+  const {error, isLoading, data} = useFetchCategories<Category[]>();
   return (
     <div className='flex gap-[10px] overflow-x-auto no-scrollbar'>
-        {dummyCategories.map((cat, idx) => (
-            <CategoryCard key={idx} title={cat.title} active={cat.active} />
+      <CategoryCard className='px-5' name="All" />
+        {data?.map((cat, idx) => (
+          <CategoryCard key={idx} name={cat.name} />
         ))}
     </div>
   )
