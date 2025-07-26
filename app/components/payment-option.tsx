@@ -1,12 +1,11 @@
 import Image from 'next/image';
 import { ChangeEvent } from 'react';
-import { PaymentMethodEnum } from '@/app/type/type';
 
 export type PaymentOptionProps = {
-  value: PaymentMethodEnum;
+  value: number;
   label: string;
   description?: string;
-  iconSrc: string;
+  iconSrc?: string;
   checked: boolean;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 };
@@ -23,7 +22,7 @@ export default function PaymentOption({
     <div className="flex flex-row-reverse w-full justify-between py-7 px-5 bg-[#f5f5f5] rounded-xl">
       <input
         value={value}
-        id={value}
+        id={value.toString()}
         type="radio"
         name="payment"
         checked={checked}
@@ -31,13 +30,15 @@ export default function PaymentOption({
         className="w-5 h-5 self-center"
       />
       <div className="flex gap-2.5 items-start flex-1">
-        <Image src={iconSrc} width={24} height={24} alt={`${label} icon`} />
+        {iconSrc && (
+          <Image src={iconSrc} width={24} height={24} alt={`${label} icon`} />
+        )}
         <div className="flex flex-col gap-4 flex-1">
-          <label htmlFor={value} className="font-semibold w-full">
+          <label htmlFor={value.toString()} className="font-semibold w-full">
             {label}
           </label>
           {description && (
-            <label htmlFor={value} className="text-sm w-full">
+            <label htmlFor={value.toString()} className="text-sm w-full">
               {description}
             </label>
           )}
