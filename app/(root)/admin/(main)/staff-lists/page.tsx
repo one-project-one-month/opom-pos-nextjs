@@ -11,27 +11,6 @@ const Page = () => {
 
   const {error, isLoading, data} = useFetchStaffs<StaffList[]>();
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <Loading />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <div className="text-red-500 font-bold flex space-x-1 md:space-x-2">
-          <p>Something went wrong. Please try again later.</p>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.0} stroke="currentColor" className="size-6">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
-          </svg>
-        </div>
-      </div>
-    );
-  }
-
   // Calculate total pages
   const total = data?.length || 0;
   const lastPage = Math.ceil(total / pageSize);
@@ -45,20 +24,15 @@ const Page = () => {
   // Define table columns
   const columns = [
     {
-      title: "Id",
-      key: "id",
-      dataIndex: "id"
+      title: 'No',
+      key: 'id',
+      dataIndex: 'id',
+      render: (value: string, record: StaffList, index: number) => <span>{(currentPage - 1) * pageSize + index + 1}</span>
     },
     {
       title: "Name",
       key: "name",
       dataIndex: "name"
-    },
-    {
-      title: "Role",
-      key: "role",
-      dataIndex: "role",
-      render: (_: any, record: StaffList) => record?.role?.name
     },
     {
       title: "Email",
@@ -73,16 +47,16 @@ const Page = () => {
         return confirmedAt ? new Date(confirmedAt).toLocaleDateString() : 'Not Confirmed';
       }
     },
-    // {
-    //   title: "Status",
-    //   key: "status",
-    //   dataIndex: "suspended",
-    //   render: (suspended: number) => (
-    //     <p className={`${suspended === 1 ? "text-orange-600" : "text-green-600"}`}>
-    //       {suspended === 1 ? "Suspended" : "Active"}
-    //     </p>
-    //   )
-    // },
+    {
+      title: "Status",
+      key: "status",
+      dataIndex: "suspended",
+      render: (suspended: number) => (
+        <p className={`${suspended === 1 ? "text-orange-600" : "text-green-600"}`}>
+          {suspended === 1 ? "Suspended" : "Active"}
+        </p>
+      )
+    },
     {
       title: "Action",
       key: "action",
@@ -90,12 +64,12 @@ const Page = () => {
       render: (_: any, record: StaffList) => (
         <>
         { record.suspended === 1 ? (
-          <button className='text-green-500 font-bold'>
-            Unsuspend
+          <button className='text-white font-medium px-3 py-1 bg-green-600 hover:bg-green-700 duration-300 rounded-lg cursor-pointer'>
+            <p className='text-sm'>Unsuspend</p>
           </button>
         ) : (
-          <button className='text-red-500 font-bold'>
-            Suspend
+          <button className='text-white font-medium px-3 py-1 bg-red-600 hover:bg-red-700 duration-300 rounded-lg cursor-pointer'>
+            <p className='text-sm'>Suspend</p>
           </button>
         )}
         </>
@@ -112,27 +86,27 @@ const Page = () => {
     <div className='p-5'>
       <div className="flex justify-between items-center mt-7 mb-10">
           <p className='font-[400px] text-[25px]'>
-              Admin And Staff Lists
+            Staff Lists
           </p>
-          {/* <button className='w-[133px] h-[54px] bg-[#FB9E3A] text-white rounded-[5px] flex items-center justify-center gap-2'>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
-            Add Admin
-          </button> */}
       </div>
       <div className="overflow-x-auto">
-        <CustomTable 
-          columns={columns} 
-          data={paginatedData} 
-          pagination={{
-            pageSize,
-            currentPage,
-            lastPage,
-            total,
-            handleOnChange: handlePaginationChange
-          }}
-        />
+        {isLoading && <div className="text-center"><Loading /></div>}
+        {error && <p className='text-alert-400'>Error loading staffs</p>}
+        {
+          !isLoading && !error && (
+            <CustomTable 
+              columns={columns} 
+              data={paginatedData} 
+              pagination={{
+                pageSize,
+                currentPage,
+                lastPage,
+                total,
+                handleOnChange: handlePaginationChange
+              }}
+            />
+          )
+        }
       </div>
     </div>
   )

@@ -5,9 +5,9 @@ import { API } from '../constants/api';
 const getStaffs = async () => {
     try {
         const res = await Axios.get(API.staffs);
-        console.log('Fetched staffs:', res.data.staff_list);
+        // console.log('Fetched staffs:', res.data.Cashier List);
 
-        return res.data.staff_list;
+        return res.data["Cashier List"];
 
     } catch (error) {
         console.error('Error fetching products:', error);
