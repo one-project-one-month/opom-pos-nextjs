@@ -9,7 +9,8 @@ export interface OrderItem {
 export interface CreateOrderPayload {
   items: OrderItem[];
   paid_amount: number;
-  payment_method: string;
+  payment_id: number;
+  customer_id: string | null;
 }
 
 export const orderService = {

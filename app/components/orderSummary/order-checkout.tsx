@@ -53,9 +53,9 @@ export default function OrderCheckout({ onCheckoutClick }: OrderCheckoutProps) {
             <p>Sub Total</p>
             <p>{totalAmount} MMK</p>
           </li>
-          <li className="w-full flex justify-between pt-6">
+          {/* <li className="w-full flex justify-between pt-6">
             <p>Discount</p>
-          </li>
+          </li> */}
           <li className="w-full flex justify-between py-7">
             <p className="font-bold">Total Amount</p>
             <span className="font-bold">{totalAmount}MMK</span>

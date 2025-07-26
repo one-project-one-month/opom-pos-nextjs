@@ -1,75 +1,75 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface OrderItem {
-  id: string
-  photo: string
-  name: string
-  price: string
-  quantity: number
+  id: string;
+  photo: string;
+  name: string;
+  price: string;
+  quantity: number;
 }
 
 export interface OrderSummaryState {
-  orders: OrderItem[]
-  paidAmount: number | ''
+  orders: OrderItem[];
+  paidAmount: number | '';
 }
 
 const initialState: OrderSummaryState = {
   orders: [],
-  paidAmount: ''
-}
+  paidAmount: '',
+};
 
 export const orderSummarySlice = createSlice({
   name: 'orderSummary',
   initialState,
   reducers: {
     addOrder: (state, action: PayloadAction<OrderItem>) => {
-      const order = state.orders.find((o) => o.id === action.payload.id)
+      const order = state.orders.find((o) => o.id === action.payload.id);
       if (state.orders.length !== 0 && order) {
-        order.quantity++
+        order.quantity++;
       } else {
-        state.orders.unshift({ ...action.payload, quantity: 1 })
+        state.orders.unshift({ ...action.payload, quantity: 1 });
       }
     },
 
-    removeOrder: (state, action: PayloadAction<{id: string}>) => {
-      state.orders = state.orders.filter((o) => o.id !== action.payload.id)
+    removeOrder: (state, action: PayloadAction<{ id: string }>) => {
+      state.orders = state.orders.filter((o) => o.id !== action.payload.id);
     },
 
-    increaseQuantity: (state, action: PayloadAction<{id: string}>) => {
-      const order = state.orders.find((o) => o.id === action.payload.id)
+    increaseQuantity: (state, action: PayloadAction<{ id: string }>) => {
+      const order = state.orders.find((o) => o.id === action.payload.id);
       if (order) {
-        order.quantity++
+        order.quantity++;
       }
     },
-    
-    decreaseQuantity: (state, action: PayloadAction<{id: string}>) => {
-      const order = state.orders.find((o) => o.id === action.payload.id)
+
+    decreaseQuantity: (state, action: PayloadAction<{ id: string }>) => {
+      const order = state.orders.find((o) => o.id === action.payload.id);
       if (order) {
-        order.quantity--
+        order.quantity--;
       }
     },
-    
+
     setPaidAmount: (state, action: PayloadAction<number | ''>) => {
-      state.paidAmount = action.payload
+      state.paidAmount = action.payload;
     },
-    
+
     clearPaidAmount: (state) => {
-      state.paidAmount = ''
+      state.paidAmount = '';
     },
     clearOrders: (state) => {
       state.orders = [];
     },
   },
-})
+});
 
-export const { 
-  addOrder, 
-  removeOrder, 
-  increaseQuantity, 
+export const {
+  addOrder,
+  removeOrder,
+  increaseQuantity,
   decreaseQuantity,
   setPaidAmount,
   clearPaidAmount,
-  clearOrders
-} = orderSummarySlice.actions
+  clearOrders,
+} = orderSummarySlice.actions;
 
-export default orderSummarySlice.reducer
+export default orderSummarySlice.reducer;

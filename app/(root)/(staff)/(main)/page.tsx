@@ -5,9 +5,7 @@ import ProductSearch from '@/app/components/products/product-search';
 import OrderSummaryLayout from '@/app/components/orderSummary/order-summary-layout';
 import { useState } from 'react';
 import PaymentModal from './PaymentModal';
-import { ModalTypes, PaymentMethodTypes } from '@/app/type/type';
-import Modal from '@/app/components/modal';
-import CustomBtn from '@/app/components/custom-btn';
+import { Customer, ModalTypes } from '@/app/type/type';
 import OrderDetailsModal from '@/app/components/order-details';
 import { OrderSuccessModal } from './OrderSuccessModal';
 import { ErrorModal } from './ErrorModal';
@@ -32,8 +30,10 @@ type OrderSuccessDetails = {
 
 export default function Home() {
   const [currentModal, setCurrentModal] = useState<ModalTypes>(null);
-  const [paymentMethod, setPaymentMethod] =
-    useState<PaymentMethodTypes>('cash');
+  const [paymentMethod, setPaymentMethod] = useState<number | null>(null);
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
+    null
+  );
   const [error, setError] = useState<ErrorState>({
     isOpen: false,
     message: '',
@@ -71,7 +71,7 @@ export default function Home() {
       receiptNumber: data.receipt_number,
       totalAmount: parseFloat(data.total_amount),
       changeAmount: parseFloat(data.change_amount),
-      paidAmount: parseFloat(data.paid_amount), // Assuming the amount is in cents
+      paidAmount: parseFloat(data.paid_amount),
       date: new Date(data.order.created_at).toLocaleDateString('en-GB'),
       time: new Date(data.order.created_at).toLocaleTimeString('en-GB', {
         hour: '2-digit',
@@ -79,20 +79,22 @@ export default function Home() {
         second: '2-digit',
       }),
       memberName: data.order.customer?.name || 'Guest',
-      paymentType: 'Cash',
+      paymentType: data.payment,
     }));
 
     setCurrentModal('success');
   };
 
+  const handleCloseModal = () => {
+    setCurrentModal(null);
+    setSelectedCustomer(null);
+    setPaymentMethod(null);
+    setError({ isOpen: false, message: '' });
+  };
+
   const handleError = (message: string, title: string = 'Error') => {
     setError({ isOpen: true, message, title });
     setCurrentModal('error');
-  };
-
-  const closeError = () => {
-    setError({ isOpen: false, message: '' });
-    setCurrentModal(null);
   };
 
   return (
@@ -113,8 +115,10 @@ export default function Home() {
       {/* Order Details Modal */}
       {currentModal === 'order-details' && (
         <OrderDetailsModal
-          isOpen={true}
-          onClose={() => setCurrentModal(null)}
+          selectedCustomer={selectedCustomer}
+          setSelectedCustomer={setSelectedCustomer}
+          isOpen={currentModal === 'order-details'}
+          onClose={handleCloseModal}
           onProceedToPayment={handleProceedToPayment}
         />
       )}
@@ -122,28 +126,18 @@ export default function Home() {
       {/* Error Modal */}
       <ErrorModal
         isOpen={currentModal === 'error' && error.isOpen}
-        onClose={closeError}
+        onClose={handleCloseModal}
         title={error.title}
         message={error.message}
       />
 
-      {/* Order Modal */}
-      {currentModal === 'order' && (
-        <Modal onClose={() => setCurrentModal(null)}>
-          <CustomBtn
-            onClick={() => setCurrentModal('payment')}
-            className="bg-[#FB9E3A]"
-          >
-            Go to payment modal
-          </CustomBtn>
-        </Modal>
-      )}
       {/* Payment Modal */}
       {currentModal === 'payment' && (
         <PaymentModal
-          setCurrentModal={setCurrentModal}
           paymentMethod={paymentMethod}
+          customer={selectedCustomer}
           setPaymentMethod={setPaymentMethod}
+          onClose={handleCloseModal}
           onError={handleError}
           onSuccess={handlePaymentSuccess}
         />
@@ -152,7 +146,7 @@ export default function Home() {
       {currentModal === 'success' && (
         <OrderSuccessModal
           isOpen={true}
-          onClose={() => setCurrentModal(null)}
+          onClose={handleCloseModal}
           orderDetails={orderSuccessDetails}
         />
       )}
