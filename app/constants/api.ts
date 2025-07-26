@@ -1,5 +1,5 @@
 // const base = "https://backoffice.opompos.site/api/v1/"
-const base = "https://4f802d48e955.ngrok-free.app/api/v1/"
+export const base = "https://4f802d48e955.ngrok-free.app/api/v1/"
 export const API = {
   products: base + 'products',
   categories: base + 'categories',

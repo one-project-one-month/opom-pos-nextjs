@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 import { addOrder } from '../../store/slices/orderSummarySlice'
 import { Product } from '../../type/product'
 import { useFetchProducts } from '../../hooks/useFetchProduct'
-import Loading from '../../(root)/(staff)/(main)/loading'
+import Loading from '../../(root)/(staff)/loading'
 import { useSearchParams } from 'next/navigation'
 
 const ProductList = () => {

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { FaLock, FaUser } from "react-icons/fa";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useAuth } from "@/app/hooks/useAuth";
-import { ErrorModal } from "../../(staff)/(main)/ErrorModal";
+import { ErrorModal } from "./ErrorModal";
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -112,7 +112,7 @@ function Login() {
 
             <button
               type="submit"
-              className="bg-primary-300 text-white px-4 py-2 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-primary-300 text-white px-4 py-2 rounded cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isLoading || !formData.email || !formData.password}
             >
               {isLoading ? "Logging in..." : "Login"}

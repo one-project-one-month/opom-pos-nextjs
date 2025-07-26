@@ -181,7 +181,7 @@ function InventoryPage() {
   const handleAction = (data: ProductFormValues) => {
     const formData = new FormData();
     formData.append('name', data.name);
-    if(!detailData?.sku) formData.append('sku', String(data?.sku));
+    if (!detailData?.sku) formData.append('sku', String(data?.sku));
     formData.append('price', String(data.price));
     formData.append('const_price', String(data.constPrice));
     formData.append('stock', String(data.stock));
@@ -214,27 +214,17 @@ function InventoryPage() {
       <p className='text-xl'>Inventory Management</p>
       <div className='flex gap-8'>
         {
-          productsList.map((product, index) => {
-            console.log(product.count);
-            
-            return <>
-              {
-                product.count !== 0 ? (
-                  (
-                    <div key={index} className='w-[220] p-5 shadow-md flex justify-center items-center gap-5 my-7'>
-                      <div className={`${product.color} w-[45] h-[45] rounded-sm flex justify-center items-center`}>
-                        {product.svg}
-                      </div>
-                      <div>
-                        <p className='mb-1'>{product.title}</p>
-                        <p className='font-semibold text-lg'>{isLoading ? <LoaderIcon /> : product.count}</p>
-                      </div>
-                    </div>
-                  )
-                ) : <></>
-              }
-            </>
-          })
+          productsList.map((product, index) => (
+            <div key={index} className='w-[220] p-5 shadow-md flex justify-center items-center gap-5 my-7'>
+              <div className={`${product.color} w-[45] h-[45] rounded-sm flex justify-center items-center`}>
+                {product.svg}
+              </div>
+              <div>
+                <p className='mb-1'>{product.title}</p>
+                <p className='font-semibold text-lg'>{isLoading ? <LoaderIcon /> : product.count}</p>
+              </div>
+            </div>
+          ))
         }
       </div>
       <div className='grid md:grid-cols-5 sm:grid-cols-3 gap-2'>

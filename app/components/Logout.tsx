@@ -21,7 +21,7 @@ export const LogoutButton: React.FC<LogoutButtonProps> = ({
 
   const handleLogout = async () => {
     await logout();
-    router.push("/auth/login");
+    router.push("/login");
   };
 
   return (

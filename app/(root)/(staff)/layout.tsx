@@ -1,4 +1,5 @@
 import Header from '@/app/components/app-header'
+import { ProtectedRoute } from '@/app/components/ProtectRoute'
 
 export default function MainLayout({
   children,
@@ -6,9 +7,9 @@ export default function MainLayout({
   children: React.ReactNode
 }>) {
   return (
-    <div>
+    <ProtectedRoute>
       <Header />
       <main className="pt-[100px]">{children}</main>
-    </div>
+    </ProtectedRoute>
   )
 }

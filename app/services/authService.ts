@@ -1,5 +1,7 @@
 // import { API } from "../constants/api";
 
+import { base } from "../constants/api";
+
 // lib/auth.ts
 export interface LoginCredentials {
   email: string;
@@ -36,8 +38,6 @@ export interface UserResponse {
   User_detail: User;
   Staff_role: string | null;
 }
-
-const API_BASE_URL = "https://d8f12f513738.ngrok-free.app";
 
 class AuthService {
   private static instance: AuthService;
@@ -105,7 +105,7 @@ class AuthService {
 
     console.log("Final Request Headers:", headers);
 
-    const response = await fetch(`${API_BASE_URL}${url}`, {
+    const response = await fetch(`${base}${url}`, {
       headers,
       ...options,
     });
@@ -147,7 +147,7 @@ class AuthService {
 
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
     try {
-      const response = await this.makeRequest("/api/v1/auth/login", {
+      const response = await this.makeRequest("auth/login", {
         method: "POST",
         body: JSON.stringify(credentials),
       });
@@ -169,7 +169,7 @@ class AuthService {
     userData: RegisterData
   ): Promise<{ user: User; access_token: string; refresh_token: string }> {
     try {
-      const response = await this.makeRequest("/api/v1/auth/register", {
+      const response = await this.makeRequest("auth/register", {
         method: "POST",
         body: JSON.stringify(userData),
       });
@@ -202,7 +202,7 @@ class AuthService {
   async logout(): Promise<void> {
     try {
       if (this.accessToken) {
-        await this.makeAuthenticatedRequest("/api/auth/auth/logout", {
+        await this.makeAuthenticatedRequest("auth/logout", {
           method: "POST",
         });
       }
@@ -219,7 +219,7 @@ class AuthService {
     }
 
     try {
-      const response = await this.makeRequest("/api/auth/auth/refresh", {
+      const response = await this.makeRequest("auth/refresh", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${this.refreshToken}`,

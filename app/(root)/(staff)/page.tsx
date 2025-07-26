@@ -8,7 +8,7 @@ import PaymentModal from './PaymentModal';
 import { Customer, ModalTypes } from '@/app/type/type';
 import OrderDetailsModal from '@/app/components/order-details';
 import { OrderSuccessModal } from './OrderSuccessModal';
-import { ErrorModal } from './ErrorModal';
+import { ErrorModal } from '../login/ErrorModal';
 
 type ErrorState = {
   isOpen: boolean;

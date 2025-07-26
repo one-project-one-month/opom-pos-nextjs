@@ -20,7 +20,7 @@ export function ErrorModal({
   if (!isOpen) return null;
 
   return (
-    <Modal onClose={onClose} className="p-12 pb-7 max-w-md w-full h-100">
+    <Modal onClose={onClose} className="p-12 pb-7 max-w-md w-full h-80">
       <div className="flex flex-col items-center text-center h-full">
         {/* Error Icon */}
         <div className="bg-red-100 p-3 rounded-full mb-6 flex justify-center items-center">
@@ -31,12 +31,12 @@ export function ErrorModal({
         <h1 className="text-2xl font-bold text-center mb-4">{title}</h1>
 
         {/* Description */}
-        <p className="text-[#9E9E9E] mb-8 text-sm text-center flex-grow">
+        <p className="text-[#9E9E9E] mb-2 text-sm text-center flex-grow">
           {message}
         </p>
 
         <div className="w-full">
-          <hr className="border-[#9E9E9E80] w-full mb-6" />
+          {/* <hr className="border-[#9E9E9E80] w-full mb-6" /> */}
           <div className="flex gap-3 w-full">
             <CustomBtn
               className="flex-1 bg-white text-red-600 hover:bg-gray-100 border border-red-600"
