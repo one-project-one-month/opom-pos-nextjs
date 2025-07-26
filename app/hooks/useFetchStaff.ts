@@ -1,6 +1,6 @@
-import {     useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import Axios from '../api-config'
-import { API } from '../constants/api';
+import { API, base } from '../constants/api';
 
 const getStaffs = async () => {
     try {
@@ -20,4 +20,26 @@ export const useFetchStaffs = <T>() => {
         queryKey: ['staffs'],
         queryFn: () => getStaffs(),
     })
+}
+
+const suspendStaff = async(id: number) => {
+    const url = `${base}suspended/${id}`;
+    const res = await Axios.post(url);
+    console.log('Staff suspended:', res.data);
+    return res;
+}
+
+export const useSuspendStaff = (onSuccessCallback?: () => void) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationKey: ['suspend-staff'],
+        mutationFn: (id: number) => suspendStaff(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['staffs'] });
+            if (onSuccessCallback) {
+                onSuccessCallback();
+            }
+        }
+    })
+
 }
