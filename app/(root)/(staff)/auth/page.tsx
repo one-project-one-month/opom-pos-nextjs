@@ -1,9 +1,7 @@
-import Login from "./login/page"
+import Login from "./login/page";
 
 function page() {
-    return (
-        <Login />
-    )
+  return <Login />;
 }
 
-export default page
+export default page;

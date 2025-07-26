@@ -1,13 +1,15 @@
-import axios from 'axios';
+import axios from "axios";
 
-const Axios = axios.create();
+const Axios = axios.create({
+  baseURL: "https://d8f12f513738.ngrok-free.app/api/v1",
+});
 
-Axios.defaults.baseURL = '';
+Axios.defaults.baseURL = "";
 
 Axios.interceptors.request.use(
   async (config) => {
-    const token = '';
-
+    const token = "";
+    config.headers["ngrok-skip-browser-warning"] = "69420";
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -25,8 +27,8 @@ Axios.interceptors.response.use(
     if (error.response.status === 401) {
       //refresh token api call
       // ....
-      const access_token = '';
-      Axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+      const access_token = "";
+      Axios.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
       return Axios(error.config);
     }
     return Promise.reject(error);
