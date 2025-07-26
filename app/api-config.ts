@@ -6,7 +6,7 @@ Axios.defaults.baseURL = '';
 
 Axios.interceptors.request.use(
   async (config) => {
-    const token = '';
+    const token = '141|WHhwMolxXo9KMBiRguW7FkLHESFvoCYsCtjeckyEe720a149';
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;

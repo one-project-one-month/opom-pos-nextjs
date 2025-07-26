@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
 import CustomBtn from '../custom-btn';
-import { useFetchCategories } from '@/app/hooks/useFetchCategories';
+import { useFetchCategories } from '@/app/hooks/useFetchCategory';
 import { Brand, Category } from '@/app/type/type';
 import { useFetchBrands } from '@/app/hooks/useFetchBrands';
 import { useState } from 'react';
