@@ -7,6 +7,7 @@ export const API = {
   manager_products: base + 'manager_products',
   // manager_products: base + 'products',
   order: base + 'orders/checkout',
+  staffs: base + 'all_staff',
   customers: base + 'customers',
   paymentMethods: base + 'payments',
 };

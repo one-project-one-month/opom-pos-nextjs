@@ -2,10 +2,40 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Axios from '../api-config';
 import { API } from '../constants/api';
 
-const getProducts = async () => {
-  const res = await Axios.get(API.products);
-  return res.data.products;
+const getProducts = async (params?: { name?: string; category?: string }) => {
+  try {
+    const queryParams = new URLSearchParams();
+    if (params?.name) queryParams.append('name', params.name);
+    if (params?.category) queryParams.append('category_name', params.category);
+
+    const queryString = queryParams.toString();
+    const url = `${API.products}${queryString ? `?${queryString}` : ''}`;
+
+    const res = await Axios.get(url);
+    console.log('Fetched products:', res.data.products);
+
+    return res.data.products;
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    throw error;
+  }
 };
+
+export const useFetchProducts = <T>(params: {
+  name?: string;
+  category?: string;
+}) => {
+  return useQuery<T>({
+    queryKey: ['products', params],
+    queryFn: () => getProducts(params),
+  });
+};
+
+// const getProducts = async () => {
+//   const res = await Axios.get('https://backoffice.opompos.site/api/v1/products')
+
+//   return res.data.product.data
+// }
 
 const getProductsById = async (id: string | number) => {
   const res = await Axios.get(`${API.products}/${id}`);
@@ -20,13 +50,13 @@ const getProductsByCategories = async (category: string | null) => {
   return res.data.product.data;
 };
 
-export const useFetchProducts = <T>(category: string | null) => {
-  return useQuery<T>({
-    queryKey: ['products', category ?? 'all'],
-    queryFn: () =>
-      category === null ? getProducts() : getProductsByCategories(category),
-  });
-};
+// export const useFetchProducts = <T>(category: string | null) => {
+//   return useQuery<T>({
+//     queryKey: ['products', category ?? 'all'],
+//     queryFn: () =>
+//       category === null ? getProducts() : getProductsByCategories(category),
+//   })
+// }
 
 export const useFetchProductsById = <T>(id: string | number) => {
   return useQuery<T>({
