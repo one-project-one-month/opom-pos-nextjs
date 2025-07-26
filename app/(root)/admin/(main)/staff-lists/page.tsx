@@ -3,7 +3,7 @@ import Loading from '@/app/(root)/(staff)/(main)/loading';
 import CustomTable from '@/app/components/custom-table';
 import React, { Suspense, useState } from 'react'
 import { StaffList } from '@/app/type/staffList';
-import { useFetchStaffs, useSuspendStaff } from '@/app/hooks/useFetchStaff';
+import { useFetchStaffs, useSuspendStaff, useUnSuspendStaff } from '@/app/hooks/useFetchStaff';
 import Modal from '@/app/components/modal';
 import ModalTitle from '@/app/components/modal-title';
 import CustomBtn from '@/app/components/custom-btn';
@@ -18,6 +18,10 @@ const Page = () => {
 
   const { mutate: suspendMutate, isPending: isSuspendPending, error: suspendError } = useSuspendStaff(() => {
     setSuspendModal(false)
+  });
+
+  const { mutate: unsuspendMutate, isPending: isUnsuspendPending, error: unsuspendError } = useUnSuspendStaff(() => {
+    setUnsuspendModal(false)
   });
 
   const {error, isLoading, data} = useFetchStaffs<StaffList[]>();
@@ -35,6 +39,11 @@ const Page = () => {
   // Handle Suspend
   const handleSuspend = () => {
     suspendMutate(staffId);
+  }
+
+  // Handle Unsuspend
+  const handleUnsuspend = () => {
+    unsuspendMutate(staffId);
   }
 
   // Define table columns
@@ -153,8 +162,9 @@ const Page = () => {
           <div className='flex justify-center gap-2 mt-5'>
             <CustomBtn className="border border-alert-400 hover:bg-alert-500 hover:text-white text-black" onClick={() => setUnsuspendModal(false)}>No</CustomBtn>
             <CustomBtn className="border border-success-400 hover:bg-success-500 hover:text-white text-black flex gap-2 justify-center items-center"
-              >
-              {/* {isDeletePending && <Loading />} */}
+              onClick={() => handleUnsuspend()}
+            >
+              {isUnsuspendPending && <Loading />} 
               Yes</CustomBtn>
           </div>
         </Modal>
@@ -163,7 +173,7 @@ const Page = () => {
         errorModal &&
         <Modal onClose={() => setErrorModal(false)} className="bg-white p-6 rounded-2xl shadow-xl w-full max-w-sm mx-auto">
           <ModalTitle>Error</ModalTitle>
-          <span className='text-center'>{(suspendError) ? 'Something Went Wrong' : ''}</span>
+          <span className='text-center'>{(suspendError || unsuspendError) ? 'Something Went Wrong' : ''}</span>
           <div className='flex justify-center gap-2 mt-5'>
             <CustomBtn className="border border-alert-400 hover:bg-alert-500 hover:text-white text-black" onClick={() => setErrorModal(false)}>Ok</CustomBtn>
           </div>

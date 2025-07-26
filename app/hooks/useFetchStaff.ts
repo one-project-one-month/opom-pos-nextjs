@@ -29,6 +29,13 @@ const suspendStaff = async(id: number) => {
     return res;
 }
 
+const unSuspendStaff = async(id: number) => {
+    const url = `${base}unsuspended/${id}`;
+    const res = await Axios.post(url);
+    console.log('Staff unsuspended:', res.data);
+    return res;
+}
+
 export const useSuspendStaff = (onSuccessCallback?: () => void) => {
     const queryClient = useQueryClient()
     return useMutation({
@@ -41,5 +48,18 @@ export const useSuspendStaff = (onSuccessCallback?: () => void) => {
             }
         }
     })
+}
 
+export const useUnSuspendStaff = (onSuccessCallback?: () => void) => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationKey: ['unsuspend-staff'],
+        mutationFn: (id: number) => unSuspendStaff(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['staffs'] });
+            if (onSuccessCallback) {
+                onSuccessCallback();
+            }
+        }
+    })
 }
