@@ -1,4 +1,4 @@
-import { API } from "../constants/api";
+// import { API } from "../constants/api";
 
 // lib/auth.ts
 export interface LoginCredentials {
@@ -37,7 +37,7 @@ export interface UserResponse {
   Staff_role: string | null;
 }
 
-const API_BASE_URL = API;
+const API_BASE_URL = "https://d8f12f513738.ngrok-free.app";
 
 class AuthService {
   private static instance: AuthService;
@@ -97,11 +97,16 @@ class AuthService {
     url: string,
     options: RequestInit = {}
   ): Promise<Response> {
+    const headers = {
+      "Content-Type": "application/json",
+      "ngrok-skip-browser-warning": "69420",
+      ...options.headers,
+    };
+
+    console.log("Final Request Headers:", headers);
+
     const response = await fetch(`${API_BASE_URL}${url}`, {
-      headers: {
-        "Content-Type": "application/json",
-        ...options.headers,
-      },
+      headers,
       ...options,
     });
 
@@ -197,7 +202,7 @@ class AuthService {
   async logout(): Promise<void> {
     try {
       if (this.accessToken) {
-        await this.makeAuthenticatedRequest("/api/v1/auth/logout", {
+        await this.makeAuthenticatedRequest("/api/auth/auth/logout", {
           method: "POST",
         });
       }
@@ -214,7 +219,7 @@ class AuthService {
     }
 
     try {
-      const response = await this.makeRequest("/api/v1/auth/refresh", {
+      const response = await this.makeRequest("/api/auth/auth/refresh", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${this.refreshToken}`,
@@ -237,12 +242,17 @@ class AuthService {
   async getCurrentUser(): Promise<UserResponse> {
     try {
       const response = await this.makeAuthenticatedRequest("/api/v1/auth/user");
+      const contentType = response.headers.get("content-type") || "";
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch user data");
+      if (contentType && contentType.includes("application/json")) {
+        return await response.json();
+      } else {
+        const text = await response.text();
+        console.error(" Not JSON. Response text:\n", text);
+        throw new Error("Unexpected response format (not JSON)");
       }
 
-      return await response.json();
+      //   return await response.json();
     } catch (error) {
       throw error;
     }
