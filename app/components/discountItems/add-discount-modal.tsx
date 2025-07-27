@@ -1,7 +1,7 @@
 'use client'
 
 import { X } from 'lucide-react'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 import * as z from 'zod'
 import { useState } from 'react'
@@ -11,9 +11,9 @@ const discountProducts = z.object({
   name: z.string().min(1, 'Product Name is required'),
   category_id: z.string().min(1, 'Category ID is required'),
   price: z.string().min(1, 'Original Price is required'),
-  disPercent: z.string().min(1, 'Discount Percent is required'),
-  disStartDate: z.string().min(1, 'Start Date is required'),
-  disEndDate: z.string().min(1, 'End Date is required'),
+  dis_percent: z.string().min(1, 'Discount Percent is required'),
+  // disStartDate: z.string().min(1, 'Start Date is required'),
+  // disEndDate: z.string().min(1, 'End Date is required'),
 })
 
 interface AddDiscountModalProps {
@@ -23,9 +23,14 @@ interface AddDiscountModalProps {
 
 type Product = {
   id: string
-  name?: string
-  category_id?: string
-  price?: number
+  name: string
+  price: number
+  discountPrice: number
+  category_id: number
+  startDate: string
+  endDate: string
+  dis_percent: number
+  sku: number
 }
 
 export default function AddDiscountModal({
@@ -35,13 +40,29 @@ export default function AddDiscountModal({
   const [validationError, setValidationError] = useState<
     Record<string, string>
   >({})
+  const queryClient = useQueryClient()
 
   const mutation = useMutation({
     mutationFn: async (data: Record<string, any>) => {
-      const res = await axios.post('/api/products/discount', data)
+      const { sku, ...withoutSku } = product
+
+      const url = `https://4f802d48e955.ngrok-free.app/api/v1/products/${product.id}`
+
+      const updatedData = {
+        ...withoutSku,
+        dis_percent: Number(data.dis_percent),
+      }
+      console.log('Updated Data:', updatedData)
+      const res = await axios.post(url, updatedData, {
+        headers: {
+          Authorization: `Bearer 155|4pVGieDrkgFQ1ofBdIzfQrN8m0NSkLIYFHJEirC77e2c7bcb`,
+        },
+      })
+
       return res.data
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['products'] })
       alert('Discount added!')
       onClose()
     },
@@ -52,15 +73,18 @@ export default function AddDiscountModal({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    console.log('Form submitted')
     const form = e.currentTarget
     const formData = new FormData(form)
 
     const data = Object.fromEntries(formData.entries())
+    // console.log('Form Data:', data)
     try {
       const validation = discountProducts.parse(data)
+      console.log('it works')
       console.log(validation)
       setValidationError({})
-      // mutation.mutate(validation)
+      mutation.mutate(validation)
     } catch (err) {
       if (err instanceof z.ZodError) {
         const fieldErrors: Record<string, string> = {}
@@ -154,19 +178,19 @@ export default function AddDiscountModal({
               <div className="flex flex-col ms-5 w-full">
                 <label className="mb-3">Discount Percent</label>
                 <input
-                  name="disPercent"
+                  name="dis_percent"
                   type="number"
                   className="bg-[#F5F5F5] p-2 rounded-[10px]"
                 />
-                {validationError.disPercent && (
+                {validationError.dis_percent && (
                   <span className="text-red-500 text-sm">
-                    {validationError.disPercent}
+                    {validationError.dis_percent}
                   </span>
                 )}
               </div>
             </div>
 
-            <div className="flex flex-col mt-5">
+            {/* <div className="flex flex-col mt-5">
               <label className="mb-3">Start Date</label>
               <input
                 name="disStartDate"
@@ -194,7 +218,7 @@ export default function AddDiscountModal({
                   {validationError.disEndDate}
                 </span>
               )}
-            </div>
+            </div> */}
 
             <button
               type="submit"

@@ -1,7 +1,10 @@
 'use client'
-import { useFetchProducts } from '@/app/hooks/useFetchProduct'
+// import { useFetchProducts } from '@/app/hooks/useFetchProduct'
+import { useFetchDiscountProducts } from '@/app/hooks/useFetchDiscountProduct'
 import Loading from '@/app/(root)/(staff)/(main)/loading'
 import { useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import axios from 'axios'
 
 // Define Product type or import it from your models
 type Product = {
@@ -9,9 +12,11 @@ type Product = {
   name: string
   price: number
   discountPrice: number
+  category_id: number
   startDate: string
   endDate: string
   dis_percent: number
+  sku: number
   // Add other fields as needed
 }
 
@@ -39,14 +44,55 @@ interface DiscountItemsListsProps {
   showAddDiscountModal: (product: Product) => void
 }
 
+interface CancelDiscountProduct {
+  id: string
+  name: string
+  price: number
+  discountPrice: number
+  category_id: number
+  startDate: string
+  endDate: string
+  dis_percent: number
+  sku: number
+}
 export default function DiscountItemsLists({
   category,
   showAddDiscountModal,
 }: DiscountItemsListsProps) {
-  const { error, isLoading, data } = useFetchProducts<Product[]>(category)
+  const queryClient = useQueryClient()
 
   const [itemsPerPage, setItemsPerPage] = useState(5)
   const [currentPage, setCurrentPage] = useState(1)
+
+  const { error, isLoading, data } = useFetchDiscountProducts<Product[]>(
+    category,
+    currentPage
+  )
+
+  const mutation = useMutation<any, Error, CancelDiscountProduct>({
+    mutationFn: async (product: CancelDiscountProduct) => {
+      const { sku, ...withoutSku } = product
+      const url = `https://4f802d48e955.ngrok-free.app/api/v1/products/${product.id}`
+      const res = await axios.post(
+        url,
+        { ...withoutSku, dis_percent: 0 },
+        {
+          headers: {
+            Authorization: `Bearer 155|4pVGieDrkgFQ1ofBdIzfQrN8m0NSkLIYFHJEirC77e2c7bcb`,
+          },
+        }
+      )
+      return res.data
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['products'] })
+      alert('Discount Cancel')
+    },
+    onError: (error: any) => {
+      alert(`Error: ${error?.message || 'Something went wrong'}`)
+    },
+  })
 
   if (isLoading) {
     return (
@@ -70,6 +116,10 @@ export default function DiscountItemsLists({
     data
   )
 
+  const cancelDiscount = (product: CancelDiscountProduct): void => {
+    mutation.mutate(product)
+  }
+
   return (
     <div className="overflow-x-auto ">
       <table className="min-w-full divide-y-2 divide-gray-200">
@@ -87,12 +137,12 @@ export default function DiscountItemsLists({
             <th className="px-3 py-2 whitespace-nowrap">
               <span className="flex items-center gap-1">Discount Price</span>
             </th>
-            <th className="px-3 py-2 whitespace-nowrap">
+            {/* <th className="px-3 py-2 whitespace-nowrap">
               <span className="flex items-center gap-1">Start Date</span>
             </th>
             <th className="px-3 py-2 whitespace-nowrap">
               <span className="flex items-center gap-1">End Date</span>
-            </th>
+            </th> */}
             <th className="px-3 py-2 whitespace-nowrap">Action</th>
           </tr>
         </thead>
@@ -101,16 +151,28 @@ export default function DiscountItemsLists({
             <tr
               key={product.id}
               className="*:text-gray-900 *:first:font-medium h-12 py-9 hover:bg-gray-100 transition-colors cursor-pointer">
-              <td className="px-3 py-2 whitespace-nowrap">{product.id}</td>
+              <td className="px-3 py-2 whitespace-nowrap">{product.sku}</td>
               <td className="px-3 py-2 whitespace-nowrap">{product.name}</td>
               <td className="px-3 py-2 whitespace-nowrap">
-                {product.price}MMK
+                {product.price} <span className="font-bold">MMK</span>
               </td>
-              <td className="px-3 py-2 whitespace-nowrap"></td>
-              <td className="px-3 py-2 whitespace-nowrap"></td>
-              <td className="px-3 py-2 whitespace-nowrap"></td>
               <td className="px-3 py-2 whitespace-nowrap">
-                <button onClick={() => showAddDiscountModal(product)}>
+                {product.dis_percent
+                  ? Math.floor(
+                      product.price -
+                        product.price * (product.dis_percent / 100)
+                    ) + ' MMK'
+                  : 'N/A'}
+              </td>
+              {/* <td className="px-3 py-2 whitespace-nowrap"></td>
+              <td className="px-3 py-2 whitespace-nowrap"></td> */}
+              <td className="px-3 py-2 whitespace-nowrap">
+                <button
+                  onClick={() =>
+                    product.dis_percent > 0
+                      ? cancelDiscount(product)
+                      : showAddDiscountModal(product)
+                  }>
                   <span
                     className={`underline ${
                       product.dis_percent > 0
@@ -166,8 +228,8 @@ export default function DiscountItemsLists({
           </li>
 
           <li>
-            <a
-              href="#"
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
               className="grid size-8 place-content-center rounded border border-gray-200 transition-colors hover:bg-gray-50 rtl:rotate-180"
               aria-label="Previous page">
               <svg
@@ -181,11 +243,13 @@ export default function DiscountItemsLists({
                   clipRule="evenodd"
                 />
               </svg>
-            </a>
+            </button>
           </li>
           <li>
-            <a
-              href="#"
+            <button
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
               className="grid size-8 place-content-center rounded border border-gray-200 transition-colors hover:bg-gray-50 rtl:rotate-180"
               aria-label="Next page">
               <svg
@@ -199,7 +263,7 @@ export default function DiscountItemsLists({
                   clipRule="evenodd"
                 />
               </svg>
-            </a>
+            </button>
           </li>
         </ul>
       </div>

@@ -1,80 +1,46 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import Axios from '../api-config'
 
-const getDiscountProducts = async () => {
+const url = 'https://79403962ac78.ngrok-free.app/api/v1/manager_products'
+const token = 'Bearer 271|RKONjOzAdPtZI7Yiw6iisFl1T021oafbvlOsoIeL471b6932'
+
+const getDiscountProducts = async (page: string | number | null) => {
   const res = await Axios.get(
-    'https://e0c8dfd98f99.ngrok-free.app/api/v1/products',
+    `${url}?page=${page}`,
     {
       headers: {
-        Accept: 'application/json',
-        // add any other headers you need
+        Authorization: token,
+        'Content-Type': 'application/json',
       },
     }
+    // console.log(res)
+    // 'https://backoffice.opompos.site/api/v1/products'
   )
-  console.log('it works')
-  console.log(res.data)
-  return res.data.products
-}
-
-const getDiscountProductsById = async (id: string | number) => {
-  const res = await Axios.get(
-    `https://944879313bd5.ngrok-free.app/api/v1/manager_products`,
-    {
-      params: { id: id },
-    }
-  )
-
-  return res.data.product.data
+  console.log(res)
+  return res.data.products.data
 }
 
 const getDiscountProductsByCategories = async (category: string | null) => {
-  const res = await Axios.get(
-    `https://94398ae51084.ngrok-free.app/api/v1/dis_products`,
-    {
-      params: { category: category },
-    }
-  )
-
-  console.log(res)
-
-  return res
-}
-
-export const useFetchDiscountProducts = <T>(category: string | null) => {
-  return useQuery<T>({
-    queryKey: ['discount_products', category ?? 'all'],
-    queryFn: () =>
-      category === null
-        ? getDiscountProducts()
-        : getDiscountProductsByCategories(category),
-  })
-}
-
-export const useFetchDiscountProductsById = <T>(id: string | number) => {
-  return useQuery<T>({
-    queryKey: ['discount_products', id],
-    queryFn: () => getDiscountProductsById(id),
-  })
-}
-
-//call in page
-
-// const {data, error, isSuccess} = useFetchProducts<Products[]>();
-
-//create order mutation
-const createDiscount = async ({}) => {
-  const res = await Axios.post('', {})
-  return res
-}
-
-export const useCreateDiscount = () => {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationKey: ['create-discount'],
-    mutationFn: async ({}) => createDiscount({}),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['discount_products'] })
+  const res = await Axios.get(url, {
+    headers: {
+      Authorization: token,
+      'Content-Type': 'application/json',
     },
+    params: { category_name: category },
+  })
+
+  return res.data.products.data
+}
+
+export const useFetchDiscountProducts = <T>(
+  category: string | null,
+  page: string | number | null
+) => {
+  return useQuery<T>({
+    queryKey: ['products', category ?? 'all', page ?? 1],
+    queryFn: () =>
+      category === null && page !== null
+        ? getDiscountProducts(page)
+        : getDiscountProductsByCategories(category),
   })
 }
