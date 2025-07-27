@@ -8,12 +8,14 @@ export default function AdminMainLayout({
   children: React.ReactNode;
 }>) {
   return (
-      <ProtectedRoute>
+    <>
+      {/* // <ProtectedRoute> */}
         <Header />
         <div className="flex overflow-hidden pt-20">
           <Sidebar />
           <main className="flex-1 overflow-y-auto ps-[250px] pe-9 pt-7 pb-10">{children}</main>
         </div>
-      </ProtectedRoute>
+      {/* // </ProtectedRoute> */}
+    </>  
   );
 }

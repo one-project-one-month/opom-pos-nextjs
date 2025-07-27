@@ -7,9 +7,11 @@ export default function MainLayout({
   children: React.ReactNode
 }>) {
   return (
-    <ProtectedRoute>
+    <>
+    {/* <ProtectedRoute> */}
       <Header />
       <main className="pt-[100px]">{children}</main>
-    </ProtectedRoute>
+    {/* </ProtectedRoute> */}
+    </>
   )
 }
