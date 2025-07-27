@@ -126,7 +126,7 @@ function SaleReportsPage() {
   const hasActiveFilters = Object.values(filters).some(value => value !== '')
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="p-6 min-h-screen">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900 mb-6">Sale Overview</h1>
@@ -159,7 +159,7 @@ function SaleReportsPage() {
       </div>
 
       {/* Sale Report Section */}
-      <div className="bg-white rounded-lg shadow-sm ">
+      <div>
         <div className="p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-gray-900">Sale Report</h2>
@@ -168,22 +168,7 @@ function SaleReportsPage() {
                 <Download className="w-4 h-4" />
                 Export to pdf
               </button>
-              <button 
-                onClick={() => setShowFilters(!showFilters)}
-                className={`flex items-center gap-2 border px-4 py-2 rounded-lg transition-colors ${
-                  showFilters || hasActiveFilters 
-                    ? 'border-orange-500 bg-orange-50 text-orange-600' 
-                    : 'border-gray-300 hover:bg-gray-50'
-                }`}
-              >
-                <Filter className="w-4 h-4" />
-                Filters
-                {hasActiveFilters && (
-                  <span className="bg-orange-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                    {Object.values(filters).filter(v => v !== '').length}
-                  </span>
-                )}
-              </button>
+               
               <div className="relative">
                 <select 
                   value={filterMonth}
@@ -202,91 +187,11 @@ function SaleReportsPage() {
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Sales Report</h3>
         </div>
 
-        {/* Filter Panel */}
-        {showFilters && (
-          <div className="px-6 py-4 bg-gray-50 border-b">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {/* Staff Name Filter */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Staff Name
-                </label>
-                <select
-                  value={filters.staffName}
-                  onChange={(e) => handleFilterChange('staffName', e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                >
-                  <option value="">All Staff</option>
-                  {uniqueStaff.map(staff => (
-                    <option key={staff} value={staff}>{staff}</option>
-                  ))}
-                </select>
-              </div>
+        
+              
 
-              {/* Payment Method Filter */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Payment Method
-                </label>
-                <select
-                  value={filters.paymentMethod}
-                  onChange={(e) => handleFilterChange('paymentMethod', e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                >
-                  <option value="">All Methods</option>
-                  {uniquePaymentMethods.map(method => (
-                    <option key={method} value={method}>{method}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Amount Range */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Amount Range (MMK)
-                </label>
-                <div className="flex gap-2">
-                  <input
-                    type="number"
-                    placeholder="Min"
-                    value={filters.minAmount}
-                    onChange={(e) => handleFilterChange('minAmount', e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  />
-                  <input
-                    type="number"
-                    placeholder="Max"
-                    value={filters.maxAmount}
-                    onChange={(e) => handleFilterChange('maxAmount', e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  />
-                </div>
-              </div>
-            </div>
             
-            {/* Filter Actions */}
-            <div className="flex items-center justify-between mt-4">
-              <div className="text-sm text-gray-600">
-                Showing {filteredData.length} of {salesData.length} results
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={clearFilters}
-                  className="px-3 py-1 text-sm text-gray-600 hover:text-gray-800 border border-gray-300 rounded hover:bg-gray-50"
-                >
-                  Clear All
-                </button>
-                <button
-                  onClick={() => setShowFilters(false)}
-                  className="px-3 py-1 text-sm bg-orange-500 text-white rounded hover:bg-orange-600"
-                >
-                  Apply Filters
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
+            
         {/* Table */}
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -358,7 +263,7 @@ function SaleReportsPage() {
         </div>
 
         {/* Pagination */}
-        <div className="px-6 py-4 border-t bg-gray-50">
+        <div className="px-6 py-4 border-t">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <span className="text-sm text-gray-700">Items per page:</span>
@@ -367,7 +272,6 @@ function SaleReportsPage() {
                 onChange={(e) => setItemsPerPage(Number(e.target.value))}
                 className="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
               >
-                <option value={5}>5</option>
                 <option value={10}>10</option>
                 <option value={20}>20</option>
                 <option value={50}>50</option>

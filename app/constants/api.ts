@@ -9,4 +9,5 @@ export const API = {
   staffs: base + 'all_staff',
   customers: base + 'customers',
   paymentMethods: base + 'payments',
+  orderHistory : base + 'orders',
 };

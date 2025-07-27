@@ -1,7 +1,7 @@
 import React from 'react'
 import CategoryCard from './category-card'
 import { useFetchCategories } from '@/app/hooks/useFetchCategory'
-import Loading from '@/app/(root)/(staff)/(main)/loading'
+import Loading from '@/app/(root)/(staff)/loading'
 
 type Props = {
   setCategory: (val: string) => void
