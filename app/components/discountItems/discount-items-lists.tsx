@@ -3,8 +3,6 @@ import { useFetchProducts } from '@/app/hooks/useFetchProduct'
 import Loading from '@/app/(root)/(staff)/loading'
 import { useState } from 'react'
 
-import { current } from '@reduxjs/toolkit'
-
 // Define Product type or import it from your models
 type Product = {
   id: string
@@ -13,14 +11,9 @@ type Product = {
   discountPrice: number
   startDate: string
   endDate: string
+  dis_percent: number
   // Add other fields as needed
 }
-
-// interface PaginationParams {
-//   currentPage: number
-//   itemsPerPage: number
-//   items: any
-// }
 
 interface PaginationResult {
   paginatedItems: any
@@ -40,9 +33,10 @@ const pagination = (
   const paginatedItems = items.slice(startedIndex, lastIndex)
   return { paginatedItems, totalPages, startedIndex, lastIndex }
 }
+
 interface DiscountItemsListsProps {
   category: string | null
-  showAddDiscountModal: () => void
+  showAddDiscountModal: (product: Product) => void
 }
 
 export default function DiscountItemsLists({
@@ -69,8 +63,6 @@ export default function DiscountItemsLists({
       </div>
     )
   }
-
-  console.log(data)
 
   const { paginatedItems, totalPages, startedIndex, lastIndex } = pagination(
     currentPage,
@@ -111,13 +103,22 @@ export default function DiscountItemsLists({
               className="*:text-gray-900 *:first:font-medium h-12 py-9 hover:bg-gray-100 transition-colors cursor-pointer">
               <td className="px-3 py-2 whitespace-nowrap">{product.id}</td>
               <td className="px-3 py-2 whitespace-nowrap">{product.name}</td>
-              <td className="px-3 py-2 whitespace-nowrap">{product.price}</td>
+              <td className="px-3 py-2 whitespace-nowrap">
+                {product.price}MMK
+              </td>
               <td className="px-3 py-2 whitespace-nowrap"></td>
               <td className="px-3 py-2 whitespace-nowrap"></td>
               <td className="px-3 py-2 whitespace-nowrap"></td>
               <td className="px-3 py-2 whitespace-nowrap">
-                <button onClick={showAddDiscountModal}>
-                  <span className="underline text-[#9E9E9E]">Add Discount</span>
+                <button onClick={() => showAddDiscountModal(product)}>
+                  <span
+                    className={`underline ${
+                      product.dis_percent > 0
+                        ? 'text-red-400 '
+                        : 'text-[#9E9E9E]'
+                    } `}>
+                    {product.dis_percent > 0 ? 'Cancel ' : 'Add '}Discount
+                  </span>
                 </button>
               </td>
             </tr>

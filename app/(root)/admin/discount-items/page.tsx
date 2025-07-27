@@ -5,8 +5,20 @@ import { useFetchProducts } from '@/app/hooks/useFetchProduct'
 import DiscountItemsLists from '@/app/components/discountItems/discount-items-lists'
 import AddDiscountModal from '@/app/components/discountItems/add-discount-modal'
 import { useState } from 'react'
+
+type Product = {
+  id: string
+  name?: string
+  category_id?: string
+  price?: number
+  discountPrice?: number
+  startDate?: string
+  endDate?: string
+  dis_percent?: number
+}
+
 export default function Page() {
-  const [addDiscountModal, setAddDiscountModal] = useState(false)
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [category, setCategory] = useState<string | null>(null)
   return (
     <div className="w-full relative  p-5 flex flex-col">
@@ -19,11 +31,14 @@ export default function Page() {
       </div>
       <DiscountItemsLists
         category={category}
-        showAddDiscountModal={() => setAddDiscountModal(true)}
+        showAddDiscountModal={(product) => setSelectedProduct(product)}
       />
 
-      {addDiscountModal && (
-        <AddDiscountModal onClose={() => setAddDiscountModal(false)} />
+      {selectedProduct && (
+        <AddDiscountModal
+          product={selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+        />
       )}
     </div>
   )
