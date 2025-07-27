@@ -24,9 +24,7 @@ export default function RootLayout({
           }}
         />
         <Providers>
-          {/* <ProtectedRoute> */}
             {children}
-          {/* </ProtectedRoute> */}
         </Providers>
       </body>
     </html>

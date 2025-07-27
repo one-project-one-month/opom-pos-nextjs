@@ -1,6 +1,6 @@
 'use client'
 import CategoryList from '@/app/components/discountItems/category-lists'
-import Loading from '@/app/(root)/(staff)/(main)/loading'
+import Loading from '@/app/(root)/(staff)/loading'
 import { useFetchProducts } from '@/app/hooks/useFetchProduct'
 import DiscountItemsLists from '@/app/components/discountItems/discount-items-lists'
 import AddDiscountModal from '@/app/components/discountItems/add-discount-modal'

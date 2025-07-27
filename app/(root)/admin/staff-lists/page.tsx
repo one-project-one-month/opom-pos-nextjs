@@ -1,5 +1,5 @@
 "use client"
-import Loading from '@/app/(root)/(staff)/(main)/loading';
+import Loading from '@/app/(root)/(staff)/loading';
 import CustomTable from '@/app/components/custom-table';
 import React, { Suspense, useState } from 'react'
 import { StaffList } from '@/app/type/staffList';

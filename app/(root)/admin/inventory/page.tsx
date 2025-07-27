@@ -1,5 +1,5 @@
 'use client'
-import Loading from '@/app/(root)/(staff)/(main)/loading';
+import Loading from '@/app/(root)/(staff)/loading';
 import CategoryList from '@/app/components/category-list';
 import CustomBtn from '@/app/components/custom-btn';
 import { FilterSvg, LowStocksSvg, OutOfStocksSvg, TotalProductsSvg } from '@/app/components/custom-svg';

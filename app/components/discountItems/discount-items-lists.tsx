@@ -1,6 +1,6 @@
 'use client'
 import { useFetchProducts } from '@/app/hooks/useFetchProduct'
-import Loading from '@/app/(root)/(staff)/(main)/loading'
+import Loading from '@/app/(root)/(staff)/loading'
 import { useState } from 'react'
 
 import { current } from '@reduxjs/toolkit'
