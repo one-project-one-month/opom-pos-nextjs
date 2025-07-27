@@ -5,6 +5,7 @@ import { Brand, Category } from '@/app/type/type';
 import { useFetchBrands } from '@/app/hooks/useFetchBrands';
 import { useState } from 'react';
 import { Product } from '@/app/type/product';
+import { ProductFormValues } from '@/app/type/form';
 import { Loader, LoaderIcon, RefreshCcw } from 'lucide-react';
 import Image from 'next/image';
 
