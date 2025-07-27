@@ -1,7 +1,12 @@
 'use client'
+<<<<<<< HEAD
 // import { useFetchProducts } from '@/app/hooks/useFetchProduct'
 import { useFetchDiscountProducts } from '@/app/hooks/useFetchDiscountProduct'
 import Loading from '@/app/(root)/(staff)/(main)/loading'
+=======
+import { useFetchProducts } from '@/app/hooks/useFetchProduct'
+import Loading from '@/app/(root)/(staff)/loading'
+>>>>>>> dev
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'

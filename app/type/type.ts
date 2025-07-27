@@ -1,9 +1,21 @@
-export enum PaymentMethodEnum {
-  Cash = 'cash',
-  DigitalWallet = 'digital-wallet',
-  CreditCard = 'credit-card',
-}
+export type ModalTypes =
+  | 'order-details'
+  | 'payment'
+  | 'success'
+  | 'error'
+  | null;
 
-export type PaymentMethodTypes = `${PaymentMethodEnum}`;
+export type Category = {
+  id: string;
+  name: string;
+};
 
-export type ModalTypes = 'order' | 'order-details' | 'payment' | 'success' | 'error' | null;
+export type Brand = {
+  id: string;
+  name: string;
+};
+
+export type Customer = {
+  id: string;
+  name: string;
+};

@@ -1,49 +1,62 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import Axios from '../api-config'
+import { API } from '../constants/api'
 
-const getProducts = async () => {
-  const res = await Axios.get(
-    'https://backoffice.opompos.site/api/v1/products',
-    {
-      headers: {
-        Accept: 'application/json',
-      },
-    }
-  )
+const getProducts = async (params?: { name?: string; category?: string }) => {
+  try {
+    const queryParams = new URLSearchParams()
+    if (params?.name) queryParams.append('name', params.name)
+    if (params?.category) queryParams.append('category_name', params.category)
 
-  console.log('it works')
-  console.log(res.data)
+    const queryString = queryParams.toString()
+    const url = `${API.products}${queryString ? `?${queryString}` : ''}`
 
-  return res.data
+    const res = await Axios.get(url)
+    console.log('Fetched products:', res.data.products)
+
+    return res.data.products
+  } catch (error) {
+    console.error('Error fetching products:', error)
+    throw error
+  }
 }
 
+export const useFetchProducts = <T>(params: {
+  name?: string
+  category?: string
+}) => {
+  return useQuery<T>({
+    queryKey: ['products', params],
+    queryFn: () => getProducts(params),
+  })
+}
+
+// const getProducts = async () => {
+//   const res = await Axios.get('https://backoffice.opompos.site/api/v1/products')
+
+//   return res.data.product.data
+// }
+
 const getProductsById = async (id: string | number) => {
-  console.log(id)
-  const res = await Axios.get(
-    `https://backoffice.opompos.site/api/v1/products/${id}`
-  )
-  console.log('full response', res.data)
-  return res.data
+  const res = await Axios.get(`${API.products}/${id}`)
+  return res.data.product.data
 }
 
 const getProductsByCategories = async (category: string | null) => {
-  const res = await Axios.get(
-    `https://backoffice.opompos.site/api/v1/products`,
-    {
-      params: { category: category },
-    }
-  )
+  const res = await Axios.get(API.products, {
+    params: { category: category },
+  })
 
   return res.data.product.data
 }
 
-export const useFetchProducts = <T>(category: string | null = null) => {
-  return useQuery<T>({
-    queryKey: ['products', category ?? 'all'],
-    queryFn: () =>
-      category === null ? getProducts() : getProductsByCategories(category),
-  })
-}
+// export const useFetchProducts = <T>(category: string | null) => {
+//   return useQuery<T>({
+//     queryKey: ['products', category ?? 'all'],
+//     queryFn: () =>
+//       category === null ? getProducts() : getProductsByCategories(category),
+//   })
+// }
 
 export const useFetchProductsById = <T>(id: string | number) => {
   return useQuery<T>({
@@ -52,24 +65,70 @@ export const useFetchProductsById = <T>(id: string | number) => {
   })
 }
 
-//call in page
-
-// const {data, error, isSuccess} = useFetchProducts<Products[]>();
-
-//create order mutation
-const createOrder = async ({}) => {
-  const res = await Axios.post('', {})
+const createProducts = async (data: FormData, id?: number) => {
+  const url = id ? `${API.products}/${id}` : API.products
+  const res = await Axios.post(url, data)
   return res
 }
 
-export const useCreateOrder = () => {
+export const useCreateProduct = (onSuccessCallback?: () => void) => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationKey: ['create-order'],
-    mutationFn: async ({}) => createOrder({}),
+    mutationKey: ['create-product'],
+    mutationFn: ({ formData, id }: { formData: FormData; id?: number }) =>
+      createProducts(formData, id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['orders'] })
+      queryClient.invalidateQueries({
+        queryKey: ['manager-products', 'products'],
+      })
+
+      if (onSuccessCallback) {
+        onSuccessCallback()
+      }
     },
+  })
+}
+
+const deleteProduct = async (id: number) => {
+  const url = `${API.products}/${id}`
+  const res = await Axios.delete(url)
+  return res
+}
+
+export const useDeletProduct = (onSuccessCallback?: () => void) => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationKey: ['delete-product'],
+    mutationFn: (id: number) => deleteProduct(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['manager-products', 'products'],
+      })
+
+      if (onSuccessCallback) {
+        onSuccessCallback()
+      }
+    },
+  })
+}
+
+interface ManagerProductParams {
+  page?: number
+  pageSize?: number
+  status?: string
+  category_name?: string
+}
+
+const getManagerProducts = async (params?: ManagerProductParams) => {
+  const res = await Axios.get(API.manager_products, { params })
+  return res.data
+}
+
+export const useFetchManagerProducts = <T>(params?: ManagerProductParams) => {
+  return useQuery<T>({
+    queryKey: ['manager-products', params],
+    queryFn: () => getManagerProducts(params),
   })
 }

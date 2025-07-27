@@ -9,13 +9,14 @@ export interface OrderItem {
 export interface CreateOrderPayload {
   items: OrderItem[];
   paid_amount: number;
-  payment_method: string;
+  payment_id: number;
+  customer_id: string | null;
 }
 
 export const orderService = {
   createOrder: async (payload: CreateOrderPayload) => {
     try {
-      const response = await Axios.post(API.ORDER, payload);
+      const response = await Axios.post(API.order, payload);
       return response.data;
     } catch (error) {
       console.error('Error creating order:', error);
