@@ -1,5 +1,4 @@
 "use client"
-import Loading from '@/app/(root)/(staff)/(main)/loading';
 import CustomTable from '@/app/components/custom-table';
 import React, { Suspense, useState } from 'react'
 import { StaffList } from '@/app/type/staffList';
@@ -7,6 +6,7 @@ import { useFetchStaffs, useSuspendStaff, useUnSuspendStaff } from '@/app/hooks/
 import Modal from '@/app/components/modal';
 import ModalTitle from '@/app/components/modal-title';
 import CustomBtn from '@/app/components/custom-btn';
+import Loading from '../../(staff)/loading';
 
 const Page = () => {
   const [pageSize, setPageSize] = useState(5);

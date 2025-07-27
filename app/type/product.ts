@@ -8,6 +8,7 @@ export type Product = {
   brand_id: number;
   category_id: number;
   photo: File | null;
+  dis_percent: number;
   expired_at: string | null;
   created_at?: string;
   updated_at?: string;

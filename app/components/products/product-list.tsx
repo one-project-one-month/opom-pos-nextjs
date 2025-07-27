@@ -38,7 +38,7 @@ const ProductList = () => {
   }
 
   return (
-    <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[17px] lg:gap-[20px] overflow-y-auto no-scrollbar items-center p-1">
+    <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[15px] px-2 py-5 overflow-y-auto no-scrollbar items-center">
       {data && data.length > 0 ? (
         data.map((product, i) => (
           <ProductCard
@@ -52,6 +52,8 @@ const ProductList = () => {
               }
             name={product?.name}
             price={product?.price}
+            discount={product?.dis_percent}
+            stock={product?.stock}
             ordersClick={() =>
             dispatch(
               addOrder({

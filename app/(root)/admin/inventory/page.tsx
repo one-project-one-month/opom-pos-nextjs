@@ -1,5 +1,4 @@
 'use client'
-import Loading from '@/app/(root)/(staff)/(main)/loading';
 import CategoryList from '@/app/components/category-list';
 import CustomBtn from '@/app/components/custom-btn';
 import { FilterSvg, LowStocksSvg, OutOfStocksSvg, TotalProductsSvg } from '@/app/components/custom-svg';
@@ -19,6 +18,7 @@ import Image from 'next/image';
 import { title } from 'process';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import Loading from '../../(staff)/loading';
 
 function InventoryPage() {
   const [detailData, setDetailData] = useState<Product>();

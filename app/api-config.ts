@@ -8,7 +8,7 @@ Axios.defaults.baseURL = "";
 
 Axios.interceptors.request.use(
   async (config) => {
-    const token = '141|WHhwMolxXo9KMBiRguW7FkLHESFvoCYsCtjeckyEe720a149';
+    const token = '245|N7RzQ9q1q2EVPGwcjrv4ehfTvjwHAm7TwIvExKy119d6df59';
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
