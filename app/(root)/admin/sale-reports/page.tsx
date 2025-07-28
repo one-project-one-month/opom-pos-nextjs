@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useMemo, useEffect } from 'react'
 import { ChevronDown, Download, Filter, Edit, Trash2, Calendar, DollarSign, X } from 'lucide-react'
-import { saleReportService, SaleReport, WeeklyGain, TotalAmount, TopSaleItem } from '../../../../services/saleReportService'
+import { saleReportService, SaleReport, WeeklyGain, TotalAmount, TopSaleItem } from '../../../services/saleReportService'
 
 function SaleReportsPage() {
   const [selectedItems, setSelectedItems] = useState<string[]>([])

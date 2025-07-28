@@ -246,6 +246,10 @@ function InventoryPage() {
               >
                 {product.svg}
               </div>
+              <div>
+                <p className='mb-1'>{product.title}</p>
+                <p className='font-semibold text-lg'>{isLoading ? <LoaderIcon /> : product.count}</p>
+              </div>
             </div>
           ))
         }
