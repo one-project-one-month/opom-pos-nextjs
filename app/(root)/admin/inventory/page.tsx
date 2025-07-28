@@ -1,6 +1,5 @@
 'use client'
 import Loading from '@/app/(root)/(staff)/loading';
-import CategoryList from '@/app/components/category-list';
 import CustomBtn from '@/app/components/custom-btn';
 import { FilterSvg, LowStocksSvg, OutOfStocksSvg, TotalProductsSvg } from '@/app/components/custom-svg';
 import CustomTable from '@/app/components/custom-table';
@@ -10,13 +9,10 @@ import ModalTitle from '@/app/components/modal-title';
 import ProductForm from '@/app/components/products/product-form';
 import TableTitle from '@/app/components/table-title';
 import { useFetchCategories } from '@/app/hooks/useFetchCategory';
-import { useCreateProduct, useDeletProduct, useFetchManagerProducts, useFetchProducts } from '@/app/hooks/useFetchProduct';
+import { useCreateProduct, useDeletProduct, useFetchManagerProducts } from '@/app/hooks/useFetchProduct';
+import { ProductFormValues } from '@/app/type/form';
 import { CategoriesResponse, Product, ProductsResponse } from '@/app/type/product';
-import { Category } from '@/app/type/type';
-import ProductImg from '@/public/assets/total-product.png';
 import { LoaderIcon, Plus } from 'lucide-react';
-import Image from 'next/image';
-import { title } from 'process';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -50,10 +46,8 @@ function InventoryPage() {
     setConfirmModal(false)
     toast.success("Successfully Deleted")
   });
-  console.log(responseData, isPending, mutateError, data, 'category ', categories, size, page);
 
   const products = data?.products?.data ?? [];
-  // const products = data ?? [];
   const total = data?.["count of total products"] ?? 0;
   const outOfStock = data?.["count of out of stock"] ?? 0;
   const lowStock = data?.["count of low of stock"] ?? 0;
@@ -227,22 +221,28 @@ function InventoryPage() {
           ))
         }
       </div>
-      <div className='grid md:grid-cols-5 sm:grid-cols-3 gap-2'>
-        {
-          categoriesLoading && <Loading />
-        }
-        {categoriesError && <p className='text-alert-400'>Error loading categories</p>}
-        {
-          categories?.map((item, index) => (
-            <div key={index} className='border border-primary-400 rounded-md p-5'>
-              <div className='mb-3'>
-                <p>{item.name}</p>
-              </div>
-              <p>{item.product.length}</p>
-            </div>
-          ))
-        }
-      </div>
+      {
+        categoriesLoading && <Loading />
+      }
+      {categoriesError && <p className='text-alert-400 mb-6'>Error loading categories</p>}
+      {
+        !categoriesLoading && !categoriesError &&
+        <div className='grid md:grid-cols-5 sm:grid-cols-3 gap-2'>
+          {
+            categories?.map((item, index) => {
+              if (!item.product.length) return null
+              return (
+                <div key={index} className='border border-primary-400 rounded-md p-5'>
+                  <div className='mb-3'>
+                    <p>{item.name}</p>
+                  </div>
+                  <p>{item.product.length}</p>
+                </div>
+              )
+            })
+          }
+        </div>
+      }
       <div className='flex justify-between mt-10 mb-5'>
         <TableTitle>Product Lists</TableTitle>
         <div className='flex gap-5 relative'>

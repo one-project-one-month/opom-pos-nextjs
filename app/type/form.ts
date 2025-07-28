@@ -1,4 +1,4 @@
-interface ProductFormValues {
+export interface ProductFormValues {
     id?: number;
     sku: number;
     name: string;

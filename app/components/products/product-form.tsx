@@ -25,7 +25,6 @@ const ProductForm = ({ detailData, handleAction, loading }: ProductFormProps) =>
             constPrice: detailData?.const_price,
             brandId: detailData?.brand_id,
             stock: detailData?.stock,
-            // status: detailData?.status,
             photo: detailData?.photo,
             expiredDate: detailData?.expired_at
         }
@@ -37,14 +36,6 @@ const ProductForm = ({ detailData, handleAction, loading }: ProductFormProps) =>
     const inputStyle = 'bg-input-gray w-full px-3 h-10 rounded-md mt-2 text-sm text-gray-600'
 
     const onSubmit = (data: ProductFormValues) => {
-        // let photo: File | string | null = null;
-        // if (data?.photo instanceof FileList) {
-        //     photo = data.photo[0];
-        // } else {
-        //     photo = data?.photo;
-        // }
-        // console.log(Array.isArray(data.photo), data.photo);
-
         handleAction({ ...data, id: detailData?.id })
     }
 
@@ -145,12 +136,17 @@ const ProductForm = ({ detailData, handleAction, loading }: ProductFormProps) =>
             <div>
                 <label>Photo</label>
                 <input type='file'
-                    accept='image/*'                    
+                    accept='image/*'
                     {...register("photo")}
                     className={inputStyle}
                     onChange={handleImageChange} />
             </div>
-            {/* <Image src='https://e0c8dfd98f99.ngrok-free.app/storage/products/lRHeogn90dXmfQ21vlyBG7aZWekjiPsBBSW46BfZ.png' alt="name"  width={100} height={100}/> */}
+            {
+                detailData?.photo &&
+                <Image 
+                src={`https://e0c8dfd98f99.ngrok-free.app/storage/${detailData?.photo}`}
+                alt="name" width={100} height={100} />
+            }
             {previewUrl && (
                 <div className="mt-2 flex justify-center items-center border rounded-md">
                     <Image
