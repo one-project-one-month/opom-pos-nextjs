@@ -1,21 +1,21 @@
-import React from 'react'
-import CategoryCard from './category-card'
-import { useFetchCategories } from '@/app/hooks/useFetchCategory'
-import Loading from '@/app/(root)/(staff)/loading'
+import React from "react";
+import CategoryCard from "./category-card";
+import { useFetchCategories } from "@/app/hooks/useFetchCategory";
+import Loading from "@/app/(root)/staff/loading";
 
 type Props = {
-  setCategory: (val: string) => void
-}
+  setCategory: (val: string) => void;
+};
 
 const CategoryList = ({ setCategory }: Props) => {
-  const { data: categories, isLoading, error } = useFetchCategories()
+  const { data: categories, isLoading, error } = useFetchCategories();
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full">
         <Loading />
       </div>
-    )
+    );
   }
 
   if (error) {
@@ -23,7 +23,7 @@ const CategoryList = ({ setCategory }: Props) => {
       <div className="flex items-center justify-center h-full">
         <div className="text-red-500">Error: {error.message}</div>
       </div>
-    )
+    );
   }
 
   return (
@@ -38,7 +38,7 @@ const CategoryList = ({ setCategory }: Props) => {
           />
         ))}
     </div>
-  )
-}
+  );
+};
 
-export default CategoryList
+export default CategoryList;
