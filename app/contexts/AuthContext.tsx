@@ -11,10 +11,10 @@ interface AuthContextType {
   isAuthenticated: boolean;
   error: string | null;
   login: (credentials: LoginCredentials) => Promise<boolean>;
-  register: (userData: RegisterData) => Promise<boolean>;
+  // register: (userData: RegisterData) => Promise<boolean>;
   logout: () => Promise<void>;
   clearError: () => void;
-  refreshUser: () => Promise<void>;
+  // refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
