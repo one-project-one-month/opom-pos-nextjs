@@ -1,10 +1,9 @@
 'use client'
 
 import { X } from 'lucide-react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import axios from 'axios'
 import * as z from 'zod'
 import { useState } from 'react'
+import { useDiscountAddMutation } from '@/app/hooks/useFetchDiscountProduct'
 
 const discountProducts = z.object({
   id: z.string().min(1, 'Product ID is required'),
@@ -12,8 +11,6 @@ const discountProducts = z.object({
   category_id: z.string().min(1, 'Category ID is required'),
   price: z.string().min(1, 'Original Price is required'),
   dis_percent: z.string().min(1, 'Discount Percent is required'),
-  // disStartDate: z.string().min(1, 'Start Date is required'),
-  // disEndDate: z.string().min(1, 'End Date is required'),
 })
 
 interface AddDiscountModalProps {
@@ -40,51 +37,31 @@ export default function AddDiscountModal({
   const [validationError, setValidationError] = useState<
     Record<string, string>
   >({})
-  const queryClient = useQueryClient()
 
-  const mutation = useMutation({
-    mutationFn: async (data: Record<string, any>) => {
-      const { sku, ...withoutSku } = product
-
-      const url = `https://4f802d48e955.ngrok-free.app/api/v1/products/${product.id}`
-
-      const updatedData = {
-        ...withoutSku,
-        dis_percent: Number(data.dis_percent),
-      }
-      console.log('Updated Data:', updatedData)
-      const res = await axios.post(url, updatedData, {
-        headers: {
-          Authorization: `Bearer 155|4pVGieDrkgFQ1ofBdIzfQrN8m0NSkLIYFHJEirC77e2c7bcb`,
-        },
-      })
-
-      return res.data
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['products'] })
+  const mutation = useDiscountAddMutation({
+    onSuccessCallback: () => {
       alert('Discount added!')
       onClose()
     },
-    onError: (error: any) => {
+    onErrorCallback: (error) => {
       alert(`Error: ${error?.message || 'Something went wrong'}`)
     },
   })
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log('Form submitted')
     const form = e.currentTarget
     const formData = new FormData(form)
-
     const data = Object.fromEntries(formData.entries())
-    // console.log('Form Data:', data)
+
     try {
       const validation = discountProducts.parse(data)
-      console.log('it works')
-      console.log(validation)
       setValidationError({})
-      mutation.mutate(validation)
+
+      mutation.mutate({
+        product,
+        discountPercent: Number(validation.dis_percent),
+      })
     } catch (err) {
       if (err instanceof z.ZodError) {
         const fieldErrors: Record<string, string> = {}

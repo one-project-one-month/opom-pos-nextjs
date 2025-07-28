@@ -1,12 +1,7 @@
 'use client'
-<<<<<<< HEAD
-// import { useFetchProducts } from '@/app/hooks/useFetchProduct'
-import { useFetchDiscountProducts } from '@/app/hooks/useFetchDiscountProduct'
-import Loading from '@/app/(root)/(staff)/(main)/loading'
-=======
 import { useFetchProducts } from '@/app/hooks/useFetchProduct'
+import { useFetchDiscountProducts } from '@/app/hooks/useFetchDiscountProduct'
 import Loading from '@/app/(root)/(staff)/loading'
->>>>>>> dev
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
@@ -77,13 +72,13 @@ export default function DiscountItemsLists({
   const mutation = useMutation<any, Error, CancelDiscountProduct>({
     mutationFn: async (product: CancelDiscountProduct) => {
       const { sku, ...withoutSku } = product
-      const url = `https://4f802d48e955.ngrok-free.app/api/v1/products/${product.id}`
+      const url = `https://79403962ac78.ngrok-free.app/api/v1/manager_products/${product.id}`
       const res = await axios.post(
         url,
         { ...withoutSku, dis_percent: 0 },
         {
           headers: {
-            Authorization: `Bearer 155|4pVGieDrkgFQ1ofBdIzfQrN8m0NSkLIYFHJEirC77e2c7bcb`,
+            Authorization: `Bearer 283|jgqQaNh2DfzKn3WPjldpFAyH7hbhQDJN63mOC5fa81144c8c`,
           },
         }
       )

@@ -1,38 +1,38 @@
-import axios from "axios";
+import axios from 'axios'
 
 const Axios = axios.create({
-  baseURL: "https://9d38ca19f693.ngrok-free.app/api/v1",
-});
+  baseURL: 'https://79403962ac78.ngrok-free.app/api/v1/products',
+})
 
-Axios.defaults.baseURL = "";
+Axios.defaults.baseURL = ''
 
 Axios.interceptors.request.use(
   async (config) => {
-    const token = '207|UD4Q6lSQHwagbLLAe6RXQ1G8590ikNYpYoaC4kP21a367aa8';
+    const token = '283|jgqQaNh2DfzKn3WPjldpFAyH7hbhQDJN63mOC5fa81144c8c'
 
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = `Bearer ${token}`
     }
-    config.headers.set('ngrok-skip-browser-warning', '69420');
-    return config;
+    config.headers.set('ngrok-skip-browser-warning', '69420')
+    return config
   },
   (error) => Promise.reject(error)
-);
+)
 
 Axios.interceptors.response.use(
   (response) => {
-    return response;
+    return response
   },
   async (error) => {
     if (error.response.status === 401) {
       //refresh token api call
       // ....
-      const access_token = "";
-      Axios.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
-      return Axios(error.config);
+      const access_token = ''
+      Axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`
+      return Axios(error.config)
     }
-    return Promise.reject(error);
+    return Promise.reject(error)
   }
-);
+)
 
-export default Axios;
+export default Axios

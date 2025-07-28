@@ -1,7 +1,9 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import CategoryCard from './category-card'
-import { useFetchCategories } from '@/app/hooks/useFetchCategory'
+// import { useFetchCategories } from '@/app/hooks/useFetchCategory'
+import { useFetchCategories } from '@/app/hooks/useFetchCategories'
+// import { useFetchCategories } from '@/app/hooks/useFetchCategory'
 import Loading from '@/app/(root)/(staff)/loading'
 
 type Props = {

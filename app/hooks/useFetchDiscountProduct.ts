@@ -1,31 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import Axios from '../api-config'
 
-const url = 'https://79403962ac78.ngrok-free.app/api/v1/manager_products'
-const token = 'Bearer 271|RKONjOzAdPtZI7Yiw6iisFl1T021oafbvlOsoIeL471b6932'
+import Axios from '../api-config'
+import { API, base } from '../constants/api'
 
 const getDiscountProducts = async (page: string | number | null) => {
-  const res = await Axios.get(
-    `${url}?page=${page}`,
-    {
-      headers: {
-        Authorization: token,
-        'Content-Type': 'application/json',
-      },
-    }
-    // console.log(res)
-    // 'https://backoffice.opompos.site/api/v1/products'
-  )
+  const res = await Axios.get(`${API.manager_products}?page=${page}`)
   console.log(res)
   return res.data.products.data
 }
 
 const getDiscountProductsByCategories = async (category: string | null) => {
-  const res = await Axios.get(url, {
-    headers: {
-      Authorization: token,
-      'Content-Type': 'application/json',
-    },
+  const res = await Axios.get(API.manager_products, {
     params: { category_name: category },
   })
 
@@ -42,5 +27,51 @@ export const useFetchDiscountProducts = <T>(
       category === null && page !== null
         ? getDiscountProducts(page)
         : getDiscountProductsByCategories(category),
+  })
+}
+
+export const useDiscountAddMutation = ({
+  onSuccessCallback,
+  onErrorCallback,
+}: {
+  onSuccessCallback: () => void
+  onErrorCallback?: (error: any) => void
+}) => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationKey: ['create_discount'],
+    mutationFn: async ({
+      product,
+      discountPercent,
+    }: {
+      product: any
+      discountPercent: number
+    }) => {
+      const { sku, ...withoutSku } = product
+
+      const updatedData = {
+        ...withoutSku,
+        dis_percent: discountPercent,
+      }
+
+      const res = await Axios.post(
+        `${API.manager_products}/${product.id}`,
+        updatedData
+      )
+
+      return res.data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['products'] })
+      onSuccessCallback()
+    },
+    onError: (error: any) => {
+      if (onErrorCallback) {
+        onErrorCallback(error)
+      } else {
+        alert(`Error: ${error?.message || 'Something went wrong'}`)
+      }
+    },
   })
 }
