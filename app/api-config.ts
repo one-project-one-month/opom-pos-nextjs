@@ -2,11 +2,11 @@ import axios from 'axios';
 
 const Axios = axios.create();
 
-Axios.defaults.baseURL = '';
+Axios.defaults.baseURL = 'https://9005578b891e.ngrok-free.app/api/v1';
 
 Axios.interceptors.request.use(
   async (config) => {
-    const token = '';
+    const token = '311|xr52tKYN4dg7oxmKtdcJmbdL4zu9GHZy7b6ySbZhf6f0b52c';
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -22,12 +22,12 @@ Axios.interceptors.response.use(
     return response;
   },
   async (error) => {
-    if (error.response.status === 401) {
-      //refresh token api call
-      // ....
-      const access_token = '';
-      Axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
-      return Axios(error.config);
+    // Check if error.response exists before accessing its properties
+    if (error.response && error.response.status === 401) {
+      // For now, just reject the error instead of trying to refresh with empty token
+      // TODO: Implement proper token refresh logic here
+      console.error('Authentication failed. Please login again.');
+      return Promise.reject(error);
     }
     return Promise.reject(error);
   }
