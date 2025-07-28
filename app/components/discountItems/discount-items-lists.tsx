@@ -4,6 +4,7 @@ import { useFetchDiscountProducts } from '@/app/hooks/useFetchDiscountProduct'
 import Loading from '@/app/(root)/(staff)/loading'
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useDiscountCancelMutation } from '@/app/hooks/useFetchDiscountProduct'
 import axios from 'axios'
 
 // Define Product type or import it from your models
@@ -18,6 +19,10 @@ type Product = {
   dis_percent: number
   sku: number
   // Add other fields as needed
+}
+
+interface CancelDiscountInput {
+  product: any
 }
 
 interface PaginationResult {
@@ -69,28 +74,9 @@ export default function DiscountItemsLists({
     currentPage
   )
 
-  const mutation = useMutation<any, Error, CancelDiscountProduct>({
-    mutationFn: async (product: CancelDiscountProduct) => {
-      const { sku, ...withoutSku } = product
-      const url = `https://79403962ac78.ngrok-free.app/api/v1/manager_products/${product.id}`
-      const res = await axios.post(
-        url,
-        { ...withoutSku, dis_percent: 0 },
-        {
-          headers: {
-            Authorization: `Bearer 283|jgqQaNh2DfzKn3WPjldpFAyH7hbhQDJN63mOC5fa81144c8c`,
-          },
-        }
-      )
-      return res.data
-    },
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['products'] })
-      alert('Discount Cancel')
-    },
-    onError: (error: any) => {
-      alert(`Error: ${error?.message || 'Something went wrong'}`)
+  const mutation = useDiscountCancelMutation({
+    onSuccessCallback: () => {
+      alert('Discount Cancelled')
     },
   })
 
@@ -117,7 +103,7 @@ export default function DiscountItemsLists({
   )
 
   const cancelDiscount = (product: CancelDiscountProduct): void => {
-    mutation.mutate(product)
+    mutation.mutate({ product })
   }
 
   return (
@@ -137,12 +123,6 @@ export default function DiscountItemsLists({
             <th className="px-3 py-2 whitespace-nowrap">
               <span className="flex items-center gap-1">Discount Price</span>
             </th>
-            {/* <th className="px-3 py-2 whitespace-nowrap">
-              <span className="flex items-center gap-1">Start Date</span>
-            </th>
-            <th className="px-3 py-2 whitespace-nowrap">
-              <span className="flex items-center gap-1">End Date</span>
-            </th> */}
             <th className="px-3 py-2 whitespace-nowrap">Action</th>
           </tr>
         </thead>

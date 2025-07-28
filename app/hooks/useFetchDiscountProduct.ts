@@ -3,6 +3,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import Axios from '../api-config'
 import { API, base } from '../constants/api'
 
+interface CancelDiscountInput {
+  product: any
+}
+
 const getDiscountProducts = async (page: string | number | null) => {
   const res = await Axios.get(`${API.manager_products}?page=${page}`)
   console.log(res)
@@ -54,6 +58,51 @@ export const useDiscountAddMutation = ({
         ...withoutSku,
         dis_percent: discountPercent,
       }
+
+      console.log('Updated Data:', updatedData)
+
+      const res = await Axios.post(
+        `${API.manager_products}/${product.id}`,
+        updatedData
+      )
+
+      return res.data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['products'] })
+      onSuccessCallback()
+    },
+    onError: (error: any) => {
+      if (onErrorCallback) {
+        onErrorCallback(error)
+      } else {
+        alert(`Error: ${error?.message || 'Something went wrong'}`)
+      }
+    },
+  })
+}
+
+export const useDiscountCancelMutation = ({
+  onSuccessCallback,
+  onErrorCallback,
+}: {
+  onSuccessCallback: () => void
+  onErrorCallback?: (error: any) => void
+}) => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationKey: ['cancel_discount'],
+    mutationFn: async ({ product }: CancelDiscountInput) => {
+      const { sku, ...withoutSku } = product
+
+      const updatedData = {
+        ...withoutSku,
+        dis_percent: 0,
+      }
+
+      console.log('Updated Data for Cancel:', updatedData)
+      console.log(`${API.manager_products}/${product.id}`)
 
       const res = await Axios.post(
         `${API.manager_products}/${product.id}`,
