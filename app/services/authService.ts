@@ -1,8 +1,5 @@
-// import { API } from "../constants/api";
-
 import { base } from "../constants/api";
 
-// lib/auth.ts
 export interface LoginCredentials {
   email: string;
   password: string;
@@ -21,6 +18,7 @@ export interface AuthResponse {
   refresh_token: string;
   refresh_token_expires_at: string;
   token_type: string;
+  user: User;
 }
 
 export interface User {
@@ -34,10 +32,10 @@ export interface User {
   role: string | null;
 }
 
-export interface UserResponse {
-  User_detail: User;
-  Staff_role: string | null;
-}
+// export interface UserResponse {
+//   User_detail: User;
+//   Staff_role: string | null;
+// }
 
 class AuthService {
   private static instance: AuthService;
@@ -51,17 +49,32 @@ class AuthService {
 
   private accessToken: string | null = null;
   private refreshToken: string | null = null;
+  private user: User | null = null;
 
   constructor() {
     if (typeof window !== "undefined") {
       this.accessToken = localStorage.getItem("access_token");
       this.refreshToken = localStorage.getItem("refresh_token");
+      const userData = localStorage.getItem("user_data");
+      if (userData) {
+        const parsedUser = JSON.parse(userData);
+        this.user = {
+          ...parsedUser,
+          role: parsedUser.role || "staff",
+        };
+      } else {
+        this.user = null;
+      }
     }
   }
 
   private setTokens(tokens: AuthResponse) {
     this.accessToken = tokens.access_token;
     this.refreshToken = tokens.refresh_token;
+    this.user = {
+      ...tokens.user,
+      role: tokens.user.role || "staff",
+    };
 
     if (typeof window !== "undefined") {
       localStorage.setItem("access_token", tokens.access_token);
@@ -80,10 +93,12 @@ class AuthService {
   private clearTokens() {
     this.accessToken = null;
     this.refreshToken = null;
+    this.user = null;
 
     if (typeof window !== "undefined") {
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
+      localStorage.removeItem("user_data");
       localStorage.removeItem("access_token_expires_at");
       localStorage.removeItem("refresh_token_expires_at");
     }
@@ -165,39 +180,39 @@ class AuthService {
     }
   }
 
-  async register(
-    userData: RegisterData
-  ): Promise<{ user: User; access_token: string; refresh_token: string }> {
-    try {
-      const response = await this.makeRequest("auth/register", {
-        method: "POST",
-        body: JSON.stringify(userData),
-      });
+  // async register(
+  //   userData: RegisterData
+  // ): Promise<{ user: User; access_token: string; refresh_token: string }> {
+  //   try {
+  //     const response = await this.makeRequest("auth/register", {
+  //       method: "POST",
+  //       body: JSON.stringify(userData),
+  //     });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Registration failed");
-      }
+  //     if (!response.ok) {
+  //       const error = await response.json();
+  //       throw new Error(error.message || "Registration failed");
+  //     }
 
-      const data = await response.json();
+  //     const data = await response.json();
 
-      this.setTokens({
-        access_token: data.access_token,
-        refresh_token: data.refresh_token,
-        access_token_expires_at: new Date(
-          Date.now() + 24 * 60 * 60 * 1000
-        ).toISOString(), // 1 day
-        refresh_token_expires_at: new Date(
-          Date.now() + 7 * 24 * 60 * 60 * 1000
-        ).toISOString(), // 7 days
-        token_type: "Bearer",
-      });
+  //     this.setTokens({
+  //       access_token: data.access_token,
+  //       refresh_token: data.refresh_token,
+  //       access_token_expires_at: new Date(
+  //         Date.now() + 24 * 60 * 60 * 1000
+  //       ).toISOString(), // 1 day
+  //       refresh_token_expires_at: new Date(
+  //         Date.now() + 7 * 24 * 60 * 60 * 1000
+  //       ).toISOString(), // 7 days
+  //       token_type: "Bearer",
+  //     });
 
-      return data;
-    } catch (error) {
-      throw error;
-    }
-  }
+  //     return data;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
 
   async logout(): Promise<void> {
     try {
@@ -220,7 +235,7 @@ class AuthService {
 
     try {
       const response = await this.makeRequest("auth/refresh", {
-        method: "POST",
+        method: "GET",
         headers: {
           Authorization: `Bearer ${this.refreshToken}`,
         },
@@ -235,25 +250,6 @@ class AuthService {
       return authData;
     } catch (error) {
       this.clearTokens();
-      throw error;
-    }
-  }
-
-  async getCurrentUser(): Promise<UserResponse> {
-    try {
-      const response = await this.makeAuthenticatedRequest("/api/v1/auth/user");
-      const contentType = response.headers.get("content-type") || "";
-
-      if (contentType && contentType.includes("application/json")) {
-        return await response.json();
-      } else {
-        const text = await response.text();
-        console.error(" Not JSON. Response text:\n", text);
-        throw new Error("Unexpected response format (not JSON)");
-      }
-
-      //   return await response.json();
-    } catch (error) {
       throw error;
     }
   }
@@ -277,6 +273,9 @@ class AuthService {
 
   getRefreshToken(): string | null {
     return this.refreshToken;
+  }
+  getUser(): User | null {
+    return this.user;
   }
 }
 
