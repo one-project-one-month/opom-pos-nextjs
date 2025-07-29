@@ -61,10 +61,7 @@ export const useDiscountAddMutation = ({
 
       console.log('Updated Data:', updatedData)
 
-      const res = await Axios.post(
-        `${API.manager_products}/${product.id}`,
-        updatedData
-      )
+      const res = await Axios.post(`${API.products}/${product.id}`, updatedData)
 
       return res.data
     },
@@ -104,10 +101,7 @@ export const useDiscountCancelMutation = ({
       console.log('Updated Data for Cancel:', updatedData)
       console.log(`${API.manager_products}/${product.id}`)
 
-      const res = await Axios.post(
-        `${API.manager_products}/${product.id}`,
-        updatedData
-      )
+      const res = await Axios.post(`${API.products}/${product.id}`, updatedData)
 
       return res.data
     },
