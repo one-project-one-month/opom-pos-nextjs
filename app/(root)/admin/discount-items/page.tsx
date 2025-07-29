@@ -6,20 +6,8 @@ import DiscountItemsLists from '@/app/components/discountItems/discount-items-li
 import AddDiscountModal from '@/app/components/discountItems/add-discount-modal'
 import { useState } from 'react'
 
-type Product = {
-  id: string
-  name: string
-  price: number
-  discountPrice: number
-  category_id: number
-  startDate: string
-  endDate: string
-  dis_percent: number
-  sku: number
-}
-
 export default function Page() {
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  // const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [category, setCategory] = useState<string | null>(null)
 
   return (
@@ -32,16 +20,9 @@ export default function Page() {
         <CategoryList setCategory={setCategory}></CategoryList>
       </div>
       <DiscountItemsLists
-        category={category}
-        showAddDiscountModal={(product) => setSelectedProduct(product)}
+        categoryName={category}
+        // showAddDiscountModal={(product) => setSelectedProduct(product)}
       />
-
-      {selectedProduct && (
-        <AddDiscountModal
-          product={selectedProduct}
-          onClose={() => setSelectedProduct(null)}
-        />
-      )}
     </div>
   )
 }

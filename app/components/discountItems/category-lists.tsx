@@ -1,8 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import CategoryCard from './category-card'
-// import { useFetchCategories } from '@/app/hooks/useFetchCategory'
-// import { useFetchCategories } from '@/app/hooks/useFetchCategories'
 import { useFetchCategories } from '@/app/hooks/useFetchCategory'
 import Loading from '@/app/(root)/(staff)/loading'
 
@@ -35,7 +33,7 @@ const CategoryList = ({ setCategory }: Props) => {
   }
 
   return (
-    <div className="flex gap-[10px] overflow-x-auto no-scrollbar">
+    <div className="flex gap-[10px] overflow-x-auto no-scrollbar cursor-pointer">
       <div
         onClick={() => setSelectedCategory(null)}
         className={`w-fit h-[48px] rounded-[5px] p-2.5 text-center flex-shrink-0 text-xs md:text-sm lg:text-[16px] flex justify-center items-center ${

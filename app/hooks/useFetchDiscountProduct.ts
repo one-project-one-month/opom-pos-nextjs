@@ -7,39 +7,36 @@ interface CancelDiscountInput {
   product: any
 }
 
-const getDiscountProducts = async (page: string | number | null) => {
-  const res = await Axios.get(`${API.manager_products}?page=${page}`)
-  console.log(res)
-  return res.data.products.data
+interface Params {
+  page?: number
+  pageSize?: number
+  status?: string
+  category_name?: string
 }
 
-const getDiscountProductsByCategories = async (category: string | null) => {
-  const res = await Axios.get(API.manager_products, {
-    params: { category_name: category },
-  })
+const getDiscountProducts = async (params: Params) => {
+  const res = await Axios.get(API.manager_products, { params })
 
-  return res.data.products.data
+  return res.data.products
 }
 
-export const useFetchDiscountProducts = <T>(
-  category: string | null,
-  page: string | number | null
-) => {
+export const useFetchDiscountProducts = <T>(params: Params) => {
+  console.log('Fetching discount products with params:', params)
   return useQuery<T>({
-    queryKey: ['products', category ?? 'all', page ?? 1],
-    queryFn: () =>
-      category === null && page !== null
-        ? getDiscountProducts(page)
-        : getDiscountProductsByCategories(category),
+    queryKey: ['products', params],
+    queryFn: () => getDiscountProducts(params),
   })
 }
 
 export const useDiscountAddMutation = ({
   onSuccessCallback,
   onErrorCallback,
-}: {
+  params,
+}: // params,
+{
   onSuccessCallback: () => void
   onErrorCallback?: (error: any) => void
+  params: any
 }) => {
   const queryClient = useQueryClient()
 
@@ -59,12 +56,33 @@ export const useDiscountAddMutation = ({
         dis_percent: discountPercent,
       }
 
-      console.log('Updated Data:', updatedData)
-
       const res = await Axios.post(`${API.products}/${product.id}`, updatedData)
 
       return res.data
     },
+    onMutate: async ({ product, discountPercent }) => {
+      await queryClient.cancelQueries({ queryKey: ['products'] })
+
+      const previousProducts = queryClient.getQueryData<any>([
+        'products',
+        params,
+      ])
+
+      // Optimistically update
+      queryClient.setQueryData(['products', params], (old: any) => {
+        if (!old || !old.data) return old
+
+        return {
+          ...old,
+          data: old.data.map((p: any) =>
+            p.id === product.id ? { ...p, dis_percent: discountPercent } : p
+          ),
+        }
+      })
+
+      return { previousProducts }
+    },
+
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] })
       onSuccessCallback()
@@ -82,9 +100,11 @@ export const useDiscountAddMutation = ({
 export const useDiscountCancelMutation = ({
   onSuccessCallback,
   onErrorCallback,
+  params,
 }: {
   onSuccessCallback: () => void
   onErrorCallback?: (error: any) => void
+  params: any
 }) => {
   const queryClient = useQueryClient()
 
@@ -98,13 +118,34 @@ export const useDiscountCancelMutation = ({
         dis_percent: 0,
       }
 
-      console.log('Updated Data for Cancel:', updatedData)
-      console.log(`${API.manager_products}/${product.id}`)
-
       const res = await Axios.post(`${API.products}/${product.id}`, updatedData)
 
       return res.data
     },
+
+    onMutate: async ({ product }) => {
+      await queryClient.cancelQueries({ queryKey: ['products'] })
+
+      const previousProducts = queryClient.getQueryData<any>([
+        'products',
+        params,
+      ])
+
+      // ✅ Correct shape: update inside `data` field
+      queryClient.setQueryData<any>(['products', params], (old: any) => {
+        if (!old || !old.data) return old
+
+        return {
+          ...old,
+          data: old.data.map((p: any) =>
+            p.id === product.id ? { ...p, dis_percent: 0 } : p
+          ),
+        }
+      })
+
+      return { previousProducts }
+    },
+
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] })
       onSuccessCallback()

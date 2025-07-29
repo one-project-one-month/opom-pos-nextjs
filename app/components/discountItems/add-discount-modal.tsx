@@ -16,6 +16,7 @@ const discountProducts = z.object({
 interface AddDiscountModalProps {
   onClose: () => void
   product: Product
+  params: any
 }
 
 type Product = {
@@ -31,6 +32,7 @@ type Product = {
 }
 
 export default function AddDiscountModal({
+  params,
   onClose,
   product,
 }: AddDiscountModalProps) {
@@ -40,12 +42,12 @@ export default function AddDiscountModal({
 
   const mutation = useDiscountAddMutation({
     onSuccessCallback: () => {
-      alert('Discount added!')
       onClose()
     },
     onErrorCallback: (error) => {
       alert(`Error: ${error?.message || 'Something went wrong'}`)
     },
+    params,
   })
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -99,6 +101,7 @@ export default function AddDiscountModal({
                   type="text"
                   className="bg-[#F5F5F5] p-2 rounded-[10px]"
                   defaultValue={product?.id || ''}
+                  readOnly
                 />
                 {validationError.id && (
                   <span className="text-red-500 text-sm">
@@ -113,6 +116,7 @@ export default function AddDiscountModal({
                   type="text"
                   className="bg-[#F5F5F5] p-2 rounded-[10px]"
                   defaultValue={product?.name || ''}
+                  readOnly
                 />
                 {validationError.name && (
                   <span className="text-red-500 text-sm">
@@ -129,6 +133,7 @@ export default function AddDiscountModal({
                 type="text"
                 className="bg-[#F5F5F5] p-2 rounded-[10px]"
                 defaultValue={product?.category_id || ''}
+                readOnly
               />
               {validationError.category_id && (
                 <span className="text-red-500 text-sm">
@@ -145,6 +150,7 @@ export default function AddDiscountModal({
                   type="text"
                   className="bg-[#F5F5F5] p-2 rounded-[10px]"
                   defaultValue={product?.price || ''}
+                  readOnly
                 />
                 {validationError.price && (
                   <span className="text-red-500 text-sm">
@@ -166,36 +172,6 @@ export default function AddDiscountModal({
                 )}
               </div>
             </div>
-
-            {/* <div className="flex flex-col mt-5">
-              <label className="mb-3">Start Date</label>
-              <input
-                name="disStartDate"
-                type="date"
-                className="bg-[#F5F5F5] p-2 rounded-[10px]"
-                // defaultValue={product?.startDate || ''}
-              />
-              {validationError.disStartDate && (
-                <span className="text-red-500 text-sm">
-                  {validationError.disStartDate}
-                </span>
-              )}
-            </div>
-
-            <div className="flex flex-col mt-5">
-              <label className="mb-3">End Date</label>
-              <input
-                name="disEndDate"
-                type="date"
-                className="bg-[#F5F5F5] p-2 rounded-[10px]"
-                // defaultValue={product?.endDate || ''}
-              />
-              {validationError.disEndDate && (
-                <span className="text-red-500 text-sm">
-                  {validationError.disEndDate}
-                </span>
-              )}
-            </div> */}
 
             <button
               type="submit"

@@ -127,6 +127,7 @@ const getManagerProducts = async (params?: ManagerProductParams) => {
 }
 
 export const useFetchManagerProducts = <T>(params?: ManagerProductParams) => {
+  console.log('Fetching manager products with params:', params)
   return useQuery<T>({
     queryKey: ['manager-products', params],
     queryFn: () => getManagerProducts(params),

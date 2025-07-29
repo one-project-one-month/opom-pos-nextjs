@@ -1,14 +1,14 @@
 import axios from 'axios'
 
 const Axios = axios.create({
-  baseURL: 'https://9005578b891e.ngrok-free.app/api/v1/',
+  baseURL: 'https://521d31f15525.ngrok-free.app/',
 })
 
 Axios.defaults.baseURL = ''
 
 Axios.interceptors.request.use(
   async (config) => {
-    const token = '289|qDhBFDtqWW4DAI8XjyA25WiGKAWHrQQIT8OcZ0Y5fc30cd82'
+    const token = '331|sTw3JZX39QxmkkbYeByIGiuLmt9KW1qFSsfuJgbadbca2288'
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
