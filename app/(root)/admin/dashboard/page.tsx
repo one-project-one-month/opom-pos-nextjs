@@ -1,8 +1,7 @@
 "use client"
 import Modal from '@/app/components/modal';
-import { Archive, BadgeDollarSign, ScrollText, SquareChartGantt, SquareChevronUp } from 'lucide-react';
+import { Archive, BadgeDollarSign, ScrollText, SquareChartGantt, SquareChevronDown, SquareChevronUp } from 'lucide-react';
 import { useState } from 'react'
-import Loading from '../../(staff)/loading';
 import CustomTable from '@/app/components/custom-table';
 import { format } from 'date-fns';
 import { useFetchManagerProducts } from '@/app/hooks/useFetchProduct';
@@ -11,6 +10,7 @@ import { useFetchTodaySales } from '@/app/hooks/useFetchTodaySales';
 import { useFetchTotalRevenue } from '@/app/hooks/useFetchTotalGain';
 import { useFetchRecentSale } from '@/app/hooks/useFetchRecentSale';
 import type { RecentSaleApiResponse } from '@/app/types/recentSale';
+import Loading from '../../staff/loading';
 
 
 function DashboardPage() {
@@ -34,7 +34,14 @@ function DashboardPage() {
   const isLoading = loadingRecentSale || loadingSales || loadingRevenue || loadingInventory;
   const isError = error  || !salesData || !revenueData || !inventoryData;
   const total = inventoryData?.["count of total products"] ?? 0;
-  const recentSales = data?.orders || [];
+  
+  const currentGain = revenueData?.gain || 0;
+  const previousGain = revenueData?.previous_month_gain || 0;
+
+const growthPercentage = previousGain
+  ? ((currentGain - previousGain) / previousGain) * 100
+  : 100;
+  const isIncrease = currentGain > previousGain;
   const stats = [
     {
       title: "Today Sales",
@@ -55,8 +62,13 @@ function DashboardPage() {
         <div className="flex justify-between items-center">
           <p>This Month</p>
           <p className="flex items-center gap-1 text-green-500">
-            +20%
-            <SquareChevronUp className="size-4" />
+            {growthPercentage > 0 ? "+" : ""}
+            {growthPercentage.toFixed()}%
+            {isIncrease ? (
+              <SquareChevronUp className="size-4" />
+            ) : (
+              <SquareChevronDown className="size-4" />  
+            )}
           </p>
         </div>
       ),

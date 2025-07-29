@@ -100,7 +100,7 @@ export default function Home() {
   return (
     <>
       <div className="flex  items-start max-w-full min-h-screen h-screen ">
-        <div className="lg:w-2/3 md:w-2/3 w-[80%] h-screen p-5 flex flex-col border-r border-[#9E9E9ECC]">
+        <div className="lg:w-2/3 md:w-2/3 w-[80%] h-screen p-5 flex flex-col">
           <div className="space-y-5">
             <ProductSearch />
             <CategoryList />

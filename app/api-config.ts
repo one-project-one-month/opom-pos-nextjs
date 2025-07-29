@@ -1,14 +1,12 @@
 import axios from "axios";
 
 const Axios = axios.create({
-  baseURL: "https://6248004bb30f.ngrok-free.app/api/v1",
+  baseURL: "hhttps://521d31f15525.ngrok-free.app/api/v1",
 });
-
-Axios.defaults.baseURL = "";
 
 Axios.interceptors.request.use(
   async (config) => {
-    const token = '329|KG9v5NlBKv01dfbvdK8C8lSnWmodZ2LyocmvH43392e47818';
+    const token = '335|ZIrSEQ5HKZ6pPYsvyfzJfQRry4MHsREEydr2XOXEbd310dd4';
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -27,7 +25,7 @@ Axios.interceptors.response.use(
     if (error.response.status === 401) {
       //refresh token api call
       // ....
-      const access_token = "";
+      const access_token = localStorage.getItem('access_token');
       Axios.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
       return Axios(error.config);
     }

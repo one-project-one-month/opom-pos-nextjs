@@ -1,25 +1,25 @@
-'use client'
-import { useFetchProducts } from '@/app/hooks/useFetchProduct'
-import Loading from '@/app/(root)/(staff)/loading'
-import { useState } from 'react'
+"use client";
+import { useFetchProducts } from "@/app/hooks/useFetchProduct";
+import Loading from "@/app/(root)/staff/loading";
+import { useState } from "react";
 
 // Define Product type or import it from your models
 type Product = {
-  id: string
-  name: string
-  price: number
-  discountPrice: number
-  startDate: string
-  endDate: string
-  dis_percent: number
+  id: string;
+  name: string;
+  price: number;
+  discountPrice: number;
+  startDate: string;
+  endDate: string;
+  dis_percent: number;
   // Add other fields as needed
-}
+};
 
 interface PaginationResult {
-  paginatedItems: any
-  totalPages: number
-  startedIndex: number
-  lastIndex: number
+  paginatedItems: any;
+  totalPages: number;
+  startedIndex: number;
+  lastIndex: number;
 }
 
 const pagination = (
@@ -27,33 +27,33 @@ const pagination = (
   itemsPerPage: number,
   items: any
 ): PaginationResult => {
-  const totalPages = Math.ceil(items.length / itemsPerPage)
-  const startedIndex = (currentPage - 1) * itemsPerPage
-  const lastIndex = startedIndex + itemsPerPage
-  const paginatedItems = items.slice(startedIndex, lastIndex)
-  return { paginatedItems, totalPages, startedIndex, lastIndex }
-}
+  const totalPages = Math.ceil(items.length / itemsPerPage);
+  const startedIndex = (currentPage - 1) * itemsPerPage;
+  const lastIndex = startedIndex + itemsPerPage;
+  const paginatedItems = items.slice(startedIndex, lastIndex);
+  return { paginatedItems, totalPages, startedIndex, lastIndex };
+};
 
 interface DiscountItemsListsProps {
-  category: string | null
-  showAddDiscountModal: (product: Product) => void
+  category: string | null;
+  showAddDiscountModal: (product: Product) => void;
 }
 
 export default function DiscountItemsLists({
   category,
   showAddDiscountModal,
 }: DiscountItemsListsProps) {
-  const { error, isLoading, data } = useFetchProducts<Product[]>(category)
+  const { error, isLoading, data } = useFetchProducts<Product[]>(category);
 
-  const [itemsPerPage, setItemsPerPage] = useState(5)
-  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1);
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full">
         <Loading />
       </div>
-    )
+    );
   }
 
   if (error) {
@@ -61,14 +61,14 @@ export default function DiscountItemsLists({
       <div className="flex items-center justify-center h-full">
         <div className="text-red-500">Error: {error.message}</div>
       </div>
-    )
+    );
   }
 
   const { paginatedItems, totalPages, startedIndex, lastIndex } = pagination(
     currentPage,
     itemsPerPage,
     data
-  )
+  );
 
   return (
     <div className="overflow-x-auto ">
@@ -100,7 +100,8 @@ export default function DiscountItemsLists({
           {paginatedItems?.map((product: Product) => (
             <tr
               key={product.id}
-              className="*:text-gray-900 *:first:font-medium h-12 py-9 hover:bg-gray-100 transition-colors cursor-pointer">
+              className="*:text-gray-900 *:first:font-medium h-12 py-9 hover:bg-gray-100 transition-colors cursor-pointer"
+            >
               <td className="px-3 py-2 whitespace-nowrap">{product.id}</td>
               <td className="px-3 py-2 whitespace-nowrap">{product.name}</td>
               <td className="px-3 py-2 whitespace-nowrap">
@@ -114,10 +115,11 @@ export default function DiscountItemsLists({
                   <span
                     className={`underline ${
                       product.dis_percent > 0
-                        ? 'text-red-400 '
-                        : 'text-[#9E9E9E]'
-                    } `}>
-                    {product.dis_percent > 0 ? 'Cancel ' : 'Add '}Discount
+                        ? "text-red-400 "
+                        : "text-[#9E9E9E]"
+                    } `}
+                  >
+                    {product.dis_percent > 0 ? "Cancel " : "Add "}Discount
                   </span>
                 </button>
               </td>
@@ -159,8 +161,8 @@ export default function DiscountItemsLists({
                 className="h-8 w-16 px-2 rounded border border-gray-200 sm:text-sm"
               />
               <span className="text-gray-600 text-sm">
-                {' '}
-                of {totalPages} pages{' '}
+                {" "}
+                of {totalPages} pages{" "}
               </span>
             </label>
           </li>
@@ -169,12 +171,14 @@ export default function DiscountItemsLists({
             <a
               href="#"
               className="grid size-8 place-content-center rounded border border-gray-200 transition-colors hover:bg-gray-50 rtl:rotate-180"
-              aria-label="Previous page">
+              aria-label="Previous page"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="size-4"
                 viewBox="0 0 20 20"
-                fill="currentColor">
+                fill="currentColor"
+              >
                 <path
                   fillRule="evenodd"
                   d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
@@ -187,12 +191,14 @@ export default function DiscountItemsLists({
             <a
               href="#"
               className="grid size-8 place-content-center rounded border border-gray-200 transition-colors hover:bg-gray-50 rtl:rotate-180"
-              aria-label="Next page">
+              aria-label="Next page"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="size-4"
                 viewBox="0 0 20 20"
-                fill="currentColor">
+                fill="currentColor"
+              >
                 <path
                   fillRule="evenodd"
                   d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
@@ -204,5 +210,5 @@ export default function DiscountItemsLists({
         </ul>
       </div>
     </div>
-  )
+  );
 }
