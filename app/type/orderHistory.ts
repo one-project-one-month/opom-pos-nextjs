@@ -25,7 +25,7 @@ export type OrderHistory = {
   updated_at: string;
   user: User;
   customer: Customer;
-  // replace `any` if customer structure is known
+  
 };
 
 export type PaginatedOrderHistoryResponse = {
@@ -33,7 +33,7 @@ export type PaginatedOrderHistoryResponse = {
   last_page: number;
   total: number;
   data: OrderHistory[];
-  // add total, per_page, etc., if your API includes them
+ 
 };
 
 export type OrderHistoryApiResponse = {
