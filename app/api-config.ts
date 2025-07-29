@@ -7,7 +7,7 @@ const Axios = axios.create({
 
 Axios.interceptors.request.use(
   async (config) => {
-    const token = localStorage.getItem('access_token');
+    const token = '335|ZIrSEQ5HKZ6pPYsvyfzJfQRry4MHsREEydr2XOXEbd310dd4';
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
