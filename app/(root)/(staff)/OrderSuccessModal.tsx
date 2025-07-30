@@ -28,15 +28,18 @@ export function OrderSuccessModal({
   if (!isOpen) return null;
 
   return (
-    <Modal onClose={onClose} className="p-12 pb-7 max-w-md w-full">
+    <Modal
+      onClose={onClose}
+      className="p-12 py-7 max-w-md w-full overflow-y-auto"
+    >
       <div className="flex flex-col items-center text-center">
         {/* Success Icon */}
-        <div className="bg-success-300 p-3 rounded-full mb-10 d-flex justify-center items-center">
+        <div className="bg-success-300 p-3 rounded-full mb-5 d-flex justify-center items-center">
           <Check className="h-10 w-10 text-white" />
         </div>
 
         {/* Header */}
-        <h1 className="text-2xl font-bold text-center mb-6">
+        <h1 className="text-2xl font-bold text-center mb-3">
           Payment Successful
         </h1>
 

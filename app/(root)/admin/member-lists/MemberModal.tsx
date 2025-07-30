@@ -1,20 +1,53 @@
 'use client';
 
 import React, { ChangeEvent, useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Modal from '@/app/components/modal';
 import CustomBtn from '@/app/components/custom-btn';
+import Axios from '@/app/api-config';
+import { API } from '@/app/constants/api';
+import toast from 'react-hot-toast';
 
 type MemberModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (member: { name: string; email: string; phone: string }) => void;
 };
 
-const MemberModal = ({ isOpen, onClose, onSave }: MemberModalProps) => {
+const MemberModal = ({ isOpen, onClose }: MemberModalProps) => {
+  const queryClient = useQueryClient();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
+  });
+
+  const createCustomer = async (customerData: {
+    name: string;
+    email: string;
+    phone: string;
+  }) => {
+    try {
+      const response = await Axios.post(API.customers, customerData);
+      return response.data;
+    } catch (error) {
+      console.error('Error creating customer:', error);
+      throw error;
+    }
+  };
+
+  const mutation = useMutation({
+    mutationFn: createCustomer,
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ['customers'] });
+      toast.success('Customer created successfully!');
+      onClose();
+      setFormData({ name: '', email: '', phone: '' });
+    },
+    onError: (error) => {
+      toast.error('Failed to create customer. Please try again.');
+      console.error('Mutation error:', error);
+    },
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -27,8 +60,11 @@ const MemberModal = ({ isOpen, onClose, onSave }: MemberModalProps) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSave(formData);
-    setFormData({ name: '', email: '', phone: '' });
+    if (!formData.name || !formData.phone) {
+      toast.error('Name and phone number are required');
+      return;
+    }
+    mutation.mutate(formData);
   };
 
   if (!isOpen) return null;
@@ -95,9 +131,10 @@ const MemberModal = ({ isOpen, onClose, onSave }: MemberModalProps) => {
           </div>
           <CustomBtn
             type="submit"
-            className="flex-1 mt-6 bg-[#FB9E3A] hover:bg-[#E28E34] text-white rounded-lg w-full py-4 font-medium transition-colors"
+            className="flex-1 mt-6 bg-[#FB9E3A] hover:bg-[#E28E34] text-white rounded-lg w-full py-4 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={mutation.isPending}
           >
-            Save
+            {mutation.isPending ? 'Saving...' : 'Save'}
           </CustomBtn>
         </form>
       </div>
