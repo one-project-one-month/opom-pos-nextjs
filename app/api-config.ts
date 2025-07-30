@@ -1,15 +1,12 @@
 import axios from 'axios';
 
 const Axios = axios.create({
-  // TODO: Change Actual Server URL
-  baseURL: '',
+  baseURL: 'https://backoffice.opompos.site/api/v1/',
 });
-
-Axios.defaults.baseURL = '';
 
 Axios.interceptors.request.use(
   async (config) => {
-    const token = '347|2icm0Q9saGFYZWSSQ0vnl9Yg17r16CS0jBVcQEpS09172a1d';
+    const token = localStorage.getItem('access_token');
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -28,8 +25,7 @@ Axios.interceptors.response.use(
     if (error.response.status === 401) {
       //refresh token api call
       // ....
-      const access_token =
-        '347|2icm0Q9saGFYZWSSQ0vnl9Yg17r16CS0jBVcQEpS09172a1d';
+      const access_token = localStorage.getItem('access_token');
       Axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
       return Axios(error.config);
     }

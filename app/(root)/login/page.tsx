@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { FaLock, FaUser } from "react-icons/fa";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useAuth } from "@/app/hooks/useAuth";
+import { getRoleBasedRoute } from "@/app/constants/routes";
 import { ErrorModal } from "./ErrorModal";
 
 function Login() {
@@ -14,14 +15,20 @@ function Login() {
   });
   const [showErrorModal, setShowErrorModal] = useState(false);
 
-  const { login, isLoading, error, isAuthenticated, clearError } = useAuth();
+  const { login, isLoading, error, isAuthenticated, user, clearError } =
+    useAuth();
   const router = useRouter();
 
+  const redirectBasedonRole = (userRole: string | null) => {
+    const route = getRoleBasedRoute(userRole || "staff");
+    router.push(route);
+  };
+
   useEffect(() => {
-    if (isAuthenticated) {
-      router.push("/admin");
+    if (isAuthenticated && user) {
+      redirectBasedonRole(user.role);
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, router, user]);
 
   useEffect(() => {
     if (error) {
@@ -50,8 +57,8 @@ function Login() {
       password: formData.password,
     });
 
-    if (success) {
-      router.push("/admin");
+    if (success && user) {
+      redirectBasedonRole(user.role);
     }
   };
 

@@ -72,84 +72,90 @@ const CustomTable = <T extends Record<string, any>>({ columns, data, pagination 
                     }
                 </tbody>
             </table>
-            <div className="flex gap-3 justify-between items-center mt-5 px-5">
-                <ul className="flex justify-start gap-1 text-gray-900">
-                    <li>
-                        <label htmlFor="Page" className="flex items-center gap-2">
-                            <span className="text-gray-600 text-sm">Items per page:</span>
-                            <span className="sr-only"> Page </span>
-                            <div className="px-2 border-[1px] rounded border-[#E1E2E3]">
-                                <select
-                                    name="number-of-items"
-                                    id="number-of-items"
-                                    value={pagination?.pageSize}
-                                    className="pr-2.5 h-8 text-sm focus-within:outline-none cursor-pointer"
-                                    onChange={handlePageSizeChange}
+            {
+                data?.length ?
+                    <div className="flex gap-3 justify-between items-center mt-5 px-5">
+                        <ul className="flex justify-start gap-1 text-gray-900">
+                            <li>
+                                <label htmlFor="Page" className="flex items-center gap-2">
+                                    <span className="text-gray-600 text-sm">Items per page:</span>
+                                    <span className="sr-only"> Page </span>
+                                    <div className="px-2 border-[1px] rounded border-[#E1E2E3]">
+                                        <select
+                                            name="number-of-items"
+                                            id="number-of-items"
+                                            value={pagination?.pageSize}
+                                            className="pr-2.5 h-8 text-sm focus-within:outline-none cursor-pointer"
+                                            onChange={handlePageSizeChange}
+                                        >
+                                            <option value={5}>5</option>
+                                            <option value={10}>10</option>
+                                            <option value={25}>25</option>
+                                            <option value={50}>50</option>
+                                            <option value={100}>100</option>
+                                        </select>
+                                    </div>
+                                    <span className="text-gray-600 text-sm">1-{pagination?.pageSize} of {pagination?.total} items</span>
+                                </label>
+                            </li>
+                        </ul>
+                        <ul className="flex items-center gap-3 text-gray-900">
+                            <li>
+                                <label htmlFor="Page">
+                                    <span className="sr-only"> Page </span>
+                                    <input
+                                        type="number"
+                                        id="Page"
+                                        min={1}
+                                        value={pagination?.currentPage || 1}
+                                        onChange={handlePageChange}
+                                        className="h-8 w-16 px-2 rounded border border-gray-200 sm:text-sm"
+                                    />
+                                    <span className="text-gray-600 text-sm"> of {pagination?.lastPage} pages </span>
+                                </label>
+                            </li>
+                            <li>
+                                <button
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        if (pagination && pagination.currentPage && pagination.currentPage > 1) {
+                                            pagination?.handleOnChange?.(
+                                                pagination.currentPage - 1,
+                                                pagination.pageSize || 5
+                                            )
+                                        }
+                                    }}
+                                    disabled={pagination?.currentPage === 1}
+                                    className="grid size-8 place-content-center rounded border border-gray-200 transition-colors hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed rtl:rotate-180 cursor-pointer"
+                                    aria-label="Previous page"
                                 >
-                                    <option value={5}>5</option>
-                                    <option value={10}>10</option>
-                                    <option value={25}>25</option>
-                                    <option value={50}>50</option>
-                                    <option value={100}>100</option>
-                                </select>
-                            </div>
-                            <span className="text-gray-600 text-sm">1-{pagination?.pageSize} of {pagination?.total} items</span>
-                        </label>
-                    </li>
-                </ul>
-                <ul className="flex items-center gap-3 text-gray-900">
-                    <li>
-                        <label htmlFor="Page">
-                            <span className="sr-only"> Page </span>
-                            <input
-                                type="number"
-                                id="Page"
-                                min={1}
-                                value={pagination?.currentPage || 1}
-                                onChange={handlePageChange}
-                                className="h-8 w-16 px-2 rounded border border-gray-200 sm:text-sm"
-                            />
-                            <span className="text-gray-600 text-sm"> of {pagination?.lastPage} pages </span>
-                        </label>
-                    </li>
-                    <li>
-                        <button
-                            onClick={(e) => {
-                                e.preventDefault();
-                                if (pagination && pagination.currentPage && pagination.currentPage > 1) {
-                                    pagination?.handleOnChange?.(
-                                        pagination.currentPage - 1,
-                                        pagination.pageSize || 5
-                                    )
-                                }
-                            }}
-                            disabled={pagination?.currentPage === 1}
-                            className="grid size-8 place-content-center rounded border border-gray-200 transition-colors hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed rtl:rotate-180 cursor-pointer"
-                            aria-label="Previous page"
-                        >
-                            <PrevSvg />
-                        </button>
-                    </li>
-                    <li>
-                        <button
-                            onClick={(e) => {
-                                e.preventDefault();
-                                if (pagination && pagination.currentPage && pagination.lastPage && (pagination?.currentPage < pagination?.lastPage)) {
-                                    pagination?.handleOnChange?.(
-                                        pagination.currentPage + 1,
-                                        pagination.pageSize || 5
-                                    )
-                                }
-                            }}        
-                            disabled={pagination?.currentPage === pagination?.lastPage}
-                            className="grid size-8 place-content-center rounded border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors hover:bg-gray-50 rtl:rotate-180 cursor-pointer"
-                            aria-label="Next page"
-                        >
-                            <NextSvg />
-                        </button>
-                    </li>
-                </ul>
-            </div>
+                                    <PrevSvg />
+                                </button>
+                            </li>
+                            <li>
+                                <button
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        if (pagination && pagination.currentPage && pagination.lastPage && (pagination?.currentPage < pagination?.lastPage)) {
+                                            pagination?.handleOnChange?.(
+                                                pagination.currentPage + 1,
+                                                pagination.pageSize || 5
+                                            )
+                                        }
+                                    }}
+                                    disabled={pagination?.currentPage === pagination?.lastPage}
+                                    className="grid size-8 place-content-center rounded border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors hover:bg-gray-50 rtl:rotate-180 cursor-pointer"
+                                    aria-label="Next page"
+                                >
+                                    <NextSvg />
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    : <div className="col-span-full flex justify-center items-center text-lg font-semibold h-32 text-alert-500">
+                        No data found
+                    </div>
+            }
         </>
     )
 }

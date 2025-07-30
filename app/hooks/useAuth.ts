@@ -1,4 +1,3 @@
-// hooks/useAuth.ts
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
@@ -7,7 +6,6 @@ import AuthService, {
   LoginCredentials,
   RegisterData,
   User,
-  UserResponse,
 } from "../services/authService";
 
 interface AuthState {
@@ -32,9 +30,15 @@ export const useAuth = () => {
     const initializeAuth = async () => {
       try {
         if (authService.isAuthenticated()) {
-          const userData = await authService.getCurrentUser();
+          const userData = await authService.getUser();
+          const userWithRole = userData
+            ? {
+                ...userData,
+                role: userData.role || "staff",
+              }
+            : null;
           setAuthState({
-            user: userData.User_detail,
+            user: userWithRole,
             isLoading: false,
             isAuthenticated: true,
             error: null,
@@ -59,18 +63,17 @@ export const useAuth = () => {
     };
 
     initializeAuth();
-  }, []);
+  }, [authService]);
 
   const login = useCallback(
     async (credentials: LoginCredentials) => {
       setAuthState((prev) => ({ ...prev, isLoading: true, error: null }));
 
       try {
-        await authService.login(credentials);
-        const userData = await authService.getCurrentUser();
+        const authRespone = await authService.login(credentials);
 
         setAuthState({
-          user: userData.User_detail,
+          user: authRespone.user,
           isLoading: false,
           isAuthenticated: true,
           error: null,
@@ -89,32 +92,32 @@ export const useAuth = () => {
     [authService]
   );
 
-  const register = useCallback(
-    async (userData: RegisterData) => {
-      setAuthState((prev) => ({ ...prev, isLoading: true, error: null }));
+  //   const register = useCallback(
+  //     async (userData: RegisterData) => {
+  //       setAuthState((prev) => ({ ...prev, isLoading: true, error: null }));
 
-      try {
-        const response = await authService.register(userData);
+  //       try {
+  //         const response = await authService.register(userData);
 
-        setAuthState({
-          user: response.user,
-          isLoading: false,
-          isAuthenticated: true,
-          error: null,
-        });
+  //         setAuthState({
+  //           user: response.user,
+  //           isLoading: false,
+  //           isAuthenticated: true,
+  //           error: null,
+  //         });
 
-        return true;
-      } catch (error) {
-        setAuthState((prev) => ({
-          ...prev,
-          isLoading: false,
-          error: error instanceof Error ? error.message : "Registration failed",
-        }));
-        return false;
-      }
-    },
-    [authService]
-  );
+  //         return true;
+  //       } catch (error) {
+  //         setAuthState((prev) => ({
+  //           ...prev,
+  //           isLoading: false,
+  //           error: error instanceof Error ? error.message : "Registration failed",
+  //         }));
+  //         return false;
+  //       }
+  //     },
+  //     [authService]
+  //   );
 
   const logout = useCallback(async () => {
     setAuthState((prev) => ({ ...prev, isLoading: true }));
@@ -128,7 +131,6 @@ export const useAuth = () => {
         error: null,
       });
     } catch (error) {
-      // Even if logout request fails, clear local state
       setAuthState({
         user: null,
         isLoading: false,
@@ -142,26 +144,10 @@ export const useAuth = () => {
     setAuthState((prev) => ({ ...prev, error: null }));
   }, []);
 
-  const refreshUser = useCallback(async () => {
-    if (!authService.isAuthenticated()) return;
-
-    try {
-      const userData = await authService.getCurrentUser();
-      setAuthState((prev) => ({
-        ...prev,
-        user: userData.User_detail,
-      }));
-    } catch (error) {
-      console.error("Failed to refresh user data:", error);
-    }
-  }, [authService]);
-
   return {
     ...authState,
     login,
-    register,
     logout,
     clearError,
-    refreshUser,
   };
 };

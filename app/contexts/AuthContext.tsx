@@ -3,7 +3,7 @@
 
 import React, { createContext, useContext, ReactNode } from "react";
 import { useAuth } from "../hooks/useAuth";
-// import { useAuth } from "@/hooks/useAuth";
+
 import { LoginCredentials, RegisterData, User } from "../services/authService";
 interface AuthContextType {
   user: User | null;
@@ -11,10 +11,8 @@ interface AuthContextType {
   isAuthenticated: boolean;
   error: string | null;
   login: (credentials: LoginCredentials) => Promise<boolean>;
-  register: (userData: RegisterData) => Promise<boolean>;
   logout: () => Promise<void>;
   clearError: () => void;
-  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
