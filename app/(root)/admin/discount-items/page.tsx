@@ -6,6 +6,12 @@ import DiscountItemsLists from "@/app/components/discountItems/discount-items-li
 import AddDiscountModal from "@/app/components/discountItems/add-discount-modal";
 import { useState } from "react";
 
+<<<<<<< HEAD
+export default function Page() {
+  // const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  const [category, setCategory] = useState<string | null>(null)
+
+=======
 type Product = {
   id: string;
   name?: string;
@@ -20,26 +26,20 @@ type Product = {
 export default function Page() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [category, setCategory] = useState<string | null>(null);
+>>>>>>> dev
   return (
     <div className="w-full relative  p-5 flex flex-col">
       <div className="flex justify-between">
         <h1 className="font-light text-2xl">Discount Item Lists</h1>
-        <p className="text-red-600 underline">Discount rules</p>
+        {/* <p className="text-red-600 underline">Discount rules</p> */}
       </div>
       <div className="my-8">
         <CategoryList setCategory={setCategory}></CategoryList>
       </div>
       <DiscountItemsLists
-        category={category}
-        showAddDiscountModal={(product) => setSelectedProduct(product)}
+        categoryName={category}
+        // showAddDiscountModal={(product) => setSelectedProduct(product)}
       />
-
-      {selectedProduct && (
-        <AddDiscountModal
-          product={selectedProduct}
-          onClose={() => setSelectedProduct(null)}
-        />
-      )}
     </div>
   );
 }

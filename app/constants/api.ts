@@ -1,5 +1,6 @@
-export const base = "https://backoffice.opompos.site/api/v1/"
-// export const base = "https://521d31f15525.ngrok-free.app/api/v1/";
+export const base = 'https://backoffice.opompos.site/api/v1/'
+// export const base = "https://9005578b891e.ngrok-free.app/api/v1/";
+
 export const API = {
   products: base + 'products',
   categories: base + 'categories',
@@ -9,8 +10,19 @@ export const API = {
   staffs: base + 'all_staff',
   customers: base + 'customers',
   paymentMethods: base + 'payments',
-  orderHistory : base + 'orders',
+  orderHistory: base + 'orders',
+
+  // Sale Report APIs
+  orders: base + 'orders',
+  orders_month: base + 'orders_month',
+  total_amount: base + 'total_amount',
+  week_gain: base + 'week_gain',
+  weekly_top_sale: base + 'get_weekly_top_sale_items',
+  monthly_top_sale: base + 'get_monthly_top_sale_items',
   recentSale: base + 'orders_day',
   totalDay: base + 'total_day',
   totalGain: base + 'total_gain',
-};
+
+  // PDF Download APIs
+  download_sale_reports: base + 'download/top_lower_sale_reports',
+}

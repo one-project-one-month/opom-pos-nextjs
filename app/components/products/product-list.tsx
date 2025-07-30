@@ -9,6 +9,15 @@ import Loading from "../../(root)/staff/loading";
 import { useSearchParams } from "next/navigation";
 
 const ProductList = () => {
+<<<<<<< HEAD
+  const searchParams = useSearchParams()
+  const name = searchParams.get('name') || ''
+  const category = searchParams.get('category') || ''
+  const { error, isLoading, data } = useFetchProducts<Product[]>({
+    name,
+    category,
+  })
+=======
   const searchParams = useSearchParams();
   const name = searchParams.get("name") || "";
   const category = searchParams.get("category") || "";
@@ -16,6 +25,7 @@ const ProductList = () => {
     name,
     category,
   });
+>>>>>>> dev
 
   const dispatch = useDispatch();
 
@@ -24,7 +34,7 @@ const ProductList = () => {
       <div className="flex items-center justify-center h-full">
         <Loading />
       </div>
-    );
+    )
   }
 
   if (error) {
@@ -38,8 +48,12 @@ const ProductList = () => {
             viewBox="0 0 24 24"
             strokeWidth={2.0}
             stroke="currentColor"
+<<<<<<< HEAD
+            className="size-6">
+=======
             className="size-6"
           >
+>>>>>>> dev
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -48,7 +62,7 @@ const ProductList = () => {
           </svg>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -58,11 +72,19 @@ const ProductList = () => {
           <ProductCard
             key={i}
             photo={
+<<<<<<< HEAD
+              typeof product.photo === 'string'
+                ? product.photo
+                : product.photo instanceof File
+                ? URL.createObjectURL(product.photo)
+                : 'assets/logo.svg'
+=======
               typeof product.photo === "string"
                 ? product.photo
                 : product.photo instanceof File
                 ? URL.createObjectURL(product.photo)
                 : "assets/logo.svg"
+>>>>>>> dev
             }
             name={product?.name}
             price={product?.price}
@@ -73,11 +95,19 @@ const ProductList = () => {
                 addOrder({
                   id: product.id.toString(),
                   photo:
+<<<<<<< HEAD
+                    typeof product.photo === 'string'
+                      ? product.photo
+                      : product.photo instanceof File
+                      ? URL.createObjectURL(product.photo)
+                      : '',
+=======
                     typeof product.photo === "string"
                       ? product.photo
                       : product.photo instanceof File
                       ? URL.createObjectURL(product.photo)
                       : "",
+>>>>>>> dev
                   name: product.name,
                   price: product.price.toString(),
                   quantity: 1,
@@ -92,7 +122,7 @@ const ProductList = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default ProductList;
+export default ProductList
