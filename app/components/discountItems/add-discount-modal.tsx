@@ -4,6 +4,7 @@ import { X } from 'lucide-react'
 import * as z from 'zod'
 import { useState } from 'react'
 import { useDiscountAddMutation } from '@/app/hooks/useFetchDiscountProduct'
+import { useFetchCategoriesById } from '@/app/hooks/useFetchCategory'
 
 const discountProducts = z.object({
   id: z.string().min(1, 'Product ID is required'),
@@ -39,6 +40,9 @@ export default function AddDiscountModal({
   const [validationError, setValidationError] = useState<
     Record<string, string>
   >({})
+
+  const { data: categoryName, isLoading: categoryLoading } =
+    useFetchCategoriesById<string>(product.category_id)
 
   const mutation = useDiscountAddMutation({
     onSuccessCallback: () => {
@@ -129,10 +133,11 @@ export default function AddDiscountModal({
             <div className="flex flex-col mt-5">
               <label className="mb-3">Category</label>
               <input
+                key={categoryName}
                 name="category_id"
                 type="text"
                 className="bg-[#F5F5F5] p-2 rounded-[10px]"
-                defaultValue={product?.category_id || ''}
+                defaultValue={categoryLoading ? 'loading...' : categoryName}
                 readOnly
               />
               {validationError.category_id && (
