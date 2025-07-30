@@ -7,9 +7,9 @@ const CategoryList = () => {
   const {error, isLoading, data} = useFetchCategories<Category[]>();
   return (
     <div className='flex gap-[10px] overflow-x-auto no-scrollbar'>
-      <CategoryCard className='px-5' name="All" />
+      <CategoryCard className='px-5' name="All" photo='' />
         {data?.map((cat, idx) => (
-          <CategoryCard key={idx} name={cat.name} />
+          <CategoryCard key={idx} name={cat.name} photo={cat.photo} />
         ))}
     </div>
   )

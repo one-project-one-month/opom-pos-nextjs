@@ -17,17 +17,12 @@ function OrderHistory() {
   const [showModal, setShowModal] = useState(false);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(5);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
   
   
-  const params = {
-    ...(page !== 0 && { page }),
-    ...(size !== 0 && { pageSize: size }),
-  }
+  
 
-const { error, isLoading, data } = useFetchOrderHistory<OrderHistoryApiResponse>();
+const { error, isLoading, data } = useFetchOrderHistory<OrderHistoryApiResponse>(page, size);
 
 const orderHistories = data?.orders?.data || [];
 
@@ -37,11 +32,7 @@ const viewSlip = (order: any) => {
     setShowModal(true);
   };
   
-  // Handle pagination changes
-  const handlePaginationChange = (page: number, size: number) => {
-    setCurrentPage(page);
-    setPageSize(size);
-  };
+ 
 
   const columns = [
     {
@@ -114,7 +105,7 @@ const viewSlip = (order: any) => {
                     data={orderHistories}
                     pagination={{
                       pageSize: size,
-                      currentPage: data?.orders?.current_page,
+                      currentPage: page,
                       lastPage: data?.orders?.last_page,
                       total: data?.orders?.total,
                       handleOnChange: (newPage, newSize) => {

@@ -15,9 +15,7 @@ export const ROUTES = {
 
   //Staff routes
   STAFF: "/staff",
-  STAFF_DASHBOARD: "/staff/dashboard",
-  STAFF_INVENTORY: staffPrefix + "inventory",
-  STAFF_ORDERS: staffPrefix + "orders",
+  STAFF_ORDERS: staffPrefix + "order-history",
 };
 
 export const getRoleBasedRoute = (role: string | "staff"): string => {

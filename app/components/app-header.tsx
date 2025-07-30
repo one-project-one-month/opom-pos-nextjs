@@ -8,6 +8,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BiLeftArrow } from "react-icons/bi";
 import { LogoutButton } from "./Logout";
+import { ROUTES } from "../constants/routes";
 
 export default function Header() {
   const now = new Date();
@@ -26,9 +27,9 @@ export default function Header() {
         </div>
         {!currentPath.includes("/admin") && (
           <>
-            {currentPath === "/order-history" ? (
+            {currentPath === ROUTES.STAFF_ORDERS ? (
               <Link
-                href={"/"}
+                href={ROUTES.STAFF}
                 className="flex justify-center items-center gap-2"
               >
                 <BiLeftArrow />
@@ -36,7 +37,7 @@ export default function Header() {
               </Link>
             ) : (
               <Link
-                href={"/order-history"}
+                href={ROUTES.STAFF_ORDERS}
                 className="flex justify-center items-center gap-2"
               >
                 <History />
@@ -48,7 +49,7 @@ export default function Header() {
         {/* <CustomBtn className="bg-alert-500 flex gap-3 items-center">
           <LogOut size={18} /> Log Out
         </CustomBtn> */}
-        <div className=" bg-primary-300 rounded-lg p-1 ">
+        <div className="bg-alert-500 rounded-lg p-1 ">
           <LogoutButton />
         </div>
       </div>

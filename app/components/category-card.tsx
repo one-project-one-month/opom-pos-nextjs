@@ -1,13 +1,16 @@
+import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
 import queryString from 'query-string'
 import React from 'react'
+import defaultImg from '@/public/assets/tomato.png'
 
 type CategoryCardProps = {
-  name: string
+  name: string,
+  photo: string,
   className?: string
 }
 
-const CategoryCard = ({ name, className }: CategoryCardProps) => {
+const CategoryCard = ({ name, photo, className }: CategoryCardProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const category = searchParams.get('category');
@@ -41,6 +44,16 @@ const CategoryCard = ({ name, className }: CategoryCardProps) => {
       onClick={getCategory}
       className={`w-fit h-[48px] rounded-[5px] p-2.5 text-center text-gray-600 flex-shrink-0 text-xs md:text-sm lg:text-[16px] flex justify-center items-center cursor-pointer ${isActive ? 'bg-[#FB9E3A] text-white' : ''} ${className}`}
     >
+      {
+        name !== 'All' &&
+        <Image
+          src={photo ? `https://backoffice.opompos.site/storage/${photo}` : defaultImg}
+          width={50}
+          height={50}
+          className='mr-2'
+          alt="category photo"
+        />
+      }
       {name}
     </div>
   )
