@@ -1,47 +1,26 @@
 'use client';
 import React, { useState } from 'react';
 import MemberModal from './MemberModal';
-
-
-const dummyData = [
-  {
-    id: '12458789',
-    name: 'John Doe',
-    role: 'Gold',
-    email: 'john@example.com',
-    phoneNumber: '1234567890',
-    point: 0,
-  },
-  {
-    id: '12458790',
-    name: 'Jane Smith',
-    role: 'Silver',
-    email: 'jane@example.com',
-    phoneNumber: '1234567890',
-    point: 1000,
-  },
-  {
-    id: '12458791',
-    name: 'Alice Brown',
-    role: 'Vip',
-    email: 'alice@example.com',
-    phoneNumber: '1234567890',
-    point: 130000,
-  },
-  {
-    id: '12458792',
-    name: 'Bob Lee',
-    role: 'Gold',
-    email: 'bob@example.com',
-    phoneNumber: '1234567890',
-    point: 1200,
-  },
-];
+import Link from 'next/link';
+import { useFetchCustomers } from '@/app/hooks/useFetchCustomer';
+import { Waveform } from 'ldrs/react';
+import 'ldrs/react/Waveform.css';
+import toast from 'react-hot-toast';
 
 const Page = () => {
-  const [value, setValue] = useState(5);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(5);
+  const startIndex = (page - 1) * size;
+  const endIndex = page * size;
 
+  const { data: customers, isLoading, error } = useFetchCustomers();
+  const customerCount = customers?.length || 0;
+  // Handle API errors
+  if (error) {
+    toast.error('Failed to load customers');
+    console.error('Error loading customers:', error);
+  }
 
   return (
     <div className="p-5">
@@ -49,7 +28,7 @@ const Page = () => {
         <p className="font-[400px] text-[25px]">Loyal Member List</p>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="bg-[#FB9E3A] py-4 px-2 text-white rounded-[5px] flex items-center justify-center gap-2 hover:bg-[#E28E34] transition-colors"
+          className="bg-[#FB9E3A] py-4 px-2 text-white rounded-[5px] flex items-center justify-center gap-2 hover:bg-[#E28E34] transition-colors cursor-pointer"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -73,16 +52,10 @@ const Page = () => {
           <thead className="ltr:text-left rtl:text-right">
             <tr className="*:font-medium *:text-gray-900">
               <th className="px-3 py-2 whitespace-nowrap">
-                <span className=""></span>
-              </th>
-              <th className="px-3 py-2 whitespace-nowrap">
                 <span className="">User Id</span>
               </th>
               <th className="px-3 py-2 whitespace-nowrap">
                 <span className="">Name</span>
-              </th>
-              <th className="px-3 py-2 whitespace-nowrap">
-                <span className="">Role</span>
               </th>
               <th className="px-3 py-2 whitespace-nowrap">
                 <span className="">Email</span>
@@ -90,37 +63,50 @@ const Page = () => {
               <th className="px-3 py-2 whitespace-nowrap">
                 <span className="">Phone Number</span>
               </th>
-              <th className="px-3 py-2 whitespace-nowrap">
-                <span className="">Points</span>
-              </th>
               <th className="px-3 py-2 whitespace-nowrap">Action</th>
             </tr>
           </thead>
 
           <tbody className="divide-y divide-gray-200 *:even:bg-gray-50">
-            {dummyData?.map((item, i) => (
-              <tr
-                key={i}
-                className="*:text-gray-900 *:first:font-medium h-[68px]"
-              >
-                <td className="px-3 py-2 whitespace-nowrap">
-                  <input type="checkbox" className="w-5 h-5" />
-                </td>
-                <td className="px-3 py-2 whitespace-nowrap">{item.id}</td>
-                <td className="px-3 py-2 whitespace-nowrap">{item.name}</td>
-                <td className="px-3 py-2 whitespace-nowrap">{item.role}</td>
-                <td className="px-3 py-2 whitespace-nowrap">{item.email}</td>
-                <td className="px-3 py-2 whitespace-nowrap">
-                  {item.phoneNumber}
-                </td>
-                <td className="px-3 py-2 whitespace-nowrap">{item.point}</td>
-                <td className="px-3 py-2 whitespace-nowrap">
-                  <button className="text-blue-500 font-bold">Edit</button>{' '}
-                  {' / '}
-                  <button className="text-red-500 font-bold">Delete</button>
+            {isLoading ? (
+              <tr>
+                <td colSpan={8} className="text-center py-4">
+                  <div className="flex justify-center">
+                    <Waveform size="35" stroke="3.5" speed="1" color="orange" />
+                  </div>
                 </td>
               </tr>
-            ))}
+            ) : customers?.length === 0 ? (
+              <tr>
+                <td colSpan={8} className="text-center py-4 text-gray-500">
+                  No customers found
+                </td>
+              </tr>
+            ) : (
+              customers?.slice(startIndex, endIndex).map((item, i) => (
+                <tr
+                  key={i}
+                  className="*:text-gray-900 *:first:font-medium h-[68px]"
+                >
+                  <td className="px-3 py-2 whitespace-nowrap">{item.id}</td>
+                  <td className="px-3 py-2 whitespace-nowrap">{item.name}</td>
+                  <td className="px-3 py-2 whitespace-nowrap">
+                    {item.email || '-'}
+                  </td>
+                  <td className="px-3 py-2 whitespace-nowrap">
+                    {item.phone || '-'}
+                  </td>
+                  <td className="px-3 py-2 whitespace-nowrap">
+                    <Link
+                      className="text-blue-500 font-bold"
+                      href={`/admin/member-lists/${item.id}`}
+                    >
+                      View
+                    </Link>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
         <div className="flex gap-3 justify-between items-center mt-5 px-5">
@@ -128,12 +114,14 @@ const Page = () => {
             <li>
               <label htmlFor="Page" className="flex items-center gap-2">
                 <span className="text-gray-600 text-sm">Items per page:</span>
-                <span className="sr-only"> Page </span>
+                <span className="sr-only">Page</span>
                 <div className="px-2 border-[1px] rounded border-[#E1E2E3]">
                   <select
                     name="number-of-items"
                     id="number-of-items"
                     className="pr-2.5 h-8 text-sm focus-within:outline-none"
+                    value={size}
+                    onChange={(e) => setSize(Number(e.target.value))}
                   >
                     <option value="5">5</option>
                     <option value="10">10</option>
@@ -142,29 +130,46 @@ const Page = () => {
                     <option value="100">100</option>
                   </select>
                 </div>
-                <span className="text-gray-600 text-sm">1-5 of 100 items</span>
+                <span className="text-gray-600 text-sm">
+                  1-5 of {customers?.length} items
+                </span>
               </label>
             </li>
           </ul>
           <ul className="flex items-center gap-3 text-gray-900">
             <li>
               <label htmlFor="Page">
-                <span className="sr-only"> Page </span>
+                <span className="sr-only">Page</span>
                 <input
                   type="number"
                   id="Page"
-                  value={value}
-                  onChange={(e) => setValue(Number(e.target.value))}
+                  value={page}
+                  onChange={(e) => setPage(Number(e.target.value))}
                   className="h-8 w-16 px-2 rounded border border-gray-200 sm:text-sm"
+                  max={Math.ceil(customerCount / size)}
+                  min={1}
                 />
-                <span className="text-gray-600 text-sm"> of 40 pages </span>
+                <span className="text-gray-600 text-sm">
+                  {' '}
+                  of {Math.ceil(customerCount / size)} pages{' '}
+                </span>
               </label>
             </li>
             <li>
               <a
                 href="#"
-                className="grid size-8 place-content-center rounded border border-gray-200 transition-colors hover:bg-gray-50 rtl:rotate-180"
+                className={
+                  'grid size-8 place-content-center rounded border border-gray-200 transition-colors rtl:rotate-180' +
+                  (page === 1
+                    ? ' bg-gray-200 cursor-not-allowed hover:bg-gray-200'
+                    : ' hover:bg-gray-50')
+                }
                 aria-label="Previous page"
+                onClick={() => {
+                  if (page > 1) {
+                    setPage(page - 1);
+                  }
+                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -183,8 +188,18 @@ const Page = () => {
             <li>
               <a
                 href="#"
-                className="grid size-8 place-content-center rounded border border-gray-200 transition-colors hover:bg-gray-50 rtl:rotate-180"
+                className={
+                  'grid size-8 place-content-center rounded border border-gray-200 transition-colors hover:bg-gray-50 rtl:rotate-180' +
+                  (page === Math.ceil(customerCount / size)
+                    ? ' bg-gray-200 cursor-not-allowed hover:bg-gray-200'
+                    : ' hover:bg-gray-50')
+                }
                 aria-label="Next page"
+                onClick={() => {
+                  if (page < Math.ceil(customerCount / size)) {
+                    setPage(page + 1);
+                  }
+                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -204,18 +219,7 @@ const Page = () => {
         </div>
       </div>
 
-      <MemberModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSave={(member) => {
-          // Here you would typically make an API call to save the member
-          console.log('Saving member:', member);
-          // For now, we'll just close the modal
-          setIsModalOpen(false);
-        }}
-      />
-      
-
+      <MemberModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 };

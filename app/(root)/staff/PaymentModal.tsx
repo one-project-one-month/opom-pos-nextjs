@@ -11,6 +11,7 @@ import {
 } from '@/app/store/slices/orderSummarySlice';
 import { useFetchPaymentMethods } from '@/app/hooks/useFetchPayments';
 import { Customer } from '@/app/type/type';
+import { base, imgBase } from '@/app/constants/api';
 
 type PaymentModalProps = {
   paymentMethod: number | null;
@@ -120,6 +121,7 @@ function PaymentModal({
             {paymentMethods.map((payment, index) => (
               <div key={payment.id}>
                 <PaymentOption
+                  iconSrc={imgBase + payment.photo}
                   value={payment.id}
                   label={payment.method}
                   checked={payment.id === paymentMethod}

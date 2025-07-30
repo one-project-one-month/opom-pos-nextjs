@@ -1,5 +1,5 @@
-export const base = 'https://backoffice.opompos.site/api/v1/'
-// export const base = "https://9005578b891e.ngrok-free.app/api/v1/";
+export const base = 'https://backoffice.opompos.site/api/v1/';
+export const imgBase = 'https://backoffice.opompos.site/storage/';
 
 export const API = {
   products: base + 'products',
@@ -25,4 +25,5 @@ export const API = {
 
   // PDF Download APIs
   download_sale_reports: base + 'download/top_lower_sale_reports',
-}
+  customerDetail: base + 'customers',
+};
