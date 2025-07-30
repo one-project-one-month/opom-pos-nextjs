@@ -39,7 +39,7 @@ const CategoryCard = ({ name, className }: CategoryCardProps) => {
   return (
     <div
       onClick={getCategory}
-      className={`w-fit h-[48px] rounded-[5px] p-2.5 text-center text-[#9E9E9E] flex-shrink-0 text-xs md:text-sm lg:text-[16px] flex justify-center items-center cursor-pointer ${isActive ? 'bg-[#FB9E3A] text-white' : ''} ${className}`}
+      className={`w-fit h-[48px] rounded-[5px] p-2.5 text-center text-gray-600 flex-shrink-0 text-xs md:text-sm lg:text-[16px] flex justify-center items-center cursor-pointer ${isActive ? 'bg-[#FB9E3A] text-white' : ''} ${className}`}
     >
       {name}
     </div>

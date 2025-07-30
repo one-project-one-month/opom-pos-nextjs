@@ -1,14 +1,12 @@
 import axios from 'axios'
 
 const Axios = axios.create({
-  baseURL: 'https://32ded80e3b49.ngrok-free.app',
+  baseURL: 'https://backoffice.opompos.site/api/v1/',
 })
-
-Axios.defaults.baseURL = ''
 
 Axios.interceptors.request.use(
   async (config) => {
-    const token = '345|jqj4bs8EATw3CDl49YY1wqG9slgcEax2NRS0m2Iu8e2e1732'
+    const token = localStorage.getItem('access_token')
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
@@ -27,7 +25,7 @@ Axios.interceptors.response.use(
     if (error.response.status === 401) {
       //refresh token api call
       // ....
-      const access_token = ''
+      const access_token = localStorage.getItem('access_token')
       Axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`
       return Axios(error.config)
     }

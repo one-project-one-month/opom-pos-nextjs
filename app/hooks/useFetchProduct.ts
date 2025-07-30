@@ -31,32 +31,10 @@ export const useFetchProducts = <T>(params: {
   })
 }
 
-// const getProducts = async () => {
-//   const res = await Axios.get('https://backoffice.opompos.site/api/v1/products')
-
-//   return res.data.product.data
-// }
-
 const getProductsById = async (id: string | number) => {
   const res = await Axios.get(`${API.products}/${id}`)
   return res.data.product.data
 }
-
-const getProductsByCategories = async (category: string | null) => {
-  const res = await Axios.get(API.products, {
-    params: { category: category },
-  })
-
-  return res.data.product.data
-}
-
-// export const useFetchProducts = <T>(category: string | null) => {
-//   return useQuery<T>({
-//     queryKey: ['products', category ?? 'all'],
-//     queryFn: () =>
-//       category === null ? getProducts() : getProductsByCategories(category),
-//   })
-// }
 
 export const useFetchProductsById = <T>(id: string | number) => {
   return useQuery<T>({
