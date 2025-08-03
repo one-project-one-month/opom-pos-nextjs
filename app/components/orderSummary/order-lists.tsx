@@ -56,8 +56,10 @@ export default function OrderLists() {
                     </button>
 
                     <span className="mx-2"> {order.quantity}</span>
-                    <button
-                      className="cursor-pointer "
+                    <button 
+                      className={`cursor-pointer ${
+                        order.quantity < order.stock ? 'block' : 'invisible'
+                      }`}
                       onClick={() =>
                         dispatch(increaseQuantity({ id: order.id }))
                       }>

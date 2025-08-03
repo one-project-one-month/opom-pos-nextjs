@@ -11,7 +11,6 @@ export interface PaymentMethod {
 const fetchPaymentMethods = async (): Promise<PaymentMethod[]> => {
   try {
     const res = await Axios.get(API.paymentMethods);
-    console.log(res);
     return Array.isArray(res?.data.payments) ? res.data.payments : [];
   } catch (error) {
     console.error('Error fetching payment methods:', error);

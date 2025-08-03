@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import Axios from '../api-config'
 import { API, base } from '../constants/api'
+import toast from 'react-hot-toast'
 
 interface CancelDiscountInput {
   product: any
@@ -21,7 +22,6 @@ const getDiscountProducts = async (params: Params) => {
 }
 
 export const useFetchDiscountProducts = <T>(params: Params) => {
-  console.log('Fetching discount products with params:', params)
   return useQuery<T>({
     queryKey: ['products', params],
     queryFn: () => getDiscountProducts(params),
@@ -91,7 +91,7 @@ export const useDiscountAddMutation = ({
       if (onErrorCallback) {
         onErrorCallback(error)
       } else {
-        alert(`Error: ${error?.message || 'Something went wrong'}`)
+        toast.error(`Error: ${error?.message || 'Something went wrong'}`)
       }
     },
   })
@@ -113,18 +113,13 @@ export const useDiscountCancelMutation = ({
     mutationFn: async ({ product }: CancelDiscountInput) => {
       const { sku, ...withoutSku } = product
 
-      const updatedData = {
-        ...withoutSku,
-        dis_percent: 0,
-      }
-
-      const res = await Axios.post(`${API.products}/${product.id}`, updatedData)
+      const res = await Axios.post(`${API.products}/cancel-discount/${product.id}`)
 
       return res.data
     },
 
     onMutate: async ({ product }) => {
-      await queryClient.cancelQueries({ queryKey: ['products'] })
+      await queryClient.cancelQueries({ queryKey: ['manager-products','products'] })
 
       const previousProducts = queryClient.getQueryData<any>([
         'products',
@@ -148,13 +143,14 @@ export const useDiscountCancelMutation = ({
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] })
+      toast.success("Cancellation successful!");
       onSuccessCallback()
     },
     onError: (error: any) => {
       if (onErrorCallback) {
         onErrorCallback(error)
       } else {
-        alert(`Error: ${error?.message || 'Something went wrong'}`)
+        toast.error(`Error: ${error?.message || 'Something went wrong'}`)
       }
     },
   })

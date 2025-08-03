@@ -9,11 +9,21 @@ import { usePathname } from "next/navigation";
 import { BiLeftArrow } from "react-icons/bi";
 import { LogoutButton } from "./Logout";
 import { ROUTES } from "../constants/routes";
+import { useEffect, useState } from "react";
 
 export default function Header() {
-  const now = new Date();
-  const formattedDate = format(now, "EEEE d, MMMM h:mma");
+  const [now, setNow] = useState(new Date());
   const currentPath = usePathname();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setNow(new Date);
+    }, 1000)
+
+    return () => clearInterval(interval)
+  }, [])
+  
+  const formattedDate = format(now, "EEEE d, MMMM h:mma");
 
   return (
     <header className=" border-b border-gray-300 bg-white z-50 md:px-10 px-5 flex justify-between items-center fixed w-full h-[80px]">
@@ -28,13 +38,7 @@ export default function Header() {
         {!currentPath.includes("/admin") && (
           <>
             {currentPath === ROUTES.STAFF_ORDERS ? (
-              <Link
-                href={ROUTES.STAFF}
-                className="flex justify-center items-center gap-2"
-              >
-                <BiLeftArrow />
-                <span className="">Back To Home</span>
-              </Link>
+              <></>
             ) : (
               <Link
                 href={ROUTES.STAFF_ORDERS}
@@ -46,9 +50,6 @@ export default function Header() {
             )}
           </>
         )}
-        {/* <CustomBtn className="bg-alert-500 flex gap-3 items-center">
-          <LogOut size={18} /> Log Out
-        </CustomBtn> */}
         <div className="bg-alert-500 rounded-lg p-1 ">
           <LogoutButton />
         </div>

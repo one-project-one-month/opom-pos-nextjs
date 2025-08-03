@@ -1,9 +1,8 @@
-<<<<<<< HEAD
 'use client'
 import React, { useState, useEffect } from 'react'
 import CategoryCard from './category-card'
 import { useFetchCategories } from '@/app/hooks/useFetchCategory'
-import Loading from '@/app/(root)/(staff)/loading'
+import Loading from '@/app/(root)/staff/loading'
 
 type Props = {
   setCategory: (val: string | null) => void
@@ -16,19 +15,6 @@ const CategoryList = ({ setCategory }: Props) => {
   useEffect(() => {
     setCategory(selectedCategory)
   }, [selectedCategory])
-=======
-import React from "react";
-import CategoryCard from "./category-card";
-import { useFetchCategories } from "@/app/hooks/useFetchCategory";
-import Loading from "@/app/(root)/staff/loading";
-
-type Props = {
-  setCategory: (val: string) => void;
-};
-
-const CategoryList = ({ setCategory }: Props) => {
-  const { data: categories, isLoading, error } = useFetchCategories();
->>>>>>> dev
 
   if (isLoading) {
     return (

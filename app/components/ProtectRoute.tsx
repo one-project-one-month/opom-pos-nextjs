@@ -4,24 +4,33 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "../contexts/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
   redirectTo?: string;
+  requiredRole?: string;
 }
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
   redirectTo = "/login",
+  requiredRole
 }) => {
-  const { isAuthenticated, isLoading } = useAuthContext();
+  const { isAuthenticated , isLoading, user } = useAuth();
   const router = useRouter();
+  useEffect(() => {
+}, [isAuthenticated]);
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.push(redirectTo);
+    if (!isLoading) {
+      if (!isAuthenticated) {
+        router.push(redirectTo);
+      } else if (requiredRole && user?.role !== requiredRole) {
+        router.replace("/unauthorized");
+      }
     }
-  }, [isAuthenticated, isLoading, router, redirectTo]);
+  }, [isAuthenticated, isLoading, router, redirectTo, requiredRole, user]);
 
   // Show loading spinner while checking authentication
   if (isLoading) {
@@ -33,9 +42,9 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   // If not authenticated, don't render children (redirect will happen)
-  if (!isAuthenticated) {
-    return null;
-  }
+  if (!isAuthenticated) return null;
+
+  if (requiredRole && user?.role !== requiredRole) return null;
 
   // If authenticated, render the protected content
   return <>{children}</>;

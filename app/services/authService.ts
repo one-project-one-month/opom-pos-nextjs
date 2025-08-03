@@ -19,6 +19,7 @@ export interface AuthResponse {
   refresh_token_expires_at: string;
   token_type: string;
   user: User;
+  staff_role: string[]
 }
 
 export interface User {
@@ -56,12 +57,18 @@ class AuthService {
       this.accessToken = localStorage.getItem("access_token");
       this.refreshToken = localStorage.getItem("refresh_token");
       const userData = localStorage.getItem("user_data");
+
       if (userData) {
-        const parsedUser = JSON.parse(userData);
-        this.user = {
-          ...parsedUser,
-          role: parsedUser.role || "staff",
-        };
+        try {
+          const parsedUser = JSON.parse(userData);
+
+          this.user = {
+            ...parsedUser,
+            role: parsedUser.role || "cashier", 
+          };
+        } catch (error) {
+          console.error("Failed to parse user data:", error);
+        }
       } else {
         this.user = null;
       }
@@ -69,16 +76,18 @@ class AuthService {
   }
 
   private setTokens(tokens: AuthResponse) {
+
     this.accessToken = tokens.access_token;
     this.refreshToken = tokens.refresh_token;
     this.user = {
       ...tokens.user,
-      role: tokens.user.role || "staff",
+      role: tokens.staff_role[0] || "cashier",
     };
 
     if (typeof window !== "undefined") {
       localStorage.setItem("access_token", tokens.access_token);
       localStorage.setItem("refresh_token", tokens.refresh_token);
+      localStorage.setItem("user_data", JSON.stringify(this.user));
       localStorage.setItem(
         "access_token_expires_at",
         tokens.access_token_expires_at
@@ -118,11 +127,10 @@ class AuthService {
       ...options.headers,
     };
 
-    console.log("Final Request Headers:", headers);
-
     const response = await fetch(`${base}${url}`, {
       headers,
       ...options,
+      
     });
 
     return response;
@@ -173,6 +181,7 @@ class AuthService {
       }
 
       const authData: AuthResponse = await response.json();
+
       this.setTokens(authData);
       return authData;
     } catch (error) {

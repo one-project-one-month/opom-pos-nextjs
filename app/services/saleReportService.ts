@@ -1,3 +1,4 @@
+import { number } from 'zod';
 import Axios from '../api-config';
 import { API } from '../constants/api';
 
@@ -58,6 +59,10 @@ export interface TotalAmount {
   total_amount: number;
 }
 
+export interface TotalGainByMonthly {
+  total_gain: number
+}
+
 export interface TopSaleItem {
   product_id: number;
   total_quantity: string;
@@ -104,9 +109,7 @@ class SaleReportService {
   // Get all orders with pagination
   async getOrders(page: number = 1): Promise<SaleReportResponse> {
     try {
-      console.log(`Making request to: /orders?page=${page}`); // Debug log
       const response = await Axios.get(`/orders?page=${page}`);
-      console.log('Orders API Response:', response); // Debug log
       return response.data;
     } catch (error: any) {
       console.error('Error fetching orders:', error);
@@ -137,9 +140,7 @@ class SaleReportService {
   // Get monthly orders
   async getMonthlyOrders(page: number = 1): Promise<SaleReportResponse> {
     try {
-      console.log(`Making request to: /orders_month?page=${page}`); // Debug log
       const response = await Axios.get(`/orders_month?page=${page}`);
-      console.log('Monthly Orders API Response:', response); // Debug log
       return response.data;
     } catch (error: any) {
       console.error('Error fetching monthly orders:', error);
@@ -175,6 +176,16 @@ class SaleReportService {
     } catch (error) {
       console.error('Error fetching total amount:', error);
       return { total_amount: 0 };
+    }
+  }
+  // Get total gain Monthly
+  async getGainByMonthly(): Promise<TotalGainByMonthly> {
+    try {
+      const response = await Axios.get(API.totalGain);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching total amount:', error);
+      return { total_gain: 0 };
     }
   }
 
@@ -255,5 +266,7 @@ class SaleReportService {
     }
   }
 }
+
+
 
 export const saleReportService = new SaleReportService();

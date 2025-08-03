@@ -233,13 +233,13 @@ function InventoryPage() {
 
   return (
     <>
-      <p className="text-xl">Inventory Management</p>
-      <div className="flex gap-8">
+      <TableTitle>Inventory Management</TableTitle>
+      <div className="flex gap-8 my-7">
         {
           productsList.map((product, index) => (
             <div
               key={index}
-              className="w-[220] p-5 shadow-md flex justify-center items-center gap-5 my-7"
+              className="w-[220] p-5 shadow-md flex justify-center items-center gap-5"
             >
               <div
                 className={`${product.color} w-[45] h-[45] rounded-sm flex justify-center items-center`}
@@ -314,15 +314,11 @@ function InventoryPage() {
       )}
       <br />
       <div>
-        {isLoading && (
-          <div className="text-center">
-            <Loading />
-          </div>
-        )}
         {error && <p className="text-alert-400">Error loading products</p>}
 
-        {!isLoading && !error && (
+        {!error && (
           <CustomTable
+            loading={isLoading}
             columns={columns}
             data={products}
             pagination={{
@@ -360,15 +356,15 @@ function InventoryPage() {
           <span className="text-center">
             Are you sure to delete this product?
           </span>
-          <div className="flex justify-center gap-2 mt-5">
+          <div className="flex justify-center gap-2 mt-5 mx-10">
             <CustomBtn
-              className="border border-alert-400 hover:bg-alert-500 hover:text-white text-black"
+              className="border border-alert-400 hover:bg-alert-500 hover:text-white text-black w-full"
               onClick={() => setConfirmModal(false)}
             >
               No
             </CustomBtn>
             <CustomBtn
-              className="border border-success-400 hover:bg-success-500 hover:text-white text-black flex gap-2 justify-center items-center"
+              className="border border-success-400 hover:bg-success-500 hover:text-white text-black flex gap-2 justify-center items-center w-full"
               onClick={() => handleDelete()}
             >
               {isDeletePending && <LoaderIcon />}

@@ -12,7 +12,6 @@ const getProducts = async (params?: { name?: string; category?: string }) => {
     const url = `${API.products}${queryString ? `?${queryString}` : ''}`
 
     const res = await Axios.get(url)
-    console.log('Fetched products:', res.data.products)
 
     return res.data.products
   } catch (error) {
@@ -105,7 +104,6 @@ const getManagerProducts = async (params?: ManagerProductParams) => {
 }
 
 export const useFetchManagerProducts = <T>(params?: ManagerProductParams) => {
-  console.log('Fetching manager products with params:', params)
   return useQuery<T>({
     queryKey: ['manager-products', params],
     queryFn: () => getManagerProducts(params),

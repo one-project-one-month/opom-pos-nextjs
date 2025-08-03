@@ -1,19 +1,19 @@
 "use client";
 import Loading from "@/app/(root)/staff/loading";
+import CustomBtn from "@/app/components/custom-btn";
 import CustomTable from "@/app/components/custom-table";
-import React, { Suspense, useState } from "react";
-import { StaffList } from "@/app/type/staffList";
+import Modal from "@/app/components/modal";
+import ModalTitle from "@/app/components/modal-title";
 import {
   useFetchStaffs,
   useSuspendStaff,
   useUnSuspendStaff,
 } from "@/app/hooks/useFetchStaff";
-import Modal from "@/app/components/modal";
-import ModalTitle from "@/app/components/modal-title";
-import CustomBtn from "@/app/components/custom-btn";
+import { StaffList } from "@/app/type/staffList";
+import { useState } from "react";
 
 const Page = () => {
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [suspendModal, setSuspendModal] = useState(false);
   const [unsuspendModal, setUnsuspendModal] = useState(false);
@@ -36,10 +36,10 @@ const Page = () => {
     setUnsuspendModal(false);
   });
 
-  const { error, isLoading, data } = useFetchStaffs<StaffList[]>();
+  const { error, isLoading, data } = useFetchStaffs<{ data: StaffList[] }>();
 
   // Calculate total pages
-  const total = data?.length || 0;
+  const total = data?.data?.length || 0;
   const lastPage = Math.ceil(total / pageSize);
 
   // Handle pagination changes
@@ -79,12 +79,12 @@ const Page = () => {
       dataIndex: "email",
     },
     {
-      title: "Confirmed At",
-      key: "confirmed_at",
-      dataIndex: "confirmed_at",
-      render: (confirmedAt: string) => {
-        return confirmedAt
-          ? new Date(confirmedAt).toLocaleDateString()
+      title: "Joined Date",
+      key: "created_at",
+      dataIndex: "created_at",
+      render: (created_at: string) => {
+        return created_at
+          ? new Date(created_at).toLocaleDateString()
           : "Not Confirmed";
       },
     },
@@ -94,9 +94,8 @@ const Page = () => {
       dataIndex: "suspended",
       render: (suspended: number) => (
         <p
-          className={`${
-            suspended === 1 ? "text-orange-600" : "text-green-600"
-          }`}
+          className={`${suspended === 1 ? "text-orange-600" : "text-green-600"
+            }`}
         >
           {suspended === 1 ? "Suspended" : "Active"}
         </p>
@@ -137,24 +136,25 @@ const Page = () => {
   // Get paginated data
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
-  const paginatedData = data?.slice(startIndex, endIndex);
+  const paginatedData = data?.data?.slice(startIndex, endIndex);
 
   return (
-    <div className="p-5">
-      <div className="flex justify-between items-center mt-7 mb-10">
+    <>
+      <div className="flex justify-between items-center mb-10">
         <p className="font-[400px] text-[25px]">Staff Lists</p>
       </div>
       <div className="overflow-x-auto">
-        {isLoading && (
+        {/* {isLoading && (
           <div className="text-center">
             <Loading />
           </div>
-        )}
+        )} */}
         {error && <p className="text-alert-400">Error loading staffs</p>}
-        {!isLoading && !error && (
+        {!error && (
           <CustomTable
             columns={columns}
             data={paginatedData}
+            loading={isLoading}
             pagination={{
               pageSize,
               currentPage,
@@ -236,7 +236,7 @@ const Page = () => {
           </div>
         </Modal>
       )}
-    </div>
+    </>
   );
 };
 

@@ -5,7 +5,6 @@ import { API } from '../constants/api'
 const getCategories = async () => {
   try {
     const res = await Axios.get(API.categories)
-    console.log(res.data.category)
     return res.data.category
   } catch (error) {
     console.error('Error fetching categories:', error)
@@ -16,7 +15,6 @@ const getCategories = async () => {
 const getCategoriesById = async (id: number) => {
   try {
     const res = await Axios.get(`${API.categories}/${id}`)
-    console.log(res.data.category)
     return res.data.category.name
   } catch (error) {
     console.error('Error fetching category by ID:', error)

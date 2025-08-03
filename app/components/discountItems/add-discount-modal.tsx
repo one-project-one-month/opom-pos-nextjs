@@ -5,6 +5,8 @@ import * as z from 'zod'
 import { useState } from 'react'
 import { useDiscountAddMutation } from '@/app/hooks/useFetchDiscountProduct'
 import { useFetchCategoriesById } from '@/app/hooks/useFetchCategory'
+import ModalTitle from '../modal-title'
+import toast from 'react-hot-toast'
 
 const discountProducts = z.object({
   id: z.string().min(1, 'Product ID is required'),
@@ -49,7 +51,7 @@ export default function AddDiscountModal({
       onClose()
     },
     onErrorCallback: (error) => {
-      alert(`Error: ${error?.message || 'Something went wrong'}`)
+      toast.error(`Error: ${error?.message || 'Something went wrong'}`)
     },
     params,
   })
@@ -84,27 +86,27 @@ export default function AddDiscountModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute inset-0 bg-black opacity-50" />
 
-      <div className="relative z-50 bg-white shadow-lg rounded-[10px] w-[90%] max-w-[600px]">
+      <div className="relative z-50 bg-white shadow-lg rounded-[10px]">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-800">
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 cursor-pointer">
           <X />
         </button>
 
         <div className="w-full p-10">
-          <h1 className="text-center font-bold text-[20px] mb-4">
+          <ModalTitle>
             Product Information
-          </h1>
+          </ModalTitle>
 
           <form onSubmit={handleSubmit}>
             <div className="flex mt-3 w-full">
               <div className="flex flex-col w-full">
-                <label className="mb-3">Product ID</label>
+                <label className="mb-3">SKU</label>
                 <input
                   name="id"
                   type="text"
-                  className="bg-[#F5F5F5] p-2 rounded-[10px]"
-                  defaultValue={product?.id || ''}
+                  className="p-2 rounded-[10px] bg-gray-200 text-gray-400 cursor-not-allowed"
+                  defaultValue={product?.sku || ''}
                   readOnly
                 />
                 {validationError.id && (
@@ -118,7 +120,7 @@ export default function AddDiscountModal({
                 <input
                   name="name"
                   type="text"
-                  className="bg-[#F5F5F5] p-2 rounded-[10px]"
+                  className="bg-gray-200 text-gray-400 cursor-not-allowed p-2 rounded-[10px]"
                   defaultValue={product?.name || ''}
                   readOnly
                 />
@@ -136,7 +138,7 @@ export default function AddDiscountModal({
                 key={categoryName}
                 name="category_id"
                 type="text"
-                className="bg-[#F5F5F5] p-2 rounded-[10px]"
+                className="bg-gray-200 text-gray-400 cursor-not-allowed p-2 rounded-[10px]"
                 defaultValue={categoryLoading ? 'loading...' : categoryName}
                 readOnly
               />
@@ -153,7 +155,7 @@ export default function AddDiscountModal({
                 <input
                   name="price"
                   type="text"
-                  className="bg-[#F5F5F5] p-2 rounded-[10px]"
+                  className="bg-gray-200 text-gray-400 cursor-not-allowed p-2 rounded-[10px]"
                   defaultValue={product?.price || ''}
                   readOnly
                 />
@@ -181,7 +183,7 @@ export default function AddDiscountModal({
             <button
               type="submit"
               disabled={mutation.isPending}
-              className="w-full bg-[#FB9E3A] text-white p-3 rounded-[10px] mt-5 text-center">
+              className="w-full bg-[#FB9E3A] text-white p-3 rounded-[10px] mt-5 text-center cursor-pointer">
               {mutation.isPending ? 'Saving...' : 'Save'}
             </button>
           </form>

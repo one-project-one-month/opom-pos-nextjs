@@ -7,17 +7,9 @@ import { Product } from "../../type/product";
 import { useFetchProducts } from "../../hooks/useFetchProduct";
 import Loading from "../../(root)/staff/loading";
 import { useSearchParams } from "next/navigation";
+import { imgBase } from "@/app/constants/api";
 
 const ProductList = () => {
-<<<<<<< HEAD
-  const searchParams = useSearchParams()
-  const name = searchParams.get('name') || ''
-  const category = searchParams.get('category') || ''
-  const { error, isLoading, data } = useFetchProducts<Product[]>({
-    name,
-    category,
-  })
-=======
   const searchParams = useSearchParams();
   const name = searchParams.get("name") || "";
   const category = searchParams.get("category") || "";
@@ -25,7 +17,6 @@ const ProductList = () => {
     name,
     category,
   });
->>>>>>> dev
 
   const dispatch = useDispatch();
 
@@ -48,12 +39,8 @@ const ProductList = () => {
             viewBox="0 0 24 24"
             strokeWidth={2.0}
             stroke="currentColor"
-<<<<<<< HEAD
-            className="size-6">
-=======
             className="size-6"
           >
->>>>>>> dev
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -65,6 +52,8 @@ const ProductList = () => {
     )
   }
 
+  
+
   return (
     <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[15px] px-2 py-5 overflow-y-auto no-scrollbar items-center">
       {data && data.length > 0 ? (
@@ -72,20 +61,13 @@ const ProductList = () => {
           <ProductCard
             key={i}
             photo={
-<<<<<<< HEAD
-              typeof product.photo === 'string'
-                ? product.photo
-                : product.photo instanceof File
-                ? URL.createObjectURL(product.photo)
-                : 'assets/logo.svg'
-=======
               typeof product.photo === "string"
-                ? product.photo
+                ? `${imgBase}${product.photo}`
                 : product.photo instanceof File
-                ? URL.createObjectURL(product.photo)
+                ? `${imgBase}${product.photo}`
                 : "assets/logo.svg"
->>>>>>> dev
             }
+            // src={product.photo ? `${imgBase}${product.photo}` : defaultImg}
             name={product?.name}
             price={product?.price}
             discount={product?.dis_percent}
@@ -95,22 +77,15 @@ const ProductList = () => {
                 addOrder({
                   id: product.id.toString(),
                   photo:
-<<<<<<< HEAD
-                    typeof product.photo === 'string'
-                      ? product.photo
-                      : product.photo instanceof File
-                      ? URL.createObjectURL(product.photo)
-                      : '',
-=======
                     typeof product.photo === "string"
                       ? product.photo
                       : product.photo instanceof File
                       ? URL.createObjectURL(product.photo)
                       : "",
->>>>>>> dev
                   name: product.name,
                   price: product.price.toString(),
                   quantity: 1,
+                  stock: product.sku
                 })
               )
             }

@@ -1,8 +1,11 @@
 import axios from 'axios';
 
 const Axios = axios.create({
-  baseURL: 'https://backoffice.opompos.site/api/v1/',
-});
+  // baseURL: 'https://backoffice.opompos.site/api/v1/',
+  baseURL: 'https://ed38c55d1fdd.ngrok-free.app/api/v1/',
+  // baseURL: 'https://opom-pos-laravel.up.railway.app/api/v1/',
+  withCredentials: true,
+})
 
 Axios.interceptors.request.use(
   async (config) => {

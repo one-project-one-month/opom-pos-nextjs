@@ -8,6 +8,7 @@ import { Product } from '@/app/type/product';
 import { ProductFormValues } from '@/app/type/form';
 import { Loader, LoaderIcon, RefreshCcw } from 'lucide-react';
 import Image from 'next/image';
+import { imgBase } from '@/app/constants/api';
 
 type ProductFormProps = {
     detailData?: Product | null;
@@ -92,7 +93,7 @@ const ProductForm = ({ detailData, handleAction, loading }: ProductFormProps) =>
                     className={inputStyle} />
                 {errors.stock && <p className="text-red-500 text-sm">{errors.stock.message}</p>}
             </div>
-            <div>
+            {/* <div>
                 <label>Brand</label>
                 {
                     brandsLoading ? <Loader /> :
@@ -108,8 +109,8 @@ const ProductForm = ({ detailData, handleAction, loading }: ProductFormProps) =>
                         </select>
                 }
                 {errors.brandId && <p className="text-red-500 text-sm">{errors.brandId.message}</p>}
-            </div>
-            <div className='col-span-2'>
+            </div> */}
+            <div>
                 <label>Category</label>
                 {
                     categoriesLoading ? <Loader />
@@ -144,7 +145,7 @@ const ProductForm = ({ detailData, handleAction, loading }: ProductFormProps) =>
             {
                 detailData?.photo &&
                 <Image 
-                src={`https://e0c8dfd98f99.ngrok-free.app/storage/${detailData?.photo}`}
+                src={imgBase + detailData?.photo}
                 alt="name" width={100} height={100} />
             }
             {previewUrl && (
