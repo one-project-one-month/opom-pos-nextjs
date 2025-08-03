@@ -75,7 +75,6 @@ const ProductList = () => {
                     ? `${imgBase}${product.photo}`
                     : "assets/logo.svg"
               }
-              // src={product.photo ? `${imgBase}${product.photo}` : defaultImg}
               name={product?.name}
               price={product?.price}
               discount={product?.dis_percent}
@@ -91,7 +90,7 @@ const ProductList = () => {
                           ? URL.createObjectURL(product.photo)
                           : "",
                     name: product.name,
-                    price: hasDiscount ? discountedPrice.toString() : product?.dis_percent.toString(),
+                    price: hasDiscount ? discountedPrice.toString() : originalPrice.toString(),
                     quantity: 1,
                     stock: product.sku
                   })
