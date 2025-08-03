@@ -13,6 +13,18 @@ export interface SaleReport {
   change_amount: number;
   created_at: string;
   updated_at: string;
+  items: [
+    {
+      id: number;
+      order_id: number;
+      product_id: number;
+      quantity: number;
+      price: number;
+      total: number;
+      created_at: string;
+      updated_at: string;
+    }
+  ],
   user: {
     id: number;
     name: string;
@@ -48,30 +60,8 @@ export interface SaleReportResponse {
   user_names?: string[];
   customer_names?: (string | null)[];
 }
-
-export interface SaleReportData {
-  current_page: number;
-  data: SaleReport[];
-  first_page_url: string;
-  from: number;
-  last_page: number;
-  last_page_url: string;
-  links: Array<{
-    url: string | null;
-    label: string;
-    active: boolean;
-  }>;
-  next_page_url: string | null;
-  path: string;
-  per_page: number;
-  prev_page_url: string | null;
-  to: number;
-  total: number;
-  user_names?: string[];
-  customer_names?: (string | null)[];
-}
 export interface SaleReportResponseNew {
-  orders: SaleReportData
+  orders: SaleReportResponse
 }
 
 export interface WeeklyGain {

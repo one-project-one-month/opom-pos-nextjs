@@ -99,8 +99,8 @@ function SaleReportsPage() {
       }
 
       setSalesData(ordersResponse.orders.data || [])
-      setTotalSales(ordersResponse.total || 0)
-      setLastPage(ordersResponse.last_page || 1)
+      setTotalSales(ordersResponse.orders.total || 0)
+      setLastPage(ordersResponse.orders.last_page || 1)
 
       // Fetch monthly top sale data
       try {
@@ -112,30 +112,30 @@ function SaleReportsPage() {
       }
 
       // Fetch weekly gain for stats
-      try {
-        const weeklyGainData = await saleReportService.getWeeklyGain()
-        setWeeklyGain(weeklyGainData)
-      } catch (gainError) {
-        console.error('Error fetching weekly gain:', gainError)
-        setWeeklyGain({ total_cost: 0, total_price: 0, gain: 0 })
-      }
+      // try {
+      //   const weeklyGainData = await saleReportService.getWeeklyGain()
+      //   setWeeklyGain(weeklyGainData)
+      // } catch (gainError) {
+      //   console.error('Error fetching weekly gain:', gainError)
+      //   setWeeklyGain({ total_cost: 0, total_price: 0, gain: 0 })
+      // }
 
       // Fetch total amount for stats
-      try {
-        const totalAmountData = await saleReportService.getTotalAmount()
-        setTotalAmount(totalAmountData)
-      } catch (amountError) {
-        console.error('Error fetching total amount:', amountError)
-        setTotalAmount({ total_amount: 0 })
-      }
+      // try {
+      //   const totalAmountData = await saleReportService.getTotalAmount()
+      //   setTotalAmount(totalAmountData)
+      // } catch (amountError) {
+      //   console.error('Error fetching total amount:', amountError)
+      //   setTotalAmount({ total_amount: 0 })
+      // }
       // Fetch total gain amount by monthly
-      try {
-        const totalGain = await saleReportService.getGainByMonthly()
-        setTotalGainByMonthly(totalGain)
-      } catch (amountError) {
-        console.error('Error fetching total amount:', amountError)
-        setTotalGainByMonthly({ total_gain: 0 })
-      }
+      // try {
+      //   const totalGain = await saleReportService.getGainByMonthly()
+      //   setTotalGainByMonthly(totalGain)
+      // } catch (amountError) {
+      //   console.error('Error fetching total amount:', amountError)
+      //   setTotalGainByMonthly({ total_gain: 0 })
+      // }
     } catch (error) {
       console.error('Error fetching sales data:', error)
       setError('Failed to load sales data. Please try again.')
@@ -395,9 +395,9 @@ function SaleReportsPage() {
                     <th className="px-6 py-3 text-left font-bold text-gray-900">
                       Total Sales
                     </th>
-                    <th className="px-6 py-3 text-left font-bold text-gray-900">
+                    {/* <th className="px-6 py-3 text-left font-bold text-gray-900">
                       Category
-                    </th>
+                    </th> */}
                   </>
                 )}
               </tr>
@@ -499,9 +499,9 @@ function SaleReportsPage() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {formatCurrency(parseInt(item.total))}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       Category {item.product?.category_id || '-'}
-                    </td>
+                    </td> */}
                   </tr>
                 ))
               )}

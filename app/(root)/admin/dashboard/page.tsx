@@ -36,12 +36,12 @@ function DashboardPage() {
   const total = inventoryData?.["count of total products"] ?? 0;
 
   const currentGain = revenueData?.gain || 0;
-  const previousGain = revenueData?.previous_month_gain || 0;
+  // const previousGain = revenueData?.previous_month_gain || 0;
 
-  const growthPercentage = previousGain
-    ? ((currentGain - previousGain) / previousGain) * 100
-    : 100;
-  const isIncrease = currentGain > previousGain;
+  // const growthPercentage = previousGain
+  //   ? ((currentGain - previousGain) / previousGain) * 100
+  //   : 100;
+  // const isIncrease = currentGain > previousGain;
 
   const stats = [
     {
