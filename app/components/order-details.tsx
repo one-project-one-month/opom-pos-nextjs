@@ -163,7 +163,7 @@ const OrderDetailsModal = ({
                       });
                     }}
                   >
-                    {customer.name}
+                    {customer.name}({customer.phone})
                   </div>
                 ))
               ) : (

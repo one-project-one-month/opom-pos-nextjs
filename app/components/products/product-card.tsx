@@ -27,7 +27,7 @@ export const ProductCard = ({
     }
   }
   
-  const isOutOfStock = stock === 32 || stock === undefined;
+  const isOutOfStock = stock === 0 || stock === undefined;
 
   // Calculate discounted price if discount is present and is a number
   const hasDiscount = typeof discount === 'number' && discount > 0;

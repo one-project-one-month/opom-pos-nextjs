@@ -52,45 +52,54 @@ const ProductList = () => {
     )
   }
 
-  
+
 
   return (
     <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[15px] px-2 py-5 overflow-y-auto no-scrollbar items-center">
       {data && data.length > 0 ? (
-        data.map((product, i) => (
-          <ProductCard
-            key={i}
-            photo={
-              typeof product.photo === "string"
-                ? `${imgBase}${product.photo}`
-                : product.photo instanceof File
-                ? `${imgBase}${product.photo}`
-                : "assets/logo.svg"
-            }
-            // src={product.photo ? `${imgBase}${product.photo}` : defaultImg}
-            name={product?.name}
-            price={product?.price}
-            discount={product?.dis_percent}
-            stock={product?.stock}
-            ordersClick={() =>
-              dispatch(
-                addOrder({
-                  id: product.id.toString(),
-                  photo:
-                    typeof product.photo === "string"
-                      ? product.photo
-                      : product.photo instanceof File
-                      ? URL.createObjectURL(product.photo)
-                      : "",
-                  name: product.name,
-                  price: product.price.toString(),
-                  quantity: 1,
-                  stock: product.sku
-                })
-              )
-            }
-          />
-        ))
+        data.map((product, i) => {
+          // Calculate discounted price if discount is present and is a number
+          const hasDiscount = typeof product?.dis_percent === 'number' && product?.dis_percent > 0;
+          const originalPrice = typeof product?.price === 'number' ? product?.price : parseFloat(product?.price);
+          const discountedPrice = hasDiscount
+            ? Math.round(originalPrice * (1 - product?.dis_percent / 100))
+            : originalPrice;
+            
+          return (
+            <ProductCard
+              key={i}
+              photo={
+                typeof product.photo === "string"
+                  ? `${imgBase}${product.photo}`
+                  : product.photo instanceof File
+                    ? `${imgBase}${product.photo}`
+                    : "assets/logo.svg"
+              }
+              // src={product.photo ? `${imgBase}${product.photo}` : defaultImg}
+              name={product?.name}
+              price={product?.price}
+              discount={product?.dis_percent}
+              stock={product?.stock}
+              ordersClick={() =>
+                dispatch(
+                  addOrder({
+                    id: product.id.toString(),
+                    photo:
+                      typeof product.photo === "string"
+                        ? product.photo
+                        : product.photo instanceof File
+                          ? URL.createObjectURL(product.photo)
+                          : "",
+                    name: product.name,
+                    price: hasDiscount ? discountedPrice.toString() : product?.dis_percent.toString(),
+                    quantity: 1,
+                    stock: product.sku
+                  })
+                )
+              }
+            />
+          )
+        })
       ) : (
         <div className="col-span-full flex justify-center items-center text-lg font-semibold h-32">
           No products found
