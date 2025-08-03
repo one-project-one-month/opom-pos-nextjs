@@ -88,8 +88,6 @@ function SaleReportsPage() {
         ordersResponse = await saleReportService.getOrders(currentPage)
       }
 
-      console.log('Orders Response:', ordersResponse) // Debug log
-
       // Check if response exists
       if (!ordersResponse) {
         throw new Error('Invalid response structure from API')
@@ -253,10 +251,6 @@ function SaleReportsPage() {
       setIsDownloading(false)
     }
   }
-
-  console.log(totalGainByMonthly);
-
-
 
   // const hasActiveFilters = Object.values(filters).some(value => value !== '')
 

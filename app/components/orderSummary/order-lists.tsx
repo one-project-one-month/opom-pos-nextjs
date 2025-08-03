@@ -12,9 +12,6 @@ export default function OrderLists() {
   const orders = useSelector((state: any) => state.orderSummary.orders)
   const dispatch = useDispatch()
 
-  console.log(orders);
-  
-
   if (orders.length === 0) {
     return <p className="font-bold px-5 flex-2/3">No Orders</p>
   }

@@ -3,7 +3,7 @@ import CategoryList from '@/app/components/category-list';
 import ProductList from '@/app/components/products/product-list';
 import ProductSearch from '@/app/components/products/product-search';
 import OrderSummaryLayout from '@/app/components/orderSummary/order-summary-layout';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import PaymentModal from './PaymentModal';
 import { Customer, ModalTypes } from '@/app/type/type';
 import OrderDetailsModal from '@/app/components/order-details';

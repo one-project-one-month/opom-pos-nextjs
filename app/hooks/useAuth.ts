@@ -29,10 +29,8 @@ export const useAuth = () => {
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        console.log(authService.isAuthenticated());
         const accessToken = localStorage.getItem("access_token");
         const userDataStr = localStorage.getItem("user_data");
-        console.log(accessToken, userDataStr)
 
         if (accessToken && userDataStr) {
           const userData = JSON.parse(userDataStr);
@@ -70,17 +68,12 @@ export const useAuth = () => {
     initializeAuth();
   }, [authService]);
 
-  console.log(authState);
-
-
   const login = useCallback(
     async (credentials: LoginCredentials) => {
       setAuthState((prev) => ({ ...prev, isLoading: true, error: null }));
 
       try {
         const authRespone = await authService.login(credentials);
-        console.log(authRespone);
-
         const userWithRole = authRespone.user
           ? {
             ...authRespone.user,
@@ -88,7 +81,6 @@ export const useAuth = () => {
           }
           : null;
 
-        console.log(userWithRole);
         if (authRespone.access_token) {
           localStorage.setItem("access_token", authRespone.access_token);
         }
@@ -147,7 +139,7 @@ export const useAuth = () => {
     setAuthState((prev) => ({ ...prev, isLoading: true }));
 
     localStorage.removeItem("access_token");
-localStorage.removeItem("user_data");
+    localStorage.removeItem("user_data");
 
     try {
       await authService.logout();
@@ -170,14 +162,6 @@ localStorage.removeItem("user_data");
   const clearError = useCallback(() => {
     setAuthState((prev) => ({ ...prev, error: null }));
   }, []);
-
-  console.log({
-    ...authState,
-    login,
-    logout,
-    clearError,
-  });
-
 
   return {
     ...authState,

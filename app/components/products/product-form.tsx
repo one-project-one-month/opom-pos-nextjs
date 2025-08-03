@@ -92,7 +92,7 @@ const ProductForm = ({ detailData, handleAction, loading }: ProductFormProps) =>
                     className={inputStyle} />
                 {errors.stock && <p className="text-red-500 text-sm">{errors.stock.message}</p>}
             </div>
-            <div>
+            {/* <div>
                 <label>Brand</label>
                 {
                     brandsLoading ? <Loader /> :
@@ -108,8 +108,8 @@ const ProductForm = ({ detailData, handleAction, loading }: ProductFormProps) =>
                         </select>
                 }
                 {errors.brandId && <p className="text-red-500 text-sm">{errors.brandId.message}</p>}
-            </div>
-            <div className='col-span-2'>
+            </div> */}
+            <div>
                 <label>Category</label>
                 {
                     categoriesLoading ? <Loader />

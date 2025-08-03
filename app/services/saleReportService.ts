@@ -109,9 +109,7 @@ class SaleReportService {
   // Get all orders with pagination
   async getOrders(page: number = 1): Promise<SaleReportResponse> {
     try {
-      console.log(`Making request to: /orders?page=${page}`); // Debug log
       const response = await Axios.get(`/orders?page=${page}`);
-      console.log('Orders API Response:', response); // Debug log
       return response.data;
     } catch (error: any) {
       console.error('Error fetching orders:', error);
@@ -142,9 +140,7 @@ class SaleReportService {
   // Get monthly orders
   async getMonthlyOrders(page: number = 1): Promise<SaleReportResponse> {
     try {
-      console.log(`Making request to: /orders_month?page=${page}`); // Debug log
       const response = await Axios.get(`/orders_month?page=${page}`);
-      console.log('Monthly Orders API Response:', response); // Debug log
       return response.data;
     } catch (error: any) {
       console.error('Error fetching monthly orders:', error);

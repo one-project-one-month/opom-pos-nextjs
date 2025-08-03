@@ -1,7 +1,6 @@
 'use client';
 import { useFetchCustomers } from '@/app/hooks/useFetchCustomer';
 import NoData from '@/public/assets/no-data.png';
-import { Waveform } from 'ldrs/react';
 import 'ldrs/react/Waveform.css';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -12,7 +11,7 @@ import MemberModal from './MemberModal';
 const Page = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [page, setPage] = useState(1);
-  const [size, setSize] = useState(5);
+  const [size, setSize] = useState(10);
   const startIndex = (page - 1) * size;
   const endIndex = page * size;
 
@@ -103,8 +102,8 @@ const Page = () => {
                   className="*:text-gray-900 *:first:font-medium h-[68px]"
                 >
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      {(page - 1) * size + i + 1}
-                    </td>
+                    {(page - 1) * size + i + 1}
+                  </td>
                   {/* <td className="px-3 py-2 whitespace-nowrap">{item.id}</td> */}
                   <td className="px-3 py-2 whitespace-nowrap">{item.name}</td>
                   <td className="px-3 py-2 whitespace-nowrap">

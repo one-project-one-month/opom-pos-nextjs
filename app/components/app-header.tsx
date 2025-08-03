@@ -38,13 +38,7 @@ export default function Header() {
         {!currentPath.includes("/admin") && (
           <>
             {currentPath === ROUTES.STAFF_ORDERS ? (
-              <Link
-                href={ROUTES.STAFF}
-                className="flex justify-center items-center gap-2"
-              >
-                <BiLeftArrow />
-                <span className="">Back To Home</span>
-              </Link>
+              <></>
             ) : (
               <Link
                 href={ROUTES.STAFF_ORDERS}

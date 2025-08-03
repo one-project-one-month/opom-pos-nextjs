@@ -1,41 +1,41 @@
 "use client";
-import CustomBtn from '@/app/components/custom-btn';
 import CustomTable from '@/app/components/custom-table';
-import DateFilter from '@/app/components/date-filter';
 import Modal from '@/app/components/modal';
-import ProductSearch from '@/app/components/products/product-search';
 
 import { ScrollText } from 'lucide-react';
 import { useState } from 'react';
-import Loading from '../loading';
 
-import { format } from 'date-fns';
-import { OrderHistoryApiResponse } from '@/app/type/orderHistory';
-import { useFetchOrderHistory } from '@/app/hooks/useFetchOrderHistory';
 import TableTitle from '@/app/components/table-title';
+import { useFetchOrderHistory } from '@/app/hooks/useFetchOrderHistory';
+import { OrderHistory, OrderHistoryApiResponse } from '@/app/type/orderHistory';
+import { format } from 'date-fns';
+import { BiLeftArrow } from 'react-icons/bi';
+import Link from 'next/link';
+import { ROUTES } from '@/app/constants/routes';
 
-function OrderHistory() {
+function OrderHistoryPage() {
   const [showModal, setShowModal] = useState(false);
   const [page, setPage] = useState(1);
-  const [size, setSize] = useState(5);
+  const [size, setSize] = useState(10);
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
-
-
-
 
   const { error, isLoading, data } = useFetchOrderHistory<OrderHistoryApiResponse>(page, size);
 
   const orderHistories = data?.orders?.data || [];
 
-
   const viewSlip = (order: any) => {
     setSelectedOrder(order);
     setShowModal(true);
   };
-
-
-
   const columns = [
+    {
+      title: "No",
+      key: "id",
+      dataIndex: "id",
+      render: (value: string, record: OrderHistory, index: number) => (
+        <span>{(page - 1) * size + index + 1}</span>
+      ),
+    },
     {
       title: "Receipt ID",
       key: "order_number",
@@ -89,8 +89,16 @@ function OrderHistory() {
   ];
 
   return (
-    <div className='px-12'>
-      <TableTitle>Order History</TableTitle>
+    <div className='px-12 mb-10'>
+      <div>
+        <Link
+          href={ROUTES.STAFF}
+          className="flex items-center gap-2"
+        >
+          <BiLeftArrow />
+          <TableTitle>Order History</TableTitle>
+        </Link>
+      </div>
       <div className="overflow-x-auto mt-5">
         <div>
           {/* {isLoading && (
@@ -100,7 +108,7 @@ function OrderHistory() {
           )} */}
           {error && <p className="text-alert-400">Error loading products</p>}
           {
-            !isLoading && !error && (
+            !error && (
               <CustomTable
                 columns={columns}
                 data={orderHistories}
@@ -174,4 +182,4 @@ function OrderHistory() {
   );
 }
 
-export default OrderHistory;
+export default OrderHistoryPage;

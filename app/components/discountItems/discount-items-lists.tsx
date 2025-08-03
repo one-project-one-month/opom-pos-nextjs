@@ -7,7 +7,7 @@ import { useDiscountCancelMutation, useFetchDiscountProducts } from '@/app/hooks
 import NoData from '@/public/assets/no-data.png'
 import Image from 'next/image'
 import { useState } from 'react'
-import toast from 'react-hot-toast';
+import toast, { LoaderIcon } from 'react-hot-toast';
 
 type Product = {
   id: string
@@ -127,17 +127,19 @@ export default function DiscountItemsLists({
           {
             isLoading ?
               Array.from({ length: 5 }).map((_, index) => (
-                <tr key={index}>
-                  <td colSpan={7} className="px-6 py-4">
-                    <div className="flex items-center space-x-4">
-                      {/* <div className="w-4 h-4 bg-gray-200 round/ed animate-pulse"></div> */}
-                      <div className="flex-1 space-y-2">
-                        <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-                        <div className="h-3 bg-gray-200 rounded animate-pulse w-3/4"></div>
+                <tbody key={index} className="divide-y divide-gray-200 *:even:bg-gray-50">
+                  <tr key={index}>
+                    <td colSpan={7} className="px-6 py-4">
+                      <div className="flex items-center space-x-4">
+                        {/* <div className="w-4 h-4 bg-gray-200 round/ed animate-pulse"></div> */}
+                        <div className="flex-1 space-y-2">
+                          <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+                          <div className="h-3 bg-gray-200 rounded animate-pulse w-3/4"></div>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                </tr>
+                    </td>
+                  </tr>
+                </tbody>
               ))
               :
               <tbody className="divide-y divide-gray-200 *:even:bg-gray-50">
@@ -145,7 +147,9 @@ export default function DiscountItemsLists({
                   <tr
                     key={product.id}
                     className="*:text-gray-900 *:first:font-medium h-12 py-9 hover:bg-gray-100 transition-colors">
-                    <td className="px-3 py-2 whitespace-nowrap">{index + 1}</td>
+                    <td className="px-3 py-2 whitespace-nowrap">
+                      {(page - 1) * size + index + 1}
+                    </td>
                     <td className="px-3 py-2 whitespace-nowrap">{product.sku}</td>
                     <td className="px-3 py-2 whitespace-nowrap">{product.name}</td>
                     <td className="px-3 py-2 whitespace-nowrap">
@@ -158,7 +162,7 @@ export default function DiscountItemsLists({
                             product.price -
                             product.price * (product.dis_percent / 100)
                           )}{' '}
-                          <span className="font-bold">MMK</span>
+                          <span>MMK</span>
                         </>
                       ) : (
                         <span>N/A</span>
@@ -251,7 +255,7 @@ export default function DiscountItemsLists({
                       viewBox="0 0 20 20"
                       fill="currentColor">
                       <path
-                        fillRule="evenodd"i
+                        fillRule="evenodd" 
                         d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
                         clipRule="evenodd"
                       />
@@ -285,7 +289,7 @@ export default function DiscountItemsLists({
                   </button>
                 </li>
               </ul>
-            </div> : 
+            </div> :
             <div className="col-span-full flex flex-col justify-center items-center text-lg font-semibold h-60">
               <Image src={NoData} width={60} height={60} alt="no data img" />
               <span className='font-semibold text-md mt-2'>No Data Found</span>
@@ -299,7 +303,7 @@ export default function DiscountItemsLists({
           className="bg-white p-6 rounded-2xl shadow-xl w-full max-w-sm mx-auto">
           <ModalTitle>Confirmation</ModalTitle>
           <span className="text-center">
-            Are you sure to delete this product?
+            Are you sure to cancel discount for this product?
           </span>
           <div className="flex justify-center gap-2 mt-5">
             <CustomBtn
@@ -311,7 +315,7 @@ export default function DiscountItemsLists({
               className={`border border-success-400 hover:bg-success-500 hover:text-white text-black flex gap-2 justify-center items-center ${mutation.isPending ? 'bg-success-500 text-white' : ''
                 }`}
               onClick={() => cancelDiscount(confirmModal)}>
-              {mutation.isPending ? 'Loading...' : 'Yes'}
+              {mutation.isPending ? <LoaderIcon/> : 'Yes'}
             </CustomBtn>
           </div>
         </Modal>

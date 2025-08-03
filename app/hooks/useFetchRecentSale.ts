@@ -9,7 +9,6 @@ const getRecentSale = async ({page=1, pageSize=5}) => {
             pageSize
         }
     });
-    console.log(res.data)
     return res.data
 }
 

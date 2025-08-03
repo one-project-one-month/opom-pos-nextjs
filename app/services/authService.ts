@@ -57,7 +57,6 @@ class AuthService {
       this.accessToken = localStorage.getItem("access_token");
       this.refreshToken = localStorage.getItem("refresh_token");
       const userData = localStorage.getItem("user_data");
-      console.log(userData);
 
       if (userData) {
         try {
@@ -77,7 +76,6 @@ class AuthService {
   }
 
   private setTokens(tokens: AuthResponse) {
-    console.log(tokens);
 
     this.accessToken = tokens.access_token;
     this.refreshToken = tokens.refresh_token;
@@ -128,8 +126,6 @@ class AuthService {
       "ngrok-skip-browser-warning": "69420",
       ...options.headers,
     };
-
-    console.log("Final Request Headers:", headers);
 
     const response = await fetch(`${base}${url}`, {
       headers,
@@ -185,7 +181,6 @@ class AuthService {
       }
 
       const authData: AuthResponse = await response.json();
-      console.log(authData);
 
       this.setTokens(authData);
       return authData;
@@ -269,8 +264,6 @@ class AuthService {
   }
 
   isAuthenticated(): boolean {
-    console.log(this.accessToken, typeof window !== "undefined");
-    
     if (!this.accessToken) return false;
 
     if (typeof window !== "undefined") {

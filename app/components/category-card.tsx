@@ -35,7 +35,6 @@ const CategoryCard = ({ name, photo, className }: CategoryCardProps) => {
     );
 
     router.push(url);
-    console.log(`Category clicked: ${name}`);
   }
 
   const isActive = (name === 'All' && !category) || category === name;
@@ -49,8 +48,8 @@ const CategoryCard = ({ name, photo, className }: CategoryCardProps) => {
         name !== 'All' &&
         <Image
           src={photo ? `${imgBase}${photo}` : defaultImg}
-          width={50}
-          height={50}
+          width={20}
+          height={20}
           className='mr-2'
           alt="category photo"
         />

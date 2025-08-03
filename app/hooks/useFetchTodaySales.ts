@@ -4,7 +4,6 @@ import { API } from "../constants/api";
 
 const getTodaySales = async () => {
   const res = await Axios.get(API.totalDay);
-  console.log(res.data);
   return res.data; // { total: number }
 };
 

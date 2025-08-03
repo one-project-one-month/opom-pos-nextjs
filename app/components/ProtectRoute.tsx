@@ -4,6 +4,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "../contexts/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -16,19 +17,19 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   redirectTo = "/login",
   requiredRole
 }) => {
-  const { isAuthenticated, isLoading, user } = useAuthContext();
+  const { isAuthenticated , isLoading, user } = useAuth();
   const router = useRouter();
-
-  console.log("ProtectedRoute isAuthenticated:",isAuthenticated, user);
+  useEffect(() => {
+}, [isAuthenticated]);
 
   useEffect(() => {
-    // if (!isLoading) {
-    //   if (!isAuthenticated) {
-    //     router.push(redirectTo);
-    //   } else if (requiredRole && user?.role !== requiredRole) {
-    //     router.replace("/unauthorized");
-    //   }
-    // }
+    if (!isLoading) {
+      if (!isAuthenticated) {
+        router.push(redirectTo);
+      } else if (requiredRole && user?.role !== requiredRole) {
+        router.replace("/unauthorized");
+      }
+    }
   }, [isAuthenticated, isLoading, router, redirectTo, requiredRole, user]);
 
   // Show loading spinner while checking authentication

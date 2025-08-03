@@ -17,15 +17,10 @@ function Login() {
 
   const { login, isLoading, error, isAuthenticated, user, clearError } =
     useAuth();
-  const router = useRouter();
-
-  console.log(isAuthenticated, user);
-  
+  const router = useRouter();  
 
   const redirectBasedonRole = (userRole: string | null) => {
     const route = getRoleBasedRoute(userRole || "cashier");
-    console.log((route));
-    
     router.push(route);
   };
 
@@ -61,7 +56,6 @@ function Login() {
       email: formData.email,
       password: formData.password,
     });
-    console.log(user);    
 
     if (success && user) {
       redirectBasedonRole(user.role);
@@ -101,7 +95,7 @@ function Login() {
               </div>
             </div>
 
-            <div className="flex items-center border rounded px-3 py-2 bg-white focus-within:ring-2 focus-within:ring-primary-300">
+            <div className="flex items-center border rounded px-3 py-2">
               <FaLock className="text-gray-500 mr-2" />
               <input
                 type={showPassword ? "text" : "password"}

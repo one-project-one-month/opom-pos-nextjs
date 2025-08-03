@@ -20,8 +20,6 @@ export const ROUTES = {
 };
 
 export const getRoleBasedRoute = (role: string | 'cashier'): string => {
-  console.log(role);
-  
   switch (role) {
     case 'manager':
       return ROUTES.ADMIN;

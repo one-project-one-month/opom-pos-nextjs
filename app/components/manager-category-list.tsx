@@ -29,7 +29,6 @@ const ManagerCategoryList = ({ categoryData, handleCategoryClick }: ManagerCateg
     <div className='flex gap-[10px] overflow-x-auto no-scrollbar'>
       {categories.map((cat) => {
         const isActive = (cat.name === 'All' && !name) || cat.name === name;
-        console.log(isActive, name === 'All', !name);
         
         return ((
         <div
