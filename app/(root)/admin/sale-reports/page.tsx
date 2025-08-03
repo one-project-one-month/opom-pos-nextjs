@@ -52,6 +52,9 @@ function SaleReportsPage() {
       })
     }
 
+    console.log(salesData);
+    
+
     return salesData.filter(sale => {
       const matchesStaff = !filters.staffName ||
         (sale.user?.name && sale.user.name.toLowerCase().includes(filters.staffName.toLowerCase()))
@@ -84,6 +87,8 @@ function SaleReportsPage() {
       let ordersResponse
       if (filterMonth === 'This month') {
         ordersResponse = await saleReportService.getMonthlyOrders(currentPage)
+        console.log(ordersResponse);
+        
       } else {
         ordersResponse = await saleReportService.getOrders(currentPage)
       }
@@ -93,7 +98,7 @@ function SaleReportsPage() {
         throw new Error('Invalid response structure from API')
       }
 
-      setSalesData(ordersResponse.data || [])
+      setSalesData(ordersResponse.orders.data || [])
       setTotalSales(ordersResponse.total || 0)
       setLastPage(ordersResponse.last_page || 1)
 
@@ -257,12 +262,12 @@ function SaleReportsPage() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <div className="mb-8">
-        <TableTitle>Sale Overview</TableTitle>
+      <div>
+        {/* <TableTitle>Sale Overview</TableTitle> */}
         {/* Stats Cards */}
-        <div className="flex flex-col md:flex-row lg:gap-12 gap-3 my-7">
+        {/* <div className="flex flex-col md:flex-row lg:gap-12 gap-3 mb-7"> */}
           {/* Today Sales Card */}
-          <div className="w-full sm:w-[300px] h-[150px] flex flex-col justify-between hover:shadow-lg transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-10% border-2 p-3 rounded border-[#E28E34]">
+          {/* <div className="w-full sm:w-[300px] h-[150px] flex flex-col justify-between hover:shadow-lg transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-10% border-2 p-3 rounded border-[#E28E34]">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-gray-600 font-medium">Today Sales</h2>
               <SquareChartGantt />
@@ -271,10 +276,10 @@ function SaleReportsPage() {
               {weeklyGain ? formatCurrency(weeklyGain.gain) : <Loading />}
             </div>
             <p className="text-sm text-gray-500">vs yesterday</p>
-          </div>
+          </div> */}
 
           {/* Total Revenue Card */}
-          <div className="w-full sm:w-[300px] h-[150px] flex flex-col justify-between hover:shadow-lg transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-10% border-2 p-3 rounded border-[#E28E34]">
+          {/* <div className="w-full sm:w-[300px] h-[150px] flex flex-col justify-between hover:shadow-lg transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-10% border-2 p-3 rounded border-[#E28E34]">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-gray-600 font-medium">Total Revenue</h2>
               <RevenueSvg />
@@ -286,15 +291,15 @@ function SaleReportsPage() {
               <span className="text-sm text-gray-500 mr-2">This Month</span>
               <span className="text-sm text-green-600 bg-green-100 px-2 py-1 rounded"></span>
             </div>
-          </div>
-        </div>
+          </div> */}
+        {/* </div> */}
       </div>
 
       {/* Sale Report Section */}
       <div>
         <div>
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-gray-900">Sale Report</h2>
+            <TableTitle>Sale Report</TableTitle>
             <div className="flex items-center gap-3">
               <button
                 onClick={handleDownloadPDF}
@@ -448,7 +453,7 @@ function SaleReportsPage() {
                       {sale.order_number}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      - items
+                      {sale.items.length} - items
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {sale.user?.name || 'Unknown Staff'}

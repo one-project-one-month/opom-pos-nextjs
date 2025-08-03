@@ -305,14 +305,14 @@ export default function DiscountItemsLists({
           <span className="text-center">
             Are you sure to cancel discount for this product?
           </span>
-          <div className="flex justify-center gap-2 mt-5">
+          <div className="flex justify-center gap-2 mt-5 mx-10">
             <CustomBtn
-              className="border border-alert-400 hover:bg-alert-500 hover:text-white text-black"
+              className="border border-alert-400 hover:bg-alert-500 hover:text-white text-black w-full"
               onClick={() => setConfirmModal(false)}>
               No
             </CustomBtn>
             <CustomBtn
-              className={`border border-success-400 hover:bg-success-500 hover:text-white text-black flex gap-2 justify-center items-center ${mutation.isPending ? 'bg-success-500 text-white' : ''
+              className={`border border-success-400 hover:bg-success-500 hover:text-white text-black flex gap-2 justify-center items-center w-full ${mutation.isPending ? 'bg-success-500 text-white' : ''
                 }`}
               onClick={() => cancelDiscount(confirmModal)}>
               {mutation.isPending ? <LoaderIcon/> : 'Yes'}

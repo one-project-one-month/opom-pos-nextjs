@@ -10,6 +10,7 @@ import {
   useUnSuspendStaff,
 } from "@/app/hooks/useFetchStaff";
 import { StaffList } from "@/app/type/staffList";
+import { Loader2Icon, LoaderIcon } from "lucide-react";
 import { useState } from "react";
 
 const Page = () => {
@@ -174,18 +175,18 @@ const Page = () => {
           <span className="text-center">
             Are you sure to suspend this staff?
           </span>
-          <div className="flex justify-center gap-2 mt-5">
+          <div className="flex justify-center gap-2 mt-5 mx-10">
             <CustomBtn
-              className="border border-alert-400 hover:bg-alert-500 hover:text-white text-black"
+              className="border border-alert-400 hover:bg-alert-500 hover:text-white text-black w-full"
               onClick={() => setSuspendModal(false)}
             >
               No
             </CustomBtn>
             <CustomBtn
-              className="border border-success-400 hover:bg-success-500 hover:text-white text-black flex gap-2 justify-center items-center"
+              className="border border-success-400 hover:bg-success-500 hover:text-white text-black flex gap-2 justify-center items-center w-full"
               onClick={() => handleSuspend()}
             >
-              {isSuspendPending && <Loading />}
+              {isSuspendPending && <Loader2Icon />}
               Yes
             </CustomBtn>
           </div>
@@ -200,18 +201,18 @@ const Page = () => {
           <span className="text-center">
             Are you sure to unsuspend this staff?
           </span>
-          <div className="flex justify-center gap-2 mt-5">
+          <div className="flex justify-center gap-2 mt-5 mx-10">
             <CustomBtn
-              className="border border-alert-400 hover:bg-alert-500 hover:text-white text-black"
+              className="border border-alert-400 hover:bg-alert-500 hover:text-white text-black w-full"
               onClick={() => setUnsuspendModal(false)}
             >
               No
             </CustomBtn>
             <CustomBtn
-              className="border border-success-400 hover:bg-success-500 hover:text-white text-black flex gap-2 justify-center items-center"
+              className="border border-success-400 hover:bg-success-500 hover:text-white text-black flex gap-2 justify-center items-center w-full"
               onClick={() => handleUnsuspend()}
             >
-              {isUnsuspendPending && <Loading />}
+              {isUnsuspendPending && <Loader2Icon />}
               Yes
             </CustomBtn>
           </div>

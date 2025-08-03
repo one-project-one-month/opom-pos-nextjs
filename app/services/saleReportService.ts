@@ -49,6 +49,31 @@ export interface SaleReportResponse {
   customer_names?: (string | null)[];
 }
 
+export interface SaleReportData {
+  current_page: number;
+  data: SaleReport[];
+  first_page_url: string;
+  from: number;
+  last_page: number;
+  last_page_url: string;
+  links: Array<{
+    url: string | null;
+    label: string;
+    active: boolean;
+  }>;
+  next_page_url: string | null;
+  path: string;
+  per_page: number;
+  prev_page_url: string | null;
+  to: number;
+  total: number;
+  user_names?: string[];
+  customer_names?: (string | null)[];
+}
+export interface SaleReportResponseNew {
+  orders: SaleReportData
+}
+
 export interface WeeklyGain {
   total_cost: number;
   total_price: number;
@@ -107,7 +132,7 @@ export interface TopSaleResponse {
 
 class SaleReportService {
   // Get all orders with pagination
-  async getOrders(page: number = 1): Promise<SaleReportResponse> {
+  async getOrders(page: number = 1): Promise<SaleReportResponseNew> {
     try {
       const response = await Axios.get(`/orders?page=${page}`);
       return response.data;
@@ -138,9 +163,9 @@ class SaleReportService {
   }
 
   // Get monthly orders
-  async getMonthlyOrders(page: number = 1): Promise<SaleReportResponse> {
+  async getMonthlyOrders(page: number = 1): Promise<SaleReportResponseNew> {
     try {
-      const response = await Axios.get(`/orders_month?page=${page}`);
+      const response = await Axios.get(`/orders_week?page=${page}`);
       return response.data;
     } catch (error: any) {
       console.error('Error fetching monthly orders:', error);

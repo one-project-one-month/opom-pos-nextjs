@@ -12,12 +12,24 @@ import { useFetchCategories } from '@/app/hooks/useFetchCategory';
 import { useCreateProduct, useDeletProduct, useFetchManagerProducts } from '@/app/hooks/useFetchProduct';
 import { ProductFormValues } from '@/app/type/form';
 import { CategoriesResponse, Product, ProductsResponse } from '@/app/type/product';
-import { LoaderIcon, Plus } from 'lucide-react';
+import { Loader2Icon, LoaderIcon, Plus } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 function InventoryPage() {
-  const [detailData, setDetailData] = useState<Product>();
+  const [detailData, setDetailData] = useState<Product>({
+      id: 0,
+      name: "string",
+      sku: 0,
+      price: 0,
+      const_price: 0,
+      stock: 0,
+      brand_id: 0,
+      category_id: 0,
+      dis_percent: 0, 
+      photo: null,
+      expired_at: null
+    });
   const [showModal, setShowModal] = useState(false);
   const [confirmModal, setConfirmModal] = useState(false);
   const [errorModal, setErrorModal] = useState(false);
@@ -33,7 +45,7 @@ function InventoryPage() {
     ...(page !== 0 && { page }),
     ...(size !== 0 && { pageSize: size }),
     ...(status && { status }),
-    ...(categoryName && { category_name: categoryName }),
+    ...(categoryName && { category_name: categoryName === 'All' ? '' : categoryName }),
   };
 
   const { error, isLoading, data } =
@@ -50,7 +62,21 @@ function InventoryPage() {
     data: responseData,
   } = useCreateProduct(() => {
     setShowModal(false);
-    toast.success(`Successfully ${detailData ? "Updated" : "Created"}`);
+    toast.success(`Successfully ${detailData.stock === 0 ? "Updated" : "Created"}`);
+    const emptyProduct: Product = {
+      id: 0,
+      name: "string",
+      sku: 0,
+      price: 0,
+      const_price: 0,
+      stock: 0,
+      brand_id: 0,
+      category_id: 0,
+      dis_percent: 0, 
+      photo: null,
+      expired_at: null
+    };
+    setDetailData(emptyProduct);
   });
   const {
     mutate: deleteMutate,
@@ -101,7 +127,7 @@ function InventoryPage() {
       value: "low_stock",
     },
     {
-      label: "In Stock",
+      label: "Full Stock",
       value: "full_stock",
     },
   ];
@@ -200,6 +226,8 @@ function InventoryPage() {
   };
 
   const handleAction = (data: ProductFormValues) => {
+    console.log(detailData);
+
     const formData = new FormData();
     formData.append("name", data.name);
     if (!detailData?.sku) formData.append("sku", String(data?.sku));
@@ -367,7 +395,7 @@ function InventoryPage() {
               className="border border-success-400 hover:bg-success-500 hover:text-white text-black flex gap-2 justify-center items-center w-full"
               onClick={() => handleDelete()}
             >
-              {isDeletePending && <LoaderIcon />}
+              {isDeletePending && <Loader2Icon />}
               Yes
             </CustomBtn>
           </div>

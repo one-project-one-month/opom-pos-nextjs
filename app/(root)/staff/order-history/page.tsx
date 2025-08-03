@@ -146,7 +146,7 @@ function OrderHistoryPage() {
               <div className="space-y-2 text-gray-700 text-sm">
                 <div className="flex justify-between">
                   <span className="font-medium">Items Count:</span>
-                  <span>{selectedOrder.items?.length}</span>
+                  <span>{selectedOrder.items?.length}- items</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="font-medium">Staff Name:</span>

@@ -143,10 +143,10 @@ const ProductForm = ({ detailData, handleAction, loading }: ProductFormProps) =>
                     onChange={handleImageChange} />
             </div>
             {
-                detailData?.photo &&
+                (detailData?.photo && !previewUrl) &&
                 <Image 
                 src={imgBase + detailData?.photo}
-                alt="name" width={100} height={100} />
+                alt="name" width={100} height={80} />
             }
             {previewUrl && (
                 <div className="mt-2 flex justify-center items-center border rounded-md">
@@ -154,7 +154,7 @@ const ProductForm = ({ detailData, handleAction, loading }: ProductFormProps) =>
                         src={previewUrl}
                         alt="Preview"
                         width={100}
-                        height={100}
+                        height={80}
                     />
                 </div>
             )}

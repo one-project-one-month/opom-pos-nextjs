@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import Axios from '../api-config'
 import { API } from '../constants/api'
+import toast from 'react-hot-toast';
 
 const getProducts = async (params?: { name?: string; category?: string }) => {
   try {
@@ -57,12 +58,15 @@ export const useCreateProduct = (onSuccessCallback?: () => void) => {
       createProducts(formData, id),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['manager-products', 'products'],
+        queryKey: ['manager-products'],
       })
 
       if (onSuccessCallback) {
         onSuccessCallback()
       }
+    },
+    onError: (error: any) => {      
+        toast.error(`Error: ${error?.message || 'Something went wrong'}`)
     },
   })
 }
@@ -81,12 +85,15 @@ export const useDeletProduct = (onSuccessCallback?: () => void) => {
     mutationFn: (id: number) => deleteProduct(id),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['manager-products', 'products'],
+        queryKey: ['manager-products'],
       })
 
       if (onSuccessCallback) {
         onSuccessCallback()
       }
+    },
+    onError: (error: any) => {      
+        toast.error(`Error: ${error?.message || 'Something went wrong'}`)
     },
   })
 }

@@ -1,7 +1,7 @@
 // export const imgBase = 'https://backoffice.opompos.site/storage/'
-export const imgBase = 'https://ed38c55d1fdd.ngrok-free.app/storage/';
+export const imgBase = 'https://18a5731454f0.ngrok-free.app/storage/';
 // export const base = 'https://backoffice.opompos.site/api/v1/'
-export const base = 'https://ed38c55d1fdd.ngrok-free.app/api/v1/'
+export const base = 'https://18a5731454f0.ngrok-free.app/api/v1/'
 // export const base = "https://opom-pos-laravel.up.railway.app/api/v1/";
 
 export const API = {

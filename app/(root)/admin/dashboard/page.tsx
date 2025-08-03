@@ -46,7 +46,7 @@ function DashboardPage() {
   const stats = [
     {
       title: "Today Sales",
-      value: isLoading ? <Loading /> : `${salesData} MMK`,
+      value: isLoading ? <Loading /> : `${salesData || 0} MMK`,
       subtitle: "vs yesterday",
       icon: <SquareChartGantt />,
     },
@@ -58,7 +58,7 @@ function DashboardPage() {
     },
     {
       title: "Total Revenues",
-      value: isLoading ? <Loading /> : `${revenueData?.gain} MMK`,
+      value: isLoading ? <Loading /> : `${revenueData?.gain || 0} MMK`,
       subtitle: (
         <div className="flex justify-between items-center">
           <p>This Month</p>
@@ -70,7 +70,7 @@ function DashboardPage() {
             ) : (
               <SquareChevronDown className="size-4" />
             )} */}
-            {currentGain} MMK
+            {currentGain || 0} MMK
           </p>
         </div>
       ),
@@ -210,7 +210,7 @@ function DashboardPage() {
               <div className="space-y-2 text-gray-700 text-sm">
                 <div className="flex justify-between">
                   <span className="font-medium">Items Count:</span>
-                  <span>{selectedOrder.items?.length}</span>
+                  <span>{selectedOrder.items?.length}- items</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="font-medium">Staff Name:</span>
