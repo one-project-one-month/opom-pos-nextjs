@@ -8,7 +8,9 @@ interface Order {
   customer_id: number;
   change_amount: number;
   order_number: string;
-  payment_id: number;
+  payment: {
+    method: string;
+  };
   paid_amount: number;
   created_at: Date;
   update_at: Date;

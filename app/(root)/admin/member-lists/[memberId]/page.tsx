@@ -127,7 +127,7 @@ const Page = ({ params }: { params: Promise<{ memberId: string }> }) => {
                 <tr key={index}>
                   <td className="px-3 py-2 whitespace-nowrap">{order.id}</td>
                   <td className="px-3 py-2 whitespace-nowrap">
-                    {order.payment_id}
+                    {order.payment.method}
                   </td>
                   <td className="px-3 py-2 whitespace-nowrap">
                     {order.total} MMK
