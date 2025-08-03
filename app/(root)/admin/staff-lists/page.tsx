@@ -36,10 +36,10 @@ const Page = () => {
     setUnsuspendModal(false);
   });
 
-  const { error, isLoading, data } = useFetchStaffs<StaffList[]>();
+  const { error, isLoading, data } = useFetchStaffs<{data: StaffList[]}>();
 
   // Calculate total pages
-  const total = data?.length || 0;
+  const total = data?.data?.length || 0;
   const lastPage = Math.ceil(total / pageSize);
 
   // Handle pagination changes
@@ -137,24 +137,25 @@ const Page = () => {
   // Get paginated data
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
-  const paginatedData = data?.slice(startIndex, endIndex);
+  const paginatedData = data?.data?.slice(startIndex, endIndex);
 
   return (
-    <div className="p-5">
+    <>
       <div className="flex justify-between items-center mt-7 mb-10">
         <p className="font-[400px] text-[25px]">Staff Lists</p>
       </div>
       <div className="overflow-x-auto">
-        {isLoading && (
+        {/* {isLoading && (
           <div className="text-center">
             <Loading />
           </div>
-        )}
+        )} */}
         {error && <p className="text-alert-400">Error loading staffs</p>}
         {!isLoading && !error && (
           <CustomTable
             columns={columns}
             data={paginatedData}
+            loading={isLoading}
             pagination={{
               pageSize,
               currentPage,
@@ -236,7 +237,7 @@ const Page = () => {
           </div>
         </Modal>
       )}
-    </div>
+    </>
   );
 };
 

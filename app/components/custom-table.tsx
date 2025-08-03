@@ -1,5 +1,7 @@
 import React from 'react';
 import { NextSvg, PrevSvg } from './custom-svg';
+import Image from 'next/image';
+import NoData from '@/public/assets/no-data.png'
 
 interface ColumnType<T> {
     title: string;
@@ -19,10 +21,11 @@ interface PaginationProps {
 interface TableProps<T> {
     columns: ColumnType<T>[],
     data?: T[],
-    pagination?: PaginationProps
+    pagination?: PaginationProps,
+    loading: boolean
 }
 
-const CustomTable = <T extends Record<string, any>>({ columns, data, pagination }: TableProps<T>) => {
+const CustomTable = <T extends Record<string, any>>({ columns, data, pagination, loading }: TableProps<T>) => {
 
     const handlePageSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const newSize = Number(e.target.value);
@@ -39,7 +42,7 @@ const CustomTable = <T extends Record<string, any>>({ columns, data, pagination 
     return (
         <>
             <table className="min-w-full divide-y-2 divide-gray-200">
-                <thead className="ltr:text-left rtl:text-right">
+                <thead className="ltr:text-left rtl:text-right bg-gray-50">
                     <tr className="*:font-bold *:text-gray-900">
                         {
                             columns.map((column) => (
@@ -53,27 +56,46 @@ const CustomTable = <T extends Record<string, any>>({ columns, data, pagination 
                         }
                     </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200 *:even:bg-gray-50">
-                    {
-                        data?.map((item, rowIndex) => (
-                            <tr key={rowIndex} className="*:text-gray-900 *:first:font-medium h-[56px]">
-                                {
-                                    columns.map((column) => (
-                                        <td key={column.key} className="px-3 whitespace-nowrap">
-                                            {
-                                                column.render ? column.render(item[column.dataIndex], item, rowIndex)
-                                                    : item[column.dataIndex]
-                                            }
-                                        </td>
-                                    ))
-                                }
-                            </tr>
+                {
+                    loading ?
+                        Array.from({ length: 5 }).map((_, index) => (
+                            <tbody key={index} className="divide-y divide-gray-200 *:even:bg-gray-50">
+                                <tr key={index}>
+                                    <td colSpan={7} className="px-6 py-4">
+                                        <div className="flex items-center space-x-4">
+                                            {/* <div className="w-4 h-4 bg-gray-200 round/ed animate-pulse"></div> */}
+                                            <div className="flex-1 space-y-2">
+                                                <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                                <div className="h-3 bg-gray-200 rounded animate-pulse w-3/4"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
                         ))
-                    }
-                </tbody>
+                        :
+                        <tbody className="divide-y divide-gray-200 *:even:bg-gray-50">
+                            {
+                                data?.map((item, rowIndex) => (
+                                    <tr key={rowIndex} className="*:text-gray-900 *:first:font-medium h-[56px]">
+                                        {
+                                            columns.map((column) => (
+                                                <td key={column.key} className="px-3 whitespace-nowrap">
+                                                    {
+                                                        column.render ? column.render(item[column.dataIndex], item, rowIndex)
+                                                            : item[column.dataIndex]
+                                                    }
+                                                </td>
+                                            ))
+                                        }
+                                    </tr>
+                                ))
+                            }
+                        </tbody>
+                }
             </table>
             {
-                data?.length ?
+                data?.length !== 0 ?
                     <div className="flex gap-3 justify-between items-center mt-5 px-5">
                         <ul className="flex justify-start gap-1 text-gray-900">
                             <li>
@@ -152,8 +174,9 @@ const CustomTable = <T extends Record<string, any>>({ columns, data, pagination 
                             </li>
                         </ul>
                     </div>
-                    : <div className="col-span-full flex justify-center items-center text-lg font-semibold h-32 text-alert-500">
-                        No data found
+                    : <div className="col-span-full flex flex-col justify-center items-center text-lg font-semibold h-60">
+                        <Image src={NoData} width={60} height={60} alt="no data img" />
+                        <span className='font-semibold text-md mt-2'>No Data Found</span>
                     </div>
             }
         </>

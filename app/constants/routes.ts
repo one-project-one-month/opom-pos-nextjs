@@ -19,11 +19,13 @@ export const ROUTES = {
   STAFF_ORDERS: staffPrefix + 'order-history',
 };
 
-export const getRoleBasedRoute = (role: string | 'staff'): string => {
+export const getRoleBasedRoute = (role: string | 'cashier'): string => {
+  console.log(role);
+  
   switch (role) {
-    case 'admin':
+    case 'manager':
       return ROUTES.ADMIN;
-    case 'staff':
+    case 'cashier':
     case null:
     case undefined:
       return ROUTES.STAFF;

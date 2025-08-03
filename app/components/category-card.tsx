@@ -3,6 +3,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import queryString from 'query-string'
 import React from 'react'
 import defaultImg from '@/public/assets/tomato.png'
+import { imgBase } from '../constants/api'
 
 type CategoryCardProps = {
   name: string,
@@ -47,7 +48,7 @@ const CategoryCard = ({ name, photo, className }: CategoryCardProps) => {
       {
         name !== 'All' &&
         <Image
-          src={photo ? `https://backoffice.opompos.site/storage/${photo}` : defaultImg}
+          src={photo ? `${imgBase}${photo}` : defaultImg}
           width={50}
           height={50}
           className='mr-2'

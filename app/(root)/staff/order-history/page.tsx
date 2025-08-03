@@ -12,27 +12,28 @@ import Loading from '../loading';
 import { format } from 'date-fns';
 import { OrderHistoryApiResponse } from '@/app/type/orderHistory';
 import { useFetchOrderHistory } from '@/app/hooks/useFetchOrderHistory';
+import TableTitle from '@/app/components/table-title';
 
 function OrderHistory() {
   const [showModal, setShowModal] = useState(false);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(5);
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
-  
-  
-  
-
-const { error, isLoading, data } = useFetchOrderHistory<OrderHistoryApiResponse>(page, size);
-
-const orderHistories = data?.orders?.data || [];
 
 
-const viewSlip = (order: any) => {
+
+
+  const { error, isLoading, data } = useFetchOrderHistory<OrderHistoryApiResponse>(page, size);
+
+  const orderHistories = data?.orders?.data || [];
+
+
+  const viewSlip = (order: any) => {
     setSelectedOrder(order);
     setShowModal(true);
   };
-  
- 
+
+
 
   const columns = [
     {
@@ -50,7 +51,7 @@ const viewSlip = (order: any) => {
       title: "Staff Name",
       key: "user_name",
       dataIndex: "user",
-      render : (user: {name:string}) => <span>{user?.name || "N/A"}</span>
+      render: (user: { name: string }) => <span>{user?.name || "N/A"}</span>
     },
     {
       title: "Total Amount",
@@ -61,8 +62,8 @@ const viewSlip = (order: any) => {
       title: "Payment Method",
       key: "paymentMethod",
       dataIndex: "payment",
-      render: (payment: {method:string}) => <span>{payment?.method || "N/A"}</span>,
-        
+      render: (payment: { method: string }) => <span>{payment?.method || "N/A"}</span>,
+
     },
     {
       title: "Time",
@@ -88,33 +89,34 @@ const viewSlip = (order: any) => {
   ];
 
   return (
-    <div>
-      <h1 className="text-3xl px-14 mt-5 font-bold">Order History</h1>
-      <div className="overflow-x-auto p-12">
+    <div className='px-12'>
+      <TableTitle>Order History</TableTitle>
+      <div className="overflow-x-auto mt-5">
         <div>
-          {isLoading && (
+          {/* {isLoading && (
             <div className="text-center">
               <Loading />
             </div>
-          )}
+          )} */}
           {error && <p className="text-alert-400">Error loading products</p>}
           {
             !isLoading && !error && (
-                <CustomTable 
-                    columns={columns} 
-                    data={orderHistories}
-                    pagination={{
-                      pageSize: size,
-                      currentPage: page,
-                      lastPage: data?.orders?.last_page,
-                      total: data?.orders?.total,
-                      handleOnChange: (newPage, newSize) => {
-                        setPage(newPage);
-                        setSize(newSize);
-                      },
-                    }}
-                />
-        )}
+              <CustomTable
+                columns={columns}
+                data={orderHistories}
+                loading={isLoading}
+                pagination={{
+                  pageSize: size,
+                  currentPage: page,
+                  lastPage: data?.orders?.last_page,
+                  total: data?.orders?.total,
+                  handleOnChange: (newPage, newSize) => {
+                    setPage(newPage);
+                    setSize(newSize);
+                  },
+                }}
+              />
+            )}
         </div>
 
         {/* Modal rendered ONCE here */}

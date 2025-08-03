@@ -6,6 +6,7 @@ export interface OrderItem {
   name: string;
   price: string;
   quantity: number;
+  stock: number;
 }
 
 export interface OrderSummaryState {

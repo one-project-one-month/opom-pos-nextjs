@@ -19,8 +19,13 @@ function Login() {
     useAuth();
   const router = useRouter();
 
+  console.log(isAuthenticated, user);
+  
+
   const redirectBasedonRole = (userRole: string | null) => {
-    const route = getRoleBasedRoute(userRole || "staff");
+    const route = getRoleBasedRoute(userRole || "cashier");
+    console.log((route));
+    
     router.push(route);
   };
 
@@ -56,6 +61,7 @@ function Login() {
       email: formData.email,
       password: formData.password,
     });
+    console.log(user);    
 
     if (success && user) {
       redirectBasedonRole(user.role);

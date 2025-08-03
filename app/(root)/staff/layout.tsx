@@ -8,10 +8,10 @@ export default function MainLayout({
 }>) {
   return (
     <>
-    {/* <ProtectedRoute> */}
+    <ProtectedRoute  requiredRole="cashier">
       <Header />
       <main className="pt-[100px]">{children}</main>
-    {/* </ProtectedRoute> */}
+    </ProtectedRoute>
     </>
   )
 }

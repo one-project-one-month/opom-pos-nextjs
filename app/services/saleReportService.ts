@@ -1,3 +1,4 @@
+import { number } from 'zod';
 import Axios from '../api-config';
 import { API } from '../constants/api';
 
@@ -56,6 +57,10 @@ export interface WeeklyGain {
 
 export interface TotalAmount {
   total_amount: number;
+}
+
+export interface TotalGainByMonthly {
+  total_gain: number
 }
 
 export interface TopSaleItem {
@@ -177,6 +182,16 @@ class SaleReportService {
       return { total_amount: 0 };
     }
   }
+  // Get total gain Monthly
+  async getGainByMonthly(): Promise<TotalGainByMonthly> {
+    try {
+      const response = await Axios.get(API.totalGain);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching total amount:', error);
+      return { total_gain: 0 };
+    }
+  }
 
   // Get weekly revenue/gain
   async getWeeklyGain(): Promise<WeeklyGain> {
@@ -255,5 +270,7 @@ class SaleReportService {
     }
   }
 }
+
+
 
 export const saleReportService = new SaleReportService();

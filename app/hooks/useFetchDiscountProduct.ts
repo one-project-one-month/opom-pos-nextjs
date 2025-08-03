@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import Axios from '../api-config'
 import { API, base } from '../constants/api'
+import toast from 'react-hot-toast'
 
 interface CancelDiscountInput {
   product: any
@@ -91,7 +92,7 @@ export const useDiscountAddMutation = ({
       if (onErrorCallback) {
         onErrorCallback(error)
       } else {
-        alert(`Error: ${error?.message || 'Something went wrong'}`)
+        toast.error(`Error: ${error?.message || 'Something went wrong'}`)
       }
     },
   })
@@ -154,7 +155,7 @@ export const useDiscountCancelMutation = ({
       if (onErrorCallback) {
         onErrorCallback(error)
       } else {
-        alert(`Error: ${error?.message || 'Something went wrong'}`)
+        toast.error(`Error: ${error?.message || 'Something went wrong'}`)
       }
     },
   })

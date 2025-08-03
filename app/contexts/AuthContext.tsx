@@ -1,7 +1,7 @@
 // contexts/AuthContext.tsx
 "use client";
 
-import React, { createContext, useContext, ReactNode } from "react";
+import React, { createContext, useContext, ReactNode, useState, useEffect } from "react";
 import { useAuth } from "../hooks/useAuth";
 
 import { LoginCredentials, RegisterData, User } from "../services/authService";
@@ -30,7 +30,11 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const auth = useAuth();
 
-  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
+  const auth = useAuth();
+  const authenticated = auth.isAuthenticated && !!auth.user && !auth.isLoading;  
+  console.log(authenticated);
+  
+
+  return <AuthContext.Provider value={{...auth,  isAuthenticated: authenticated}}>{children}</AuthContext.Provider>;
 };

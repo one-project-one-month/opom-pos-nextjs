@@ -1,5 +1,8 @@
-export const base = 'https://backoffice.opompos.site/api/v1/';
-export const imgBase = 'https://backoffice.opompos.site/storage/';
+// export const imgBase = 'https://backoffice.opompos.site/storage/'
+export const imgBase = 'https://opom-pos-laravel.up.railway.app/storage/';
+// export const base = 'https://backoffice.opompos.site/api/v1/'
+export const base = 'https://ed38c55d1fdd.ngrok-free.app/api/v1/'
+// export const base = "https://opom-pos-laravel.up.railway.app/api/v1/";
 
 export const API = {
   products: base + 'products',

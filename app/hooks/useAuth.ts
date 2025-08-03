@@ -29,14 +29,19 @@ export const useAuth = () => {
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        if (authService.isAuthenticated()) {
-          const userData = await authService.getUser();
-          const userWithRole = userData
-            ? {
-                ...userData,
-                role: userData.role || "staff",
-              }
-            : null;
+        console.log(authService.isAuthenticated());
+        const accessToken = localStorage.getItem("access_token");
+        const userDataStr = localStorage.getItem("user_data");
+        console.log(accessToken, userDataStr)
+
+        if (accessToken && userDataStr) {
+          const userData = JSON.parse(userDataStr);
+
+          const userWithRole = {
+            ...userData,
+            role: userData.role || "cashier",
+          };
+
           setAuthState({
             user: userWithRole,
             isLoading: false,
@@ -65,15 +70,34 @@ export const useAuth = () => {
     initializeAuth();
   }, [authService]);
 
+  console.log(authState);
+
+
   const login = useCallback(
     async (credentials: LoginCredentials) => {
       setAuthState((prev) => ({ ...prev, isLoading: true, error: null }));
 
       try {
         const authRespone = await authService.login(credentials);
+        console.log(authRespone);
+
+        const userWithRole = authRespone.user
+          ? {
+            ...authRespone.user,
+            role: authRespone.staff_role[0] || "cashier",
+          }
+          : null;
+
+        console.log(userWithRole);
+        if (authRespone.access_token) {
+          localStorage.setItem("access_token", authRespone.access_token);
+        }
+        if (userWithRole) {
+          localStorage.setItem("user_data", JSON.stringify(userWithRole));
+        }
 
         setAuthState({
-          user: authRespone.user,
+          user: userWithRole,
           isLoading: false,
           isAuthenticated: true,
           error: null,
@@ -122,6 +146,9 @@ export const useAuth = () => {
   const logout = useCallback(async () => {
     setAuthState((prev) => ({ ...prev, isLoading: true }));
 
+    localStorage.removeItem("access_token");
+localStorage.removeItem("user_data");
+
     try {
       await authService.logout();
       setAuthState({
@@ -143,6 +170,14 @@ export const useAuth = () => {
   const clearError = useCallback(() => {
     setAuthState((prev) => ({ ...prev, error: null }));
   }, []);
+
+  console.log({
+    ...authState,
+    login,
+    logout,
+    clearError,
+  });
+
 
   return {
     ...authState,

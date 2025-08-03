@@ -3,9 +3,7 @@ import Login from "./login/page";
 
 function Home() {
   return (
-    <div>
-      <Login />
-    </div>
+    <Login />
   );
 }
 
