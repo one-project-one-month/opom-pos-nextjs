@@ -76,10 +76,15 @@ const CustomTable = <T extends Record<string, any>>({ columns, data, pagination,
                             <>
                                 {
                                     data?.length === 0 ?
-                                        <div className="col-span-full flex flex-col justify-center items-center text-lg font-semibold h-60">
-                                            <Image src={NoData} width={60} height={60} alt="no data img" />
-                                            <span className='font-semibold text-md mt-2'>No Data Found</span>
-                                        </div> :
+                                        <tr>
+                                            <td colSpan={7} className="text-center">
+                                                <div className="col-span-full h-60 flex flex-col items-center justify-center text-center text-lg font-semibold">
+                                                    <Image src={NoData} width={60} height={60} alt="no data img" />
+                                                    <span className="font-semibold text-md mt-2">No Data Found</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        :
                                         <>
                                             {
                                                 data?.map((item, rowIndex) => (

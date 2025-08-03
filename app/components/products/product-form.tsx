@@ -8,6 +8,7 @@ import { Product } from '@/app/type/product';
 import { ProductFormValues } from '@/app/type/form';
 import { Loader, LoaderIcon, RefreshCcw } from 'lucide-react';
 import Image from 'next/image';
+import { imgBase } from '@/app/constants/api';
 
 type ProductFormProps = {
     detailData?: Product | null;
@@ -144,7 +145,7 @@ const ProductForm = ({ detailData, handleAction, loading }: ProductFormProps) =>
             {
                 detailData?.photo &&
                 <Image 
-                src={`https://e0c8dfd98f99.ngrok-free.app/storage/${detailData?.photo}`}
+                src={imgBase + detailData?.photo}
                 alt="name" width={100} height={100} />
             }
             {previewUrl && (

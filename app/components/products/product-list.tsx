@@ -8,7 +8,6 @@ import { useFetchProducts } from "../../hooks/useFetchProduct";
 import Loading from "../../(root)/staff/loading";
 import { useSearchParams } from "next/navigation";
 import { imgBase } from "@/app/constants/api";
-import defaultImg from '@/public/assets/POSLogin.png'
 
 const ProductList = () => {
   const searchParams = useSearchParams();
@@ -63,7 +62,7 @@ const ProductList = () => {
             key={i}
             photo={
               typeof product.photo === "string"
-                ? product.photo
+                ? `${imgBase}${product.photo}`
                 : product.photo instanceof File
                 ? `${imgBase}${product.photo}`
                 : "assets/logo.svg"
