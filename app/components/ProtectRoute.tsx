@@ -4,7 +4,6 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "../contexts/AuthContext";
-import { useAuth } from "../hooks/useAuth";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -17,7 +16,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   redirectTo = "/login",
   requiredRole
 }) => {
-  const { isAuthenticated , isLoading, user } = useAuth();
+  const { isAuthenticated , isLoading, user } = useAuthContext();
   const router = useRouter();
   useEffect(() => {
 }, [isAuthenticated]);

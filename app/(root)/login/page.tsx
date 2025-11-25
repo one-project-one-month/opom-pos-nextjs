@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { FaLock, FaUser } from "react-icons/fa";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import { useAuth } from "@/app/hooks/useAuth";
+import { useAuthContext } from "@/app/contexts/AuthContext";
 import { getRoleBasedRoute } from "@/app/constants/routes";
 import { ErrorModal } from "./ErrorModal";
 
@@ -16,7 +16,7 @@ function Login() {
   const [showErrorModal, setShowErrorModal] = useState(false);
 
   const { login, isLoading, error, isAuthenticated, user, clearError } =
-    useAuth();
+    useAuthContext();
   const router = useRouter();  
 
   const redirectBasedonRole = (userRole: string | null) => {

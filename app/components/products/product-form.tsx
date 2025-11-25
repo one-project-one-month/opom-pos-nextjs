@@ -24,7 +24,7 @@ const ProductForm = ({ detailData, handleAction, loading }: ProductFormProps) =>
             categoryId: detailData?.category_id,
             price: detailData?.price,
             constPrice: detailData?.const_price,
-            brandId: detailData?.brand_id,
+            brandId: detailData?.brand_id ?? 1,
             stock: detailData?.stock,
             photo: detailData?.photo,
             expiredDate: detailData?.expired_at
