@@ -135,19 +135,21 @@ class SaleReportService {
       }
       // Return empty response on error
       return {
-        current_page: 1,
-        data: [],
-        first_page_url: '',
-        from: 0,
-        last_page: 1,
-        last_page_url: '',
-        links: [],
-        next_page_url: null,
-        path: '',
-        per_page: 5,
-        prev_page_url: null,
-        to: 0,
-        total: 0
+        orders: {
+          current_page: 1,
+          data: [],
+          first_page_url: '',
+          from: 0,
+          last_page: 1,
+          last_page_url: '',
+          links: [],
+          next_page_url: null,
+          path: '',
+          per_page: 5,
+          prev_page_url: null,
+          to: 0,
+          total: 0
+        }
       };
     }
   }
@@ -166,19 +168,21 @@ class SaleReportService {
       }
       // Return empty response on error
       return {
-        current_page: 1,
-        data: [],
-        first_page_url: '',
-        from: 0,
-        last_page: 1,
-        last_page_url: '',
-        links: [],
-        next_page_url: null,
-        path: '',
-        per_page: 5,
-        prev_page_url: null,
-        to: 0,
-        total: 0
+        orders: {
+          current_page: 1,
+          data: [],
+          first_page_url: '',
+          from: 0,
+          last_page: 1,
+          last_page_url: '',
+          links: [],
+          next_page_url: null,
+          path: '',
+          per_page: 5,
+          prev_page_url: null,
+          to: 0,
+          total: 0
+        }
       };
     }
   }
