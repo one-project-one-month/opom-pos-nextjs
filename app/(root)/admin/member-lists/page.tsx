@@ -126,7 +126,7 @@ const Page = () => {
           </tbody>
         </table>
         {
-          customers?.length > 0 &&
+          customerCount > 0 &&
           <div className="flex gap-3 justify-between items-center mt-5 px-5">
             <ul className="flex justify-start gap-1 text-gray-900">
               <li>
