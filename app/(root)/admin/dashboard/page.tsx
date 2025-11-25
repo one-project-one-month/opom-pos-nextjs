@@ -177,12 +177,12 @@ function DashboardPage() {
             <CustomTable
               loading={isLoading}
               columns={columns}
-              data={data?.orders?.data || []}
+              data={(data as any)?.orders?.data || []}
               pagination={{
                 pageSize: size,
                 currentPage: page,
-                lastPage: data?.orders?.last_page,
-                total: data?.orders?.total,
+                lastPage: (data as any)?.orders?.last_page,
+                total: (data as any)?.orders?.total,
                 handleOnChange: (newPage, newSize) => {
                   setPage(newPage);
                   setSize(newSize);
